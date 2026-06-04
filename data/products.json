@@ -1,0 +1,128 @@
+[
+  {
+    "id": "luna-tile",
+    "slug": "luna-tile",
+    "name": "Luna Tile",
+    "price": 68,
+    "currency": "€",
+    "category": "Decorative",
+    "tag": "Bestseller",
+    "image": "/images/pannel.png",
+    "description": "A hand-carved decorative tile featuring a crescent moon, dotted sky, and woven earth. Inspired by quiet nights and open fields.",
+    "details": [
+      "Approximately 15 × 15 cm",
+      "Handmade — each piece is unique",
+      "Wall-mount ready with cork backing",
+      "Food-safe glaze"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "moo-ring-dish",
+    "slug": "moo-ring-dish",
+    "name": "Moo Ring Dish",
+    "price": 45,
+    "currency": "€",
+    "category": "Accessories",
+    "tag": "New",
+    "image": "/images/ring-holder.png",
+    "description": "A playful cow-print ring dish with a coral hand rising from the center to hold your favorite rings. Bold, fun, and utterly unique.",
+    "details": [
+      "Approximately 14 cm diameter",
+      "Handmade — each piece is unique",
+      "Hand-painted cow print pattern",
+      "Holds 3–5 rings comfortably"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "cloud-candle-holder",
+    "slug": "cloud-candle-holder",
+    "name": "Cloud Candle Holder",
+    "price": 52,
+    "currency": "€",
+    "category": "Home",
+    "tag": "",
+    "image": "/images/candle-holder.png",
+    "description": "A sky-blue candle holder sitting on a cloud-like textured white base. Perfect for tea lights and small candles. Brings a dreamy calm to any shelf.",
+    "details": [
+      "Approximately 8 cm tall × 12 cm wide",
+      "Handmade — each piece is unique",
+      "Fits standard tea lights",
+      "Textured white stoneware base"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "sunrise-egg-cup",
+    "slug": "sunrise-egg-cup",
+    "name": "Sunrise Egg Cup",
+    "price": 38,
+    "currency": "€",
+    "category": "Kitchen",
+    "tag": "",
+    "image": "/images/egg.png",
+    "description": "Start your morning right with this cheerful egg cup. Hand-glazed in warm, sunrise-inspired tones. Perfectly sized for soft-boiled eggs.",
+    "details": [
+      "Approximately 6 cm tall",
+      "Handmade — each piece is unique",
+      "Food-safe glaze",
+      "Dishwasher safe"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "check-tray",
+    "slug": "check-tray",
+    "name": "Check Tray",
+    "price": 42,
+    "currency": "€",
+    "category": "Accessories",
+    "tag": "New",
+    "image": "/images/hashtrae.png",
+    "description": "A bold checkered trinket tray for your entryway, vanity, or bedside table. Catch-all for keys, coins, and small treasures.",
+    "details": [
+      "Approximately 16 × 12 cm",
+      "Handmade — each piece is unique",
+      "Hand-painted checkerboard pattern",
+      "Slightly raised edges"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "speckle-jar",
+    "slug": "speckle-jar",
+    "name": "Speckle Jar",
+    "price": 56,
+    "currency": "€",
+    "category": "Kitchen",
+    "tag": "",
+    "image": "/images/jar.png",
+    "description": "A generously sized jar with hand-applied speckled glaze. Ideal for storing dry goods, utensils, or wildflowers. Every jar tells its own story.",
+    "details": [
+      "Approximately 14 cm tall × 10 cm diameter",
+      "Handmade — each piece is unique",
+      "Food-safe glaze",
+      "Includes fitted lid"
+    ],
+    "inStock": true
+  },
+  {
+    "id": "wild-garden-vase",
+    "slug": "wild-garden-vase",
+    "name": "Wild Garden Vase",
+    "price": 62,
+    "currency": "€",
+    "category": "Home",
+    "tag": "",
+    "image": "/images/imagem.png",
+    "description": "A sculptural vase with organic curves and hand-painted botanical motifs. Designed to hold a single stem or a small wildflower bouquet.",
+    "details": [
+      "Approximately 18 cm tall",
+      "Handmade — each piece is unique",
+      "Watertight interior glaze",
+      "Hand-painted details"
+    ],
+    "inStock": true
+  }
+]
