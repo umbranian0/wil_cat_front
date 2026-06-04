@@ -2,16 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
 :root {
-  --cream: #F5EDE3;
-  --charcoal: #2D2A26;
-  --terracotta: #C45D3E;
+  --cream: #F8F1E6;
+  --linen: #EDE3D1;
+  --ink: #1C1814;
+  --clay: #B85532;
+  --gold: #C09050;
 }
 
 ::selection {
-  background: var(--terracotta);
+  background: var(--clay);
   color: var(--cream);
 }
 
@@ -25,29 +27,35 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--linen); }
+::-webkit-scrollbar-thumb { background: #C4AF97; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #8C7B66; }
+
 /* Marquee */
 .marquee-track {
   display: inline-block;
   white-space: nowrap;
-  animation: marquee 25s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 @keyframes marquee {
-  0% { transform: translateX(0); }
+  0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
 /* Product card image zoom */
 .product-img-wrap img {
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .group:hover .product-img-wrap img {
-  transform: scale(1.05);
+  transform: scale(1.07);
 }
 
 /* Quick add slide up */
 .quick-add-btn {
   transform: translateY(100%);
-  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .group:hover .quick-add-btn {
   transform: translateY(0);
@@ -55,21 +63,36 @@ body {
 
 /* Cart drawer */
 .cart-overlay {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
 }
 .cart-drawer {
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Page transitions */
 .page-enter {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.65s ease forwards;
 }
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ornamental divider — usage: <div class="ornament">text</div> */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #C4AF97;
+}
+.ornament::before,
+.ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: currentColor;
 }

@@ -10,8 +10,11 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      className="group cursor-pointer transition-transform duration-400"
-      style={{ transform: hovered ? 'translateY(-4px)' : 'translateY(0)' }}
+      className="group cursor-pointer"
+      style={{
+        transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
+        transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -23,29 +26,39 @@ export default function ProductCard({ product }) {
             alt={product.name}
             className="w-full h-full object-cover"
           />
-          {/* Quick add overlay */}
+          {/* Tag badge */}
+          {product.tag && (
+            <span className="absolute top-3.5 left-3.5 font-sans text-[9px] font-bold tracking-[0.18em] uppercase bg-terracotta text-white px-2.5 py-1">
+              {product.tag}
+            </span>
+          )}
+          {/* Quick add */}
           <button
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               addItem(product);
             }}
-            className="quick-add-btn absolute bottom-0 left-0 right-0 py-3 bg-charcoal/90 text-cream-100 font-sans text-[12px] font-semibold tracking-[0.1em] uppercase text-center border-none cursor-pointer hover:bg-charcoal-light"
+            className="quick-add-btn absolute bottom-0 left-0 right-0 py-3.5 bg-charcoal/92 text-cream-100 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-center border-none cursor-pointer hover:bg-terracotta transition-colors"
           >
-            Quick add
+            + Add to cart
           </button>
         </div>
 
         {/* Info */}
-        <div className="pt-3.5 flex justify-between items-baseline">
-          <span className="font-sans text-[14px] font-medium text-charcoal">{product.name}</span>
-          <span className="font-sans text-[14px] text-cream-500">{product.currency}{product.price}</span>
-        </div>
-        {product.tag && (
-          <div className="font-sans text-[10px] font-semibold tracking-[0.1em] uppercase text-terracotta mt-1">
-            {product.tag}
+        <div className="pt-4 pb-1">
+          <div className="flex justify-between items-baseline gap-2">
+            <span className="font-serif text-[18px] font-light text-charcoal leading-snug">
+              {product.name}
+            </span>
+            <span className="font-sans text-[13px] text-charcoal/55 flex-shrink-0">
+              {product.currency}{product.price}
+            </span>
           </div>
-        )}
+          <span className="font-sans text-[11px] text-charcoal/35 mt-1 block tracking-wide">
+            {product.category}
+          </span>
+        </div>
       </Link>
     </div>
   );
