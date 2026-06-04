@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import siteConfig from '@/lib/config';
 
 export default function ContactClient() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -10,7 +11,7 @@ export default function ContactClient() {
     e.preventDefault();
     const subject = encodeURIComponent(`Contact from ${form.name}`);
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
-    window.open(`mailto:orders_wildcat@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    window.open(`mailto:${siteConfig.orderEmail}?subject=${subject}&body=${body}`, '_blank');
     setSent(true);
     setTimeout(() => setSent(false), 3000);
   };
@@ -34,18 +35,18 @@ export default function ContactClient() {
         {/* Contact methods */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
           <a
-            href="mailto:orders_wildcat@gmail.com"
+            href={`mailto:${siteConfig.orderEmail}`}
             className="bg-cream-200 p-6 text-center transition-all hover:-translate-y-0.5 block"
           >
             <div className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-cream-500 mb-2">
               Email
             </div>
             <div className="font-sans text-[14px] font-medium text-charcoal">
-              orders_wildcat@gmail.com
+              {siteConfig.orderEmail}
             </div>
           </a>
           <a
-            href="https://wa.me/351911111111"
+            href={`https://wa.me/${siteConfig.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-cream-200 p-6 text-center transition-all hover:-translate-y-0.5 block"
@@ -54,7 +55,7 @@ export default function ContactClient() {
               WhatsApp
             </div>
             <div className="font-sans text-[14px] font-medium text-charcoal">
-              +351 911 111 111
+              {siteConfig.whatsappDisplay}
             </div>
           </a>
         </div>

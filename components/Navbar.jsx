@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from './CartProvider';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -22,8 +23,15 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-100/92 backdrop-blur-md border-b border-charcoal/[0.06]">
       <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href="/" className="font-serif text-[22px] text-charcoal tracking-tight">
-          Wild Cat Ceramic
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo/imagem.png"
+            alt="Wild Cat Ceramica"
+            width={120}
+            height={60}
+            className="h-12 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* Desktop links */}

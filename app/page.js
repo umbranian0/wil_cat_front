@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Hero from '@/components/Hero';
 import FeaturedBanner from '@/components/FeaturedBanner';
 import ProductGrid from './ProductGrid';
@@ -21,6 +22,25 @@ export default function Home() {
             </span>
           </div>
           <ProductGrid products={products} />
+        </div>
+      </div>
+
+      {/* Full collection image */}
+      <div className="px-6 md:px-10 mb-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <h2 className="font-serif text-[28px] font-normal text-charcoal">Our Collection</h2>
+          </div>
+          <div className="relative w-full overflow-hidden">
+            <Image
+              src="/images/all_products.jpg"
+              alt="Wild Cat Ceramica — full collection"
+              width={1400}
+              height={800}
+              className="w-full h-auto object-cover"
+              priority={false}
+            />
+          </div>
         </div>
       </div>
 

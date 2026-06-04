@@ -1,11 +1,12 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback } from 'react';
+import siteConfig from '@/lib/config';
 
 const CartContext = createContext();
 
-const WHATSAPP_NUMBER = '351911111111';
-const ORDER_EMAIL = 'orders_wildcat@gmail.com';
+const WHATSAPP_NUMBER = siteConfig.whatsappNumber;
+const ORDER_EMAIL = siteConfig.orderEmail;
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);

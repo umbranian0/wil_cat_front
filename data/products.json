@@ -107,22 +107,4 @@
     ],
     "inStock": true
   },
-  {
-    "id": "wild-garden-vase",
-    "slug": "wild-garden-vase",
-    "name": "Wild Garden Vase",
-    "price": 62,
-    "currency": "€",
-    "category": "Home",
-    "tag": "",
-    "image": "/images/imagem.png",
-    "description": "A sculptural vase with organic curves and hand-painted botanical motifs. Designed to hold a single stem or a small wildflower bouquet.",
-    "details": [
-      "Approximately 18 cm tall",
-      "Handmade — each piece is unique",
-      "Watertight interior glaze",
-      "Hand-painted details"
-    ],
-    "inStock": true
-  }
 ]
