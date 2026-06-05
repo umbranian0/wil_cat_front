@@ -25,7 +25,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center flex-shrink-0">
           <img
-            src="/logo/imagem.png"
+            src="/logo/imagem-transparent.png"
             alt="Wild Cat Ceramica"
             className="h-11 w-auto object-contain"
           />

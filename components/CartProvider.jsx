@@ -50,7 +50,7 @@ export function CartProvider({ children }) {
       summary += `• ${item.name} × ${item.qty} — €${(item.price * item.qty).toFixed(2)}\n`;
     });
     summary += `\nTotal: €${totalPrice.toFixed(2)}`;
-    summary += '\n\nPlease let me know about availability and shipping. Thank you!';
+    summary += '\n\nPlease confirm availability, shipping, and next steps. Thank you!';
     return summary;
   }, [items, totalPrice]);
 

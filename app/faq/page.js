@@ -1,24 +1,24 @@
 export const metadata = {
   title: 'FAQ — Wild Cat Ceramic',
-  description: 'Frequently asked questions about shipping, care, and ordering from Wild Cat Ceramic.',
+  description: 'Frequently asked questions about orders, shipping, and care.',
 };
 
 const faqs = [
   {
     question: 'How do I place an order?',
-    answer: 'Browse our collection, add items to your cart, and checkout via WhatsApp or email. We will confirm availability and shipping costs before you make any payment.',
+    answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, shipping, and payment before the order is final.',
   },
   {
     question: 'How do I pay?',
-    answer: 'After we confirm your order, we will send you payment details. We currently accept bank transfer and PayPal. A payment gateway is coming soon!',
+    answer: 'We send payment details after confirmation. Bank transfer and PayPal are currently available.',
   },
   {
     question: 'How long does shipping take?',
-    answer: 'Orders are typically shipped within 5–7 business days. Since every piece is handmade, some items may need extra time. We will keep you updated.',
+    answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Custom timelines are confirmed separately.',
   },
   {
     question: 'Do you ship internationally?',
-    answer: 'Yes! We ship worldwide from Portugal. Shipping costs are calculated based on destination and package weight. We will let you know the exact cost before you pay.',
+    answer: 'Yes. We ship from Portugal, and shipping is quoted before payment.',
   },
   {
     question: 'Are your pieces food safe?',
@@ -26,23 +26,23 @@ const faqs = [
   },
   {
     question: 'How should I care for my ceramics?',
-    answer: 'Hand washing is recommended for all pieces to preserve the glaze. Avoid sudden temperature changes (don\'t put a cold piece in a hot oven). Most pieces are microwave safe, but check individual product details.',
+    answer: 'Hand washing is recommended. Avoid sudden temperature changes, and check each product page for specific use notes.',
   },
   {
     question: 'Can I request a custom piece?',
-    answer: 'Absolutely! We love custom orders. Contact us via email or WhatsApp with your idea and we will discuss design, size, colors, and pricing.',
+    answer: 'Yes. Send your idea by email or WhatsApp, and we will confirm scope, price, and timing before work begins.',
   },
   {
     question: 'What if my piece arrives damaged?',
-    answer: 'We pack everything with great care, but if your piece arrives damaged, contact us within 48 hours with photos. We will replace or refund the item.',
+    answer: 'Contact us within 48 hours with photos. Because each piece is unique, we may refund, repair, or discuss a close alternative rather than send an identical replacement.',
   },
   {
     question: 'Are pieces exactly like the photos?',
-    answer: 'Since every piece is handmade, slight variations in color, size, and texture are normal and part of what makes each piece special. We do our best to represent each piece accurately.',
+    answer: 'Each piece is handmade and one-of-a-kind. Product photos represent the listed piece as accurately as possible.',
   },
   {
     question: 'Do you do wholesale?',
-    answer: 'We work with select shops and galleries. Get in touch via our contact page to discuss wholesale opportunities.',
+    answer: 'We work with select shops and galleries. Contact us to discuss availability.',
   },
 ];
 
@@ -59,7 +59,7 @@ export default function FAQPage() {
             FAQ
           </h1>
           <p className="font-sans text-[15px] text-charcoal-muted max-w-[400px] mx-auto">
-            Answers to common questions about ordering, shipping, and caring for your ceramics.
+            Short answers about orders, shipping, care, and handmade pieces.
           </p>
         </div>
 
@@ -80,13 +80,13 @@ export default function FAQPage() {
         {/* CTA */}
         <div className="mt-12 text-center">
           <p className="font-sans text-[14px] text-cream-500 mb-4">
-            Still have questions?
+            Need the full order terms?
           </p>
           <a
-            href="/contact"
+            href="/terms"
             className="inline-block font-sans text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal border border-charcoal px-8 py-3 transition-all hover:bg-charcoal hover:text-cream-100"
           >
-            Contact us
+            Terms &amp; Conditions
           </a>
         </div>
       </div>

@@ -116,7 +116,10 @@ export default function CartDrawer() {
               </button>
 
               <p className="font-sans text-[11px] text-cream-500 text-center mt-3 leading-relaxed">
-                We&apos;ll confirm availability and shipping costs before payment.
+                Availability and shipping are confirmed before payment.{' '}
+                <a href="/terms" className="underline hover:text-charcoal">
+                  Terms apply.
+                </a>
               </p>
             </div>
           )}

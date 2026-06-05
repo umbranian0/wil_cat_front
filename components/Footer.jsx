@@ -11,13 +11,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col items-start gap-4 max-w-[240px]">
             <img
-              src="/logo/imagem.png"
+              src="/logo/imagem-transparent.png"
               alt="Wild Cat Ceramica"
               className="h-16 w-auto object-contain"
             />
             <p className="font-sans text-[13px] text-charcoal/55 leading-relaxed">
               Handmade ceramics with soul.<br />
-              Made with love, shipped worldwide.
+              One-of-a-kind pieces from Portugal.
             </p>
           </div>
 
@@ -41,6 +41,11 @@ export default function Footer() {
                 <li>
                   <Link href="/faq" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
                     FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
+                    Terms
                   </Link>
                 </li>
               </ul>
