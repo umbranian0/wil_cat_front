@@ -43,8 +43,199 @@ function emptyProduct() {
   };
 }
 
-function jsonBlocks(value) {
-  return JSON.stringify(value || [], null, 2);
+function parseBlocks(value) {
+  if (Array.isArray(value)) return value;
+  try { return JSON.parse(value); } catch { return []; }
+}
+
+const HOMEPAGE_BLOCK_ORDER = ['hero', 'callout', 'collection_banner'];
+
+function HomepageBlockEditor({ blocks, onChange }) {
+  const hero = blocks.find((b) => b.type === 'hero') || { type: 'hero' };
+  const callout = blocks.find((b) => b.type === 'callout') || { type: 'callout' };
+  const banner = blocks.find((b) => b.type === 'collection_banner') || { type: 'collection_banner' };
+
+  function update(blockType, field, value) {
+    const existing = blocks.find((b) => b.type === blockType) || { type: blockType };
+    const rest = blocks.filter((b) => b.type !== blockType);
+    const next = [...rest, { ...existing, [field]: value }]
+      .sort((a, b) => HOMEPAGE_BLOCK_ORDER.indexOf(a.type) - HOMEPAGE_BLOCK_ORDER.indexOf(b.type));
+    onChange(next);
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Hero section</span>
+        <Field label="Eyebrow" value={hero.eyebrow || ''} onChange={(v) => update('hero', 'eyebrow', v)} />
+        <Field label="Headline" value={hero.headline || ''} onChange={(v) => update('hero', 'headline', v)} />
+        <Textarea label="Tagline" value={hero.tagline || ''} onChange={(v) => update('hero', 'tagline', v)} rows={2} />
+        <Field label="Marquee text" value={hero.marquee || ''} onChange={(v) => update('hero', 'marquee', v)} />
+      </div>
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Studio callout</span>
+        <Field label="Eyebrow" value={callout.eyebrow || ''} onChange={(v) => update('callout', 'eyebrow', v)} />
+        <Field label="Heading" value={callout.heading || ''} onChange={(v) => update('callout', 'heading', v)} />
+      </div>
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Collection banner</span>
+        <Field label="Eyebrow" value={banner.eyebrow || ''} onChange={(v) => update('collection_banner', 'eyebrow', v)} />
+        <Field label="Heading" value={banner.heading || ''} onChange={(v) => update('collection_banner', 'heading', v)} />
+      </div>
+    </div>
+  );
+}
+
+function FaqBlockEditor({ blocks, onChange }) {
+  const items = blocks.filter((b) => b.type === 'faq_item');
+
+  function updateItem(index, field, value) {
+    onChange(items.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  }
+
+  function addItem() {
+    onChange([...items, { type: 'faq_item', question: '', answer: '' }]);
+  }
+
+  function removeItem(index) {
+    onChange(items.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {items.map((item, i) => (
+        <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Question {i + 1}</span>
+            <button onClick={() => removeItem(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+          </div>
+          <Field label="Question" value={item.question || ''} onChange={(v) => updateItem(i, 'question', v)} />
+          <Textarea label="Answer" value={item.answer || ''} onChange={(v) => updateItem(i, 'answer', v)} rows={3} />
+        </div>
+      ))}
+      <button
+        onClick={addItem}
+        className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+      >
+        + Add question
+      </button>
+    </div>
+  );
+}
+
+function TermsBlockEditor({ blocks, onChange }) {
+  const items = blocks.filter((b) => b.type === 'terms_section');
+
+  function updateItem(index, field, value) {
+    onChange(items.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  }
+
+  function addItem() {
+    onChange([...items, { type: 'terms_section', title: '', body: '' }]);
+  }
+
+  function removeItem(index) {
+    onChange(items.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {items.map((item, i) => (
+        <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Section {i + 1}</span>
+            <button onClick={() => removeItem(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+          </div>
+          <Field label="Title" value={item.title || ''} onChange={(v) => updateItem(i, 'title', v)} />
+          <Textarea label="Body" value={item.body || ''} onChange={(v) => updateItem(i, 'body', v)} rows={4} />
+        </div>
+      ))}
+      <button
+        onClick={addItem}
+        className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+      >
+        + Add section
+      </button>
+    </div>
+  );
+}
+
+function AboutBlockEditor({ blocks, onChange }) {
+  const header = blocks.find((b) => b.type === 'header') || { type: 'header' };
+  const contentBlocks = blocks.filter((b) => b.type === 'paragraph' || b.type === 'section_heading');
+
+  function updateHeader(field, value) {
+    const rest = blocks.filter((b) => b.type !== 'header');
+    onChange([{ ...header, [field]: value }, ...rest]);
+  }
+
+  function updateContent(index, field, value) {
+    const newContent = contentBlocks.map((b, i) => i === index ? { ...b, [field]: value } : b);
+    onChange([header, ...newContent]);
+  }
+
+  function addBlock(type) {
+    onChange([header, ...contentBlocks, { type, text: '' }]);
+  }
+
+  function removeContent(index) {
+    onChange([header, ...contentBlocks.filter((_, i) => i !== index)]);
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Page header</span>
+        <Field label="Eyebrow" value={header.eyebrow || ''} onChange={(v) => updateHeader('eyebrow', v)} />
+        <Field label="Heading" value={header.heading || ''} onChange={(v) => updateHeader('heading', v)} />
+        <Field label="Tagline" value={header.tagline || ''} onChange={(v) => updateHeader('tagline', v)} />
+      </div>
+      {contentBlocks.map((block, i) => (
+        <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+              {block.type === 'section_heading' ? 'Section heading' : 'Paragraph'}
+            </span>
+            <button onClick={() => removeContent(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+          </div>
+          {block.type === 'section_heading'
+            ? <Field label="Heading text" value={block.text || ''} onChange={(v) => updateContent(i, 'text', v)} />
+            : <Textarea label="Paragraph text" value={block.text || ''} onChange={(v) => updateContent(i, 'text', v)} rows={3} />
+          }
+        </div>
+      ))}
+      <div className="flex gap-2">
+        <button
+          onClick={() => addBlock('paragraph')}
+          className="flex-1 border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+        >
+          + Add paragraph
+        </button>
+        <button
+          onClick={() => addBlock('section_heading')}
+          className="flex-1 border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+        >
+          + Add heading
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CmsBlockEditor({ page, onChange }) {
+  const blocks = parseBlocks(page?.blocks);
+  if (page?.type === 'homepage_section') return <HomepageBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'faq') return <FaqBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'terms') return <TermsBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'about') return <AboutBlockEditor blocks={blocks} onChange={onChange} />;
+  return (
+    <Textarea
+      label="Blocks JSON"
+      value={typeof page?.blocks === 'string' ? page.blocks : JSON.stringify(blocks, null, 2)}
+      onChange={onChange}
+      rows={12}
+    />
+  );
 }
 
 export default function AdminDashboard({ admin, csrf, initialData }) {
@@ -531,11 +722,9 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Select label="Status" value={selectedPage.status || 'draft'} options={['draft', 'published', 'archived']} onChange={(value) => updateSelectedPage('status', value)} />
                     <Select label="Type" value={selectedPage.type || 'custom'} options={['homepage_section', 'about', 'faq', 'terms', 'contact', 'custom']} onChange={(value) => updateSelectedPage('type', value)} />
                   </div>
-                  <Textarea
-                    label="Blocks JSON"
-                    value={typeof selectedPage.blocks === 'string' ? selectedPage.blocks : jsonBlocks(selectedPage.blocks)}
+                  <CmsBlockEditor
+                    page={selectedPage}
                     onChange={(value) => updateSelectedPage('blocks', value)}
-                    rows={12}
                   />
                   <PrimaryButton onClick={savePage}>Save content</PrimaryButton>
                 </div>

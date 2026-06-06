@@ -1,9 +1,19 @@
-'use client';
-
 import Link from 'next/link';
 
-export default function Hero() {
-  const marqueeText = '  ✶  Handmade  ✶  One of a kind  ✶  Made with love  ✶  Handcrafted in Portugal  ✶  Unique pieces  ';
+const DEFAULTS = {
+  eyebrow: 'Wild Cat Ceramica — Portugal',
+  headline: 'Pieces made to bring joy',
+  tagline: 'Every piece is shaped by hand, glazed with care, and made to add a little wonder to your everyday.',
+  marquee: '  ✶  Handmade  ✶  One of a kind  ✶  Made with love  ✶  Handcrafted in Portugal  ✶  Unique pieces  ',
+};
+
+export default function Hero({ eyebrow, headline, tagline, marquee }) {
+  const text = {
+    eyebrow: eyebrow || DEFAULTS.eyebrow,
+    headline: headline || DEFAULTS.headline,
+    tagline: tagline || DEFAULTS.tagline,
+    marquee: marquee || DEFAULTS.marquee,
+  };
 
   return (
     <section className="pt-40 pb-0 flex flex-col items-center text-center px-6 overflow-hidden">
@@ -12,7 +22,7 @@ export default function Hero() {
       <div className="flex items-center gap-5 mb-8">
         <div className="h-px w-10 bg-charcoal/20" />
         <span className="font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-charcoal/45">
-          Wild Cat Ceramica &mdash; Portugal
+          {text.eyebrow}
         </span>
         <div className="h-px w-10 bg-charcoal/20" />
       </div>
@@ -22,14 +32,14 @@ export default function Hero() {
         className="font-serif font-light text-charcoal leading-[0.92] tracking-tight max-w-[820px] mb-8"
         style={{ fontSize: 'clamp(56px, 9vw, 110px)' }}
       >
-        Pieces made<br />
-        <em className="italic font-light text-terracotta">to bring joy</em>
+        {text.headline.split('\n').map((line, i, arr) => (
+          i < arr.length - 1 ? <span key={i}>{line}<br /></span> : <em key={i} className="italic font-light text-terracotta">{line}</em>
+        ))}
       </h1>
 
       {/* Tagline */}
       <p className="font-sans text-[15px] md:text-[16px] leading-[1.75] text-charcoal/55 max-w-[400px] mb-10">
-        Every piece is shaped by hand, glazed with care,<br className="hidden sm:block" />
-        and made to add a little wonder to your everyday.
+        {text.tagline}
       </p>
 
       {/* CTAs */}
@@ -51,7 +61,7 @@ export default function Hero() {
       {/* Marquee strip */}
       <div className="mt-20 w-screen overflow-hidden border-y border-charcoal/[0.07] py-4 bg-cream-200/50">
         <div className="marquee-track font-serif text-[13px] tracking-[0.28em] text-charcoal/30 uppercase italic">
-          {marqueeText}{marqueeText}{marqueeText}{marqueeText}
+          {text.marquee}{text.marquee}{text.marquee}{text.marquee}
         </div>
       </div>
     </section>

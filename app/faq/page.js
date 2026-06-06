@@ -1,52 +1,31 @@
+import { getCmsPageBySlug } from '@/lib/catalog';
+
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'FAQ — Wild Cat Ceramic',
   description: 'Frequently asked questions about orders, shipping, and care.',
 };
 
-const faqs = [
-  {
-    question: 'How do I place an order?',
-    answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, shipping, and payment before the order is final.',
-  },
-  {
-    question: 'How do I pay?',
-    answer: 'We send payment details after confirmation. Bank transfer and PayPal are currently available.',
-  },
-  {
-    question: 'How long does shipping take?',
-    answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Custom timelines are confirmed separately.',
-  },
-  {
-    question: 'Do you ship internationally?',
-    answer: 'Yes. We ship from Portugal, and shipping is quoted before payment.',
-  },
-  {
-    question: 'Are your pieces food safe?',
-    answer: 'Yes. All glazes used on our functional pieces (cups, bowls, plates, jars) are food-safe and lead-free. Decorative pieces like tiles are for display only.',
-  },
-  {
-    question: 'How should I care for my ceramics?',
-    answer: 'Hand washing is recommended. Avoid sudden temperature changes, and check each product page for specific use notes.',
-  },
-  {
-    question: 'Can I request a custom piece?',
-    answer: 'Yes. Send your idea by email or WhatsApp, and we will confirm scope, price, and timing before work begins.',
-  },
-  {
-    question: 'What if my piece arrives damaged?',
-    answer: 'Contact us within 48 hours with photos. Because each piece is unique, we may refund, repair, or discuss a close alternative rather than send an identical replacement.',
-  },
-  {
-    question: 'Are pieces exactly like the photos?',
-    answer: 'Each piece is handmade and one-of-a-kind. Product photos represent the listed piece as accurately as possible.',
-  },
-  {
-    question: 'Do you do wholesale?',
-    answer: 'We work with select shops and galleries. Contact us to discuss availability.',
-  },
+const FALLBACK_FAQS = [
+  { question: 'How do I place an order?', answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, shipping, and payment before the order is final.' },
+  { question: 'How do I pay?', answer: 'We send payment details after confirmation. Bank transfer and PayPal are currently available.' },
+  { question: 'How long does shipping take?', answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Custom timelines are confirmed separately.' },
+  { question: 'Do you ship internationally?', answer: 'Yes. We ship from Portugal, and shipping is quoted before payment.' },
+  { question: 'Are your pieces food safe?', answer: 'Yes. All glazes used on our functional pieces (cups, bowls, plates, jars) are food-safe and lead-free. Decorative pieces like tiles are for display only.' },
+  { question: 'How should I care for my ceramics?', answer: 'Hand washing is recommended. Avoid sudden temperature changes, and check each product page for specific use notes.' },
+  { question: 'Can I request a custom piece?', answer: 'Yes. Send your idea by email or WhatsApp, and we will confirm scope, price, and timing before work begins.' },
+  { question: 'What if my piece arrives damaged?', answer: 'Contact us within 48 hours with photos. Because each piece is unique, we may refund, repair, or discuss a close alternative rather than send an identical replacement.' },
+  { question: 'Are pieces exactly like the photos?', answer: 'Each piece is handmade and one-of-a-kind. Product photos represent the listed piece as accurately as possible.' },
+  { question: 'Do you do wholesale?', answer: 'We work with select shops and galleries. Contact us to discuss availability.' },
 ];
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const page = await getCmsPageBySlug('faq');
+  const blocks = Array.isArray(page?.blocks) ? page.blocks : [];
+  const faqs = blocks.filter((b) => b.type === 'faq_item' && b.question);
+  const items = faqs.length > 0 ? faqs : FALLBACK_FAQS;
+
   return (
     <div className="page-enter pt-28 pb-16 px-6">
       <div className="max-w-2xl mx-auto">
@@ -65,7 +44,7 @@ export default function FAQPage() {
 
         {/* FAQ list */}
         <div className="flex flex-col">
-          {faqs.map((faq, i) => (
+          {items.map((faq, i) => (
             <div key={i} className="py-6 border-b border-charcoal/[0.08]">
               <h3 className="font-sans text-[15px] font-semibold text-charcoal mb-2">
                 {faq.question}

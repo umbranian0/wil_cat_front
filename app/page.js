@@ -2,17 +2,30 @@ import Link from 'next/link';
 import Hero from '@/components/Hero';
 import FeaturedBanner from '@/components/FeaturedBanner';
 import ProductGrid from './ProductGrid';
-import { getFeaturedProduct, listPublishedProducts } from '@/lib/catalog';
+import { getFeaturedProduct, listPublishedProducts, getCmsPageBySlug } from '@/lib/catalog';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const products = await listPublishedProducts();
-  const featured = await getFeaturedProduct();
+  const [products, featured, cmsPage] = await Promise.all([
+    listPublishedProducts(),
+    getFeaturedProduct(),
+    getCmsPageBySlug('homepage'),
+  ]);
+
+  const blocks = Array.isArray(cmsPage?.blocks) ? cmsPage.blocks : [];
+  const heroBlock = blocks.find((b) => b.type === 'hero') || {};
+  const calloutBlock = blocks.find((b) => b.type === 'callout') || {};
+  const bannerBlock = blocks.find((b) => b.type === 'collection_banner') || {};
 
   return (
     <div className="page-enter">
-      <Hero />
+      <Hero
+        eyebrow={heroBlock.eyebrow}
+        headline={heroBlock.headline}
+        tagline={heroBlock.tagline}
+        marquee={heroBlock.marquee}
+      />
       {featured && <FeaturedBanner product={featured} />}
 
       {/* Product Grid */}
@@ -40,20 +53,19 @@ export default async function Home() {
           alt="Wild Cat Ceramica — full collection"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/65 via-charcoal/15 to-transparent" />
-        {/* Text overlay */}
         <div className="absolute bottom-0 left-0 right-0 px-8 py-10 md:px-16 md:py-14">
           <div className="max-w-7xl mx-auto">
             <span className="block font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-cream-100/55 mb-3">
-              The Collection
+              {bannerBlock.eyebrow || 'The Collection'}
             </span>
             <h2
               className="font-serif font-light text-cream-100 leading-tight mb-7 max-w-[520px]"
               style={{ fontSize: 'clamp(30px, 5vw, 54px)' }}
             >
-              Every piece has<br />
-              <em className="italic">a story to tell</em>
+              {(bannerBlock.heading || 'Every piece has a story to tell').split('\n').map((line, i, arr) => (
+                i < arr.length - 1 ? <span key={i}>{line}<br /></span> : <em key={i} className="italic">{line}</em>
+              ))}
             </h2>
             <Link
               href="/shop"
@@ -73,14 +85,15 @@ export default async function Home() {
           <div className="h-px w-8 bg-current" />
         </div>
         <span className="font-sans text-[10px] font-semibold tracking-[0.22em] uppercase text-charcoal/40">
-          From the studio
+          {calloutBlock.eyebrow || 'From the studio'}
         </span>
         <h3
           className="font-serif font-light text-charcoal max-w-[540px] leading-tight"
           style={{ fontSize: 'clamp(24px, 3.5vw, 36px)' }}
         >
-          Every piece is made by hand.<br />
-          <em className="italic text-terracotta">No two are ever the same.</em>
+          {(calloutBlock.heading || 'Every piece is made by hand. No two are ever the same.').split('\n').map((line, i, arr) => (
+            i < arr.length - 1 ? <span key={i}>{line}<br /></span> : <em key={i} className="italic text-terracotta">{line}</em>
+          ))}
         </h3>
         <Link
           href="/about"
