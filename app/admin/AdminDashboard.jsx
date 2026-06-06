@@ -7,6 +7,7 @@ const tabs = [
   { id: 'orders', label: 'Orders' },
   { id: 'products', label: 'Products' },
   { id: 'cms', label: 'CMS' },
+  { id: 'customers', label: 'Customers' },
   { id: 'security', label: 'Security' },
 ];
 
@@ -448,6 +449,9 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     status: 'draft',
     blocks: '[]',
   });
+  const [customers, setCustomers] = useState(initialData.customers || []);
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
+  const [customerPasswordDraft, setCustomerPasswordDraft] = useState('');
   const [toasts, setToasts] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
 
@@ -513,6 +517,42 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
   async function refreshPages() {
     const data = await api('/api/admin/cms/pages');
     setPages(data.pages);
+  }
+
+  async function refreshCustomers() {
+    const data = await api('/api/admin/customers');
+    setCustomers(data.customers || []);
+  }
+
+  async function adminResetPassword() {
+    if (!selectedCustomerId || !customerPasswordDraft) return;
+    if (customerPasswordDraft.length < 8) {
+      showError({ message: 'Temporary password must be at least 8 characters.' });
+      return;
+    }
+    try {
+      await api(`/api/admin/customers/${selectedCustomerId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ newPassword: customerPasswordDraft }),
+      });
+      setCustomerPasswordDraft('');
+      showSuccess('Password reset', 'The customer\'s password has been updated. Please share the temporary password with them securely.');
+    } catch (error) {
+      showError(error);
+    }
+  }
+
+  async function adminToggleCustomerStatus(customerId, status) {
+    try {
+      const data = await api(`/api/admin/customers/${customerId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      });
+      setCustomers((current) => current.map((c) => c.id === customerId ? data.customer : c));
+      showSuccess('Customer updated', `Account status changed to ${status}.`);
+    } catch (error) {
+      showError(error);
+    }
   }
 
   async function logout() {
@@ -1056,6 +1096,108 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 </div>
               )}
             </Panel>
+          </section>
+        )}
+
+        {activeTab === 'customers' && (
+          <section className="grid gap-6 lg:grid-cols-[320px_1fr]">
+            <Panel title="Customers">
+              <button
+                onClick={refreshCustomers}
+                className="mb-3 w-full border border-charcoal/20 px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/55 hover:border-charcoal hover:text-charcoal"
+              >
+                Refresh list
+              </button>
+              <div className="flex max-h-[640px] flex-col gap-2 overflow-auto">
+                {customers.length === 0 && (
+                  <p className="font-sans text-sm text-charcoal/45">No customers yet. Click Refresh to load.</p>
+                )}
+                {customers.map((customer) => (
+                  <button
+                    key={customer.id}
+                    onClick={() => { setSelectedCustomerId(customer.id); setCustomerPasswordDraft(''); }}
+                    className={`border p-3 text-left font-sans text-sm ${
+                      selectedCustomerId === customer.id ? 'border-charcoal bg-cream-200' : 'border-charcoal/10'
+                    }`}
+                  >
+                    <span className="block font-semibold">{customer.name || '—'}</span>
+                    <span className="block text-xs text-charcoal/55">{customer.email}</span>
+                    <span className={`mt-1 block text-[10px] font-semibold uppercase tracking-[0.1em] ${
+                      customer.status === 'active' ? 'text-[#4A7C59]' : 'text-terracotta'
+                    }`}>{customer.status}</span>
+                  </button>
+                ))}
+              </div>
+            </Panel>
+
+            {selectedCustomerId ? (() => {
+              const customer = customers.find((c) => c.id === selectedCustomerId);
+              if (!customer) return null;
+              return (
+                <div className="flex flex-col gap-6">
+                  <Panel title={customer.name || customer.email}>
+                    <div className="grid gap-2 font-sans text-sm mb-4">
+                      {[
+                        ['Email', customer.email],
+                        ['Phone', customer.phone || '—'],
+                        ['Status', customer.status],
+                        ['Joined', customer.createdAt ? customer.createdAt.slice(0, 10) : '—'],
+                        ['Last login', customer.lastLoginAt ? customer.lastLoginAt.slice(0, 10) : 'Never'],
+                        ['Privacy accepted', customer.dataProtectionFlags?.privacyPolicyAccepted ? 'yes' : 'no'],
+                        ['Marketing consent', customer.dataProtectionFlags?.marketingEmailConsent ? 'yes' : 'no'],
+                      ].map(([label, val]) => (
+                        <div key={label} className="flex items-center justify-between border border-charcoal/10 p-2">
+                          <span className="text-charcoal/55">{label}</span>
+                          <span className="font-semibold text-charcoal">{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {customer.status !== 'disabled' && (
+                        <button
+                          onClick={() => adminToggleCustomerStatus(customer.id, 'disabled')}
+                          className="border border-terracotta px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-terracotta hover:bg-terracotta hover:text-cream-100"
+                        >
+                          Disable account
+                        </button>
+                      )}
+                      {customer.status === 'disabled' && (
+                        <button
+                          onClick={() => adminToggleCustomerStatus(customer.id, 'active')}
+                          className="border border-[#4A7C59] px-4 py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-[#4A7C59] hover:bg-[#4A7C59] hover:text-cream-100"
+                        >
+                          Re-enable account
+                        </button>
+                      )}
+                    </div>
+                  </Panel>
+
+                  <Panel title="Reset password">
+                    <p className="mb-4 font-sans text-sm text-charcoal/55">
+                      Set a temporary password for this customer. Ask them to change it after signing in (via their account Password tab).
+                    </p>
+                    <div className="grid gap-3">
+                      <Field
+                        label="Temporary password (min 8 characters)"
+                        type="text"
+                        value={customerPasswordDraft}
+                        onChange={(value) => setCustomerPasswordDraft(value)}
+                      />
+                      <button
+                        onClick={adminResetPassword}
+                        className="w-fit bg-charcoal px-5 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-cream-100 hover:bg-terracotta"
+                      >
+                        Set password
+                      </button>
+                    </div>
+                  </Panel>
+                </div>
+              );
+            })() : (
+              <div className="flex items-center justify-center border border-dashed border-charcoal/20 p-8 font-sans text-sm text-charcoal/40">
+                Select a customer to manage their account
+              </div>
+            )}
           </section>
         )}
 

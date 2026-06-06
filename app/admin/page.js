@@ -10,6 +10,7 @@ import {
   listNotifications,
 } from '@/lib/backoffice/repository';
 import { listRiskEvents } from '@/lib/backoffice/security';
+import { listAllCustomers } from '@/lib/customer/repository';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +22,7 @@ export default async function AdminPage() {
   const admin = await getAdminFromCookies();
   if (!admin) redirect('/admin/login');
 
-  const [summary, products, orders, pages, riskEvents, auditEvents, notifications] = await Promise.all([
+  const [summary, products, orders, pages, riskEvents, auditEvents, notifications, customers] = await Promise.all([
     getDashboardSummary(),
     listProducts(),
     listOrders({ limit: 100 }),
@@ -29,13 +30,14 @@ export default async function AdminPage() {
     listRiskEvents(80),
     listAuditEvents(80),
     listNotifications(80),
+    listAllCustomers(),
   ]);
 
   return (
     <AdminDashboard
       admin={{ email: admin.email, role: admin.role }}
       csrf={admin.csrf}
-      initialData={{ summary, products, orders, pages, riskEvents, auditEvents, notifications }}
+      initialData={{ summary, products, orders, pages, riskEvents, auditEvents, notifications, customers }}
     />
   );
 }

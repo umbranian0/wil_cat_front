@@ -46,6 +46,7 @@ export default function AccountDashboardClient({ initialData }) {
     { id: 'addresses', label: content.addressesLabel },
     { id: 'privacy', label: content.privacyLabel },
     { id: 'profile', label: content.profileLabel },
+    { id: 'security', label: 'Password' },
   ];
   const [activeTab, setActiveTab] = useState('orders');
   const [customer, setCustomer] = useState(initialData.customer);
@@ -61,6 +62,7 @@ export default function AccountDashboardClient({ initialData }) {
     marketingEmailConsent: Boolean(initialData.customer.dataProtectionFlags?.marketingEmailConsent),
   });
   const [privacyDraft, setPrivacyDraft] = useState({ type: 'access', message: '' });
+  const [passwordDraft, setPasswordDraft] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
 
@@ -163,6 +165,30 @@ export default function AccountDashboardClient({ initialData }) {
       await refreshProfile();
       setSelectedAddressId('new');
       setNotice('Address deleted.');
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function changePassword() {
+    if (passwordDraft.newPassword !== passwordDraft.confirmPassword) {
+      setError('The new passwords do not match. Please try again.');
+      return;
+    }
+    if (passwordDraft.newPassword.length < 8) {
+      setError('Your new password must be at least 8 characters.');
+      return;
+    }
+    try {
+      await api('/api/customer/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({
+          currentPassword: passwordDraft.currentPassword,
+          newPassword: passwordDraft.newPassword,
+        }),
+      });
+      setPasswordDraft({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setNotice('Password changed successfully.');
     } catch (err) {
       setError(err.message);
     }
@@ -423,6 +449,43 @@ export default function AccountDashboardClient({ initialData }) {
                 />
                 <PrimaryButton onClick={saveProfile}>Save profile</PrimaryButton>
               </div>
+            </Panel>
+          </section>
+        )}
+
+        {activeTab === 'security' && (
+          <section className="grid gap-6 lg:grid-cols-2">
+            <Panel title="Change password">
+              <p className="mb-4 font-sans text-sm text-charcoal/55">
+                To update your password, please enter your current password first. Your new password must be at least 8 characters.
+              </p>
+              <div className="grid gap-4">
+                <Field
+                  label="Current password"
+                  type="password"
+                  value={passwordDraft.currentPassword}
+                  onChange={(value) => setPasswordDraft((current) => ({ ...current, currentPassword: value }))}
+                />
+                <Field
+                  label="New password"
+                  type="password"
+                  value={passwordDraft.newPassword}
+                  onChange={(value) => setPasswordDraft((current) => ({ ...current, newPassword: value }))}
+                />
+                <Field
+                  label="Confirm new password"
+                  type="password"
+                  value={passwordDraft.confirmPassword}
+                  onChange={(value) => setPasswordDraft((current) => ({ ...current, confirmPassword: value }))}
+                />
+                <PrimaryButton onClick={changePassword}>Update password</PrimaryButton>
+              </div>
+            </Panel>
+            <Panel title="Need help?">
+              <p className="font-sans text-sm leading-7 text-charcoal/60">
+                If you have forgotten your password and cannot sign in, please contact us via the{' '}
+                <a href="/contact" className="underline hover:text-charcoal">contact page</a> and we will reset your account manually.
+              </p>
             </Panel>
           </section>
         )}
