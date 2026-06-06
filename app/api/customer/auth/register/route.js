@@ -14,7 +14,7 @@ export async function POST(request) {
       windowSeconds: 15 * 60,
     });
     if (!rate.allowed) {
-      return json({ error: 'Too many registration attempts.', retryAfter: rate.retryAfter }, { status: 429 });
+      return json({ error: 'Too many registration attempts. Please wait a few minutes and try again.', retryAfter: rate.retryAfter }, { status: 429 });
     }
 
     const customer = await createCustomer(body, context);

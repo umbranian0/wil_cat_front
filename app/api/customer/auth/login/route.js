@@ -15,7 +15,7 @@ export async function POST(request) {
       windowSeconds: 15 * 60,
     });
     if (!rate.allowed) {
-      return json({ error: 'Too many login attempts.', retryAfter: rate.retryAfter }, { status: 429 });
+      return json({ error: 'Too many login attempts. Please wait a few minutes and try again.', retryAfter: rate.retryAfter }, { status: 429 });
     }
 
     const authenticated = await authenticateCustomer(body);
@@ -30,7 +30,7 @@ export async function POST(request) {
         userAgentHash: context.userAgentHash,
         requestId: context.requestId,
       });
-      return json({ error: 'Invalid credentials.' }, { status: 401 });
+      return json({ error: 'We couldn\'t sign you in. Please check your email and password and try again.' }, { status: 401 });
     }
 
     const customer = await markCustomerLogin(authenticated, context);

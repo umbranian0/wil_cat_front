@@ -1,8 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { DEFAULT_ACCOUNT_CONTENT } from '@/lib/cmsContent';
+
+const FIELD_PATHS = {
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  privacyPolicyAccepted: 'privacyPolicyAccepted',
+};
 
 export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }) {
   const [mode, setMode] = useState('login');
@@ -14,17 +21,44 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
     privacyPolicyAccepted: false,
     marketingEmailConsent: false,
   });
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [globalError, setGlobalError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const privacyRef = useRef(null);
+
+  const fieldRefs = {
+    name: nameRef,
+    email: emailRef,
+    password: passwordRef,
+    privacyPolicyAccepted: privacyRef,
+  };
 
   function update(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
+    if (fieldErrors[field]) {
+      setFieldErrors((current) => {
+        const next = { ...current };
+        delete next[field];
+        return next;
+      });
+    }
+  }
+
+  function switchMode(next) {
+    setMode(next);
+    setFieldErrors({});
+    setGlobalError('');
   }
 
   async function submit(event) {
     event.preventDefault();
     setLoading(true);
-    setError('');
+    setFieldErrors({});
+    setGlobalError('');
 
     const path = mode === 'login' ? '/api/customer/auth/login' : '/api/customer/auth/register';
     const payload =
@@ -49,10 +83,28 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
     setLoading(false);
 
     if (!response.ok) {
-      const issue = body.issues?.[0]?.message;
-      setError(issue || body.error || 'Authentication failed.');
+      if (body.issues?.length) {
+        const errors = {};
+        let firstField = null;
+        for (const issue of body.issues) {
+          const field = issue.path;
+          if (FIELD_PATHS[field]) {
+            errors[field] = issue.message;
+            if (!firstField) firstField = field;
+          }
+        }
+        setFieldErrors(errors);
+        if (firstField && fieldRefs[firstField]?.current) {
+          fieldRefs[firstField].current.focus();
+        } else if (body.issues[0]) {
+          setGlobalError(body.issues[0].message);
+        }
+      } else {
+        setGlobalError(body.error || 'Something went wrong. Please try again.');
+      }
       return;
     }
+
     window.location.href = '/account';
   }
 
@@ -83,7 +135,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
           <div className="mb-6 grid grid-cols-2 border border-charcoal/10 bg-cream-100 p-1">
             <button
               type="button"
-              onClick={() => setMode('login')}
+              onClick={() => switchMode('login')}
               className={`py-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] ${
                 mode === 'login' ? 'bg-charcoal text-cream-100' : 'text-charcoal/55'
               }`}
@@ -92,7 +144,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
             </button>
             <button
               type="button"
-              onClick={() => setMode('register')}
+              onClick={() => switchMode('register')}
               className={`py-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] ${
                 mode === 'register' ? 'bg-charcoal text-cream-100' : 'text-charcoal/55'
               }`}
@@ -110,31 +162,73 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
           <form onSubmit={submit} className="grid gap-4">
             {mode === 'register' && (
               <>
-                <Field label="Name" value={form.name} onChange={(value) => update('name', value)} required />
-                <Field label="Phone" value={form.phone} onChange={(value) => update('phone', value)} />
+                <Field
+                  ref={nameRef}
+                  label="Name"
+                  value={form.name}
+                  onChange={(value) => update('name', value)}
+                  required
+                  error={fieldErrors.name}
+                />
+                <Field
+                  label="Phone"
+                  value={form.phone}
+                  onChange={(value) => update('phone', value)}
+                />
               </>
             )}
-            <Field label="Email" type="email" value={form.email} onChange={(value) => update('email', value)} required />
-            <Field label="Password" type="password" value={form.password} onChange={(value) => update('password', value)} required minLength={mode === 'register' ? 8 : undefined} hint={mode === 'register' ? 'Minimum 8 characters.' : undefined} />
+
+            <Field
+              ref={emailRef}
+              label="Email"
+              type="email"
+              value={form.email}
+              onChange={(value) => update('email', value)}
+              required
+              error={fieldErrors.email}
+            />
+
+            <Field
+              ref={passwordRef}
+              label="Password"
+              type="password"
+              value={form.password}
+              onChange={(value) => update('password', value)}
+              required
+              minLength={mode === 'register' ? 8 : undefined}
+              hint={mode === 'register' && !fieldErrors.password ? 'Minimum 8 characters.' : undefined}
+              error={fieldErrors.password}
+            />
 
             {mode === 'register' && (
               <>
-                <label className="flex items-start gap-2 font-sans text-xs leading-6 text-charcoal/65">
-                  <input
-                    type="checkbox"
-                    required
-                    checked={form.privacyPolicyAccepted}
-                    onChange={(event) => update('privacyPolicyAccepted', event.target.checked)}
-                    className="mt-1"
-                  />
-                  <span>
-                    I accept the{' '}
-                    <Link href="/privacy" className="underline hover:text-charcoal">
-                      privacy policy
-                    </Link>{' '}
-                    for account creation and order management.
-                  </span>
-                </label>
+                <div>
+                  <label
+                    ref={privacyRef}
+                    className={`flex items-start gap-2 font-sans text-xs leading-6 ${
+                      fieldErrors.privacyPolicyAccepted ? 'text-terracotta' : 'text-charcoal/65'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      required
+                      checked={form.privacyPolicyAccepted}
+                      onChange={(event) => update('privacyPolicyAccepted', event.target.checked)}
+                      className="mt-1"
+                    />
+                    <span>
+                      I accept the{' '}
+                      <Link href="/privacy" className="underline hover:text-charcoal">
+                        privacy policy
+                      </Link>{' '}
+                      for account creation and order management.
+                    </span>
+                  </label>
+                  {fieldErrors.privacyPolicyAccepted && (
+                    <p className="mt-1 font-sans text-[11px] text-terracotta">{fieldErrors.privacyPolicyAccepted}</p>
+                  )}
+                </div>
+
                 <label className="flex items-start gap-2 font-sans text-xs leading-6 text-charcoal/65">
                   <input
                     type="checkbox"
@@ -147,7 +241,11 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
               </>
             )}
 
-            {error && <p className="font-sans text-sm text-terracotta">{error}</p>}
+            {globalError && (
+              <div className="border border-terracotta/30 bg-terracotta/5 px-4 py-3 font-sans text-sm text-terracotta">
+                {globalError}
+              </div>
+            )}
 
             <button
               type="submit"
@@ -163,21 +261,34 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
   );
 }
 
-function Field({ label, value, onChange, type = 'text', required = false, minLength, hint }) {
+const Field = forwardRef(function Field({ label, value, onChange, type = 'text', required = false, minLength, hint, error }, ref) {
   return (
     <label className="block">
-      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+      <span
+        className={`mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] ${
+          error ? 'text-terracotta' : 'text-charcoal/45'
+        }`}
+      >
         {label}
       </span>
       <input
+        ref={ref}
         type={type}
         required={required}
         minLength={minLength}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full border border-charcoal/15 bg-transparent px-3 py-3 font-sans text-sm outline-none focus:border-charcoal"
+        className={`w-full border px-3 py-3 font-sans text-sm outline-none transition-colors focus:border-charcoal ${
+          error
+            ? 'border-terracotta bg-terracotta/5 focus:border-terracotta'
+            : 'border-charcoal/15 bg-transparent'
+        }`}
       />
-      {hint && <span className="mt-1 block font-sans text-[11px] text-charcoal/40">{hint}</span>}
+      {error ? (
+        <span className="mt-1 block font-sans text-[11px] text-terracotta">{error}</span>
+      ) : hint ? (
+        <span className="mt-1 block font-sans text-[11px] text-charcoal/40">{hint}</span>
+      ) : null}
     </label>
   );
-}
+});
