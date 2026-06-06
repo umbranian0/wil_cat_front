@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 const tabs = [
   { id: 'orders', label: 'Orders' },
@@ -33,7 +34,7 @@ function emptyProduct() {
     tag: '',
     priceAmount: 0,
     currency: '€',
-    image: '/images/pannel.png',
+    image: '',
     description: '',
     details: '',
     inventoryMode: 'one_of_one',
@@ -66,6 +67,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     blocks: '[]',
   });
   const [message, setMessage] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const selectedProduct = selectedProductId === 'new' ? draftProduct : products.find((item) => item.id === selectedProductId);
   const selectedOrder = orders.find((item) => item.id === selectedOrderId);
@@ -146,6 +148,37 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       setMessage('Product archived.');
     } catch (error) {
       setMessage(error.message);
+    }
+  }
+
+  async function uploadSelectedProductImage(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file || !selectedProduct) return;
+
+    setUploadingImage(true);
+    setMessage('');
+
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      form.append('productName', selectedProduct.name || '');
+      form.append('productSlug', selectedProduct.slug || '');
+
+      const response = await fetch('/api/admin/assets/upload', {
+        method: 'POST',
+        headers: { 'x-csrf-token': csrf },
+        body: form,
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.error || 'Image upload failed.');
+
+      updateSelectedProduct('image', body.asset.secureUrl || body.asset.url);
+      setMessage('Image uploaded to Cloudinary. Save product to keep it.');
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setUploadingImage(false);
     }
   }
 
@@ -392,7 +425,34 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Field label="Tag" value={selectedProduct.tag || ''} onChange={(value) => updateSelectedProduct('tag', value)} />
                     <Field label="Stock" type="number" value={selectedProduct.stockQty || 0} onChange={(value) => updateSelectedProduct('stockQty', value)} />
                   </div>
-                  <Field label="Image path" value={selectedProduct.image || ''} onChange={(value) => updateSelectedProduct('image', value)} />
+                  <div className="grid gap-4 md:grid-cols-[180px_1fr]">
+                    <div className="aspect-square overflow-hidden border border-charcoal/10 bg-cream-200">
+                      <img
+                        src={productImageSrc(selectedProduct.image)}
+                        alt={selectedProduct.name || 'Product image'}
+                        onError={applyProductImageFallback}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="grid content-start gap-3">
+                      <Field label="Image URL" value={selectedProduct.image || ''} onChange={(value) => updateSelectedProduct('image', value)} />
+                      <label className="block">
+                        <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+                          Upload to Cloudinary
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+                          disabled={uploadingImage}
+                          onChange={uploadSelectedProductImage}
+                          className="w-full border border-charcoal/15 bg-transparent px-3 py-2 font-sans text-sm file:mr-3 file:border-0 file:bg-charcoal file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.1em] file:text-cream-100 disabled:opacity-50"
+                        />
+                      </label>
+                      <p className="font-sans text-xs text-charcoal/50">
+                        {uploadingImage ? 'Uploading...' : 'Uploaded images are stored in Cloudinary; KV stores only the secure URL.'}
+                      </p>
+                    </div>
+                  </div>
                   <Textarea label="Description" value={selectedProduct.description || ''} onChange={(value) => updateSelectedProduct('description', value)} />
                   <Textarea
                     label="Details, one per line"
@@ -467,13 +527,15 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 <ReadinessRow label="Upstash configured" ready={summary.storage.upstashConfigured} value={summary.storage.upstashConfigured ? 'yes' : 'no'} />
                 <ReadinessRow label="Auth configured" ready={summary.auth?.productionReady} value={summary.auth?.productionReady ? 'yes' : 'no'} />
                 <ReadinessRow label="Secure admin cookies" ready={summary.auth?.secureCookie} value={summary.auth?.secureCookie ? 'enabled' : 'disabled'} />
+                <ReadinessRow label="Media uploads" ready={summary.media?.productionReady} value={summary.media?.provider || 'url-only'} />
+                <ReadinessRow label="Image fallback" ready={Boolean(summary.media?.fallbackImage)} value={summary.media?.fallbackImage || '/images/pannel.png'} />
                 <a
                   href="/admin/configurator"
                   className="inline-block border border-charcoal px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] hover:bg-charcoal hover:text-cream-100"
                 >
                   Open configurator
                 </a>
-                {[...(summary.storage.warnings || []), ...(summary.auth?.warnings || [])].map((warning) => (
+                {[...(summary.storage.warnings || []), ...(summary.auth?.warnings || []), ...(summary.media?.warnings || [])].map((warning) => (
                   <div key={warning} className="border border-terracotta/40 bg-cream-200 p-3 text-terracotta">
                     {warning}
                   </div>

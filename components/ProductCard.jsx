@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCart } from './CartProvider';
+import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 export default function ProductCard({ product }) {
   const [hovered, setHovered] = useState(false);
@@ -23,8 +24,9 @@ export default function ProductCard({ product }) {
         {/* Image */}
         <div className="product-img-wrap relative overflow-hidden aspect-square bg-cream-200">
           <img
-            src={product.image}
+            src={productImageSrc(product.image)}
             alt={product.name}
+            onError={applyProductImageFallback}
             className="w-full h-full object-cover"
           />
           {/* Tag badge */}

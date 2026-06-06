@@ -23,7 +23,7 @@ function makeConfig(email = 'owner@example.com') {
   };
 }
 
-export default function ConfiguratorClient({ canRegenerate, initialAuth, initialStorage, isAdmin }) {
+export default function ConfiguratorClient({ canRegenerate, initialAuth, initialMedia, initialStorage, isAdmin }) {
   const [email, setEmail] = useState('owner@example.com');
   const [config, setConfig] = useState(() => makeConfig('owner@example.com'));
 
@@ -50,6 +50,31 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
     [config]
   );
 
+  const cloudinaryEnvBlock = useMemo(
+    () => [
+      'CLOUDINARY_CLOUD_NAME=<your_cloud_name>',
+      'CLOUDINARY_API_KEY=<your_api_key>',
+      'CLOUDINARY_API_SECRET=<your_api_secret>',
+      `CLOUDINARY_UPLOAD_FOLDER=${initialMedia.uploadFolder || 'wild-cat/products'}`,
+      `CLOUDINARY_MAX_UPLOAD_MB=${initialMedia.maxUploadMb || 5}`,
+      `NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=${initialMedia.fallbackImage || '/images/pannel.png'}`,
+    ].join('\n'),
+    [initialMedia]
+  );
+
+  const cloudinaryCli = useMemo(
+    () => [
+      'printf "<your_cloud_name>" | vercel env add CLOUDINARY_CLOUD_NAME production',
+      'printf "<your_api_key>" | vercel env add CLOUDINARY_API_KEY production',
+      'printf "<your_api_secret>" | vercel env add CLOUDINARY_API_SECRET production',
+      `printf "${initialMedia.uploadFolder || 'wild-cat/products'}" | vercel env add CLOUDINARY_UPLOAD_FOLDER production`,
+      `printf "${initialMedia.maxUploadMb || 5}" | vercel env add CLOUDINARY_MAX_UPLOAD_MB production`,
+      `printf "${initialMedia.fallbackImage || '/images/pannel.png'}" | vercel env add NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL production`,
+      'vercel --prod',
+    ].join('\n'),
+    [initialMedia]
+  );
+
   return (
     <main className="min-h-screen bg-cream-100 px-6 py-16 text-charcoal">
       <div className="mx-auto max-w-4xl">
@@ -64,7 +89,7 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
           </p>
         </div>
 
-        <section className="mb-8 grid gap-4 md:grid-cols-2">
+        <section className="mb-8 grid gap-4 md:grid-cols-3">
           <ReadinessCard
             title="Storage"
             ready={initialStorage.productionReady}
@@ -83,6 +108,18 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
               ['Secure cookies', initialAuth.secureCookie ? 'enabled' : 'disabled'],
             ]}
             warnings={initialAuth.warnings || []}
+          />
+          <ReadinessCard
+            title="Media"
+            ready={initialMedia.productionReady}
+            rows={[
+              ['Provider', initialMedia.provider],
+              ['Cloud name', initialMedia.cloudNameConfigured ? 'yes' : 'no'],
+              ['API key', initialMedia.apiKeyConfigured ? 'yes' : 'no'],
+              ['API secret', initialMedia.apiSecretConfigured ? 'yes' : 'no'],
+              ['Fallback', initialMedia.fallbackImage],
+            ]}
+            warnings={initialMedia.warnings || []}
           />
         </section>
 
@@ -118,6 +155,8 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
           <div className="grid gap-5">
             <CodeBlock title="Vercel environment variables" value={envBlock} />
             <CodeBlock title="Vercel CLI helper" value={vercelCli} />
+            <CodeBlock title="Cloudinary environment template" value={cloudinaryEnvBlock} />
+            <CodeBlock title="Cloudinary Vercel CLI helper" value={cloudinaryCli} />
           </div>
 
           <div className="mt-6 border border-charcoal/10 bg-cream-100 p-4 font-sans text-sm leading-6 text-charcoal/65">
@@ -126,6 +165,11 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
               The Upstash integration in Vercel usually creates <code>KV_REST_API_URL</code> and{' '}
               <code>KV_REST_API_TOKEN</code>. The app also supports <code>UPSTASH_REDIS_REST_URL</code> and{' '}
               <code>UPSTASH_REDIS_REST_TOKEN</code>.
+            </p>
+            <p className="mt-2">
+              Product image uploads require Cloudinary. The app stores image files in Cloudinary and keeps only the
+              returned secure URL in KV. If a product image cannot load, the storefront uses the single global fallback
+              from <code>NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL</code>.
             </p>
             <p className="mt-2">
               This configurator does not write variables to Vercel automatically. That would require storing a Vercel

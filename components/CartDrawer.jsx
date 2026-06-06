@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useCart } from './CartProvider';
+import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 function money(currency, amount) {
   const symbol = currency === 'EUR' || currency === 'â‚¬' ? '€' : currency || '€';
@@ -114,8 +115,9 @@ export default function CartDrawer() {
             {items.map((item, i) => (
               <div key={item.id} className="flex gap-4 py-4 border-b border-charcoal/[0.06]">
                 <img
-                  src={item.image}
+                  src={productImageSrc(item.image)}
                   alt={item.name}
+                  onError={applyProductImageFallback}
                   className="w-[72px] h-[72px] object-cover bg-cream-200 flex-shrink-0"
                 />
                 <div className="flex-1 flex flex-col gap-1.5">

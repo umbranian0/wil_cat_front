@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 export default function FeaturedBanner({ product }) {
   if (!product) return null;
@@ -11,8 +12,9 @@ export default function FeaturedBanner({ product }) {
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-cream-200">
         <img
-          src={product.image}
+          src={productImageSrc(product.image)}
           alt={product.name}
+          onError={applyProductImageFallback}
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         />
         {product.tag && (

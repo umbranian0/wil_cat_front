@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCart } from '@/components/CartProvider';
 import ProductCard from '@/components/ProductCard';
 import Link from 'next/link';
+import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 export default function ProductDetailClient({ product, related }) {
   const { addItem } = useCart();
@@ -37,8 +38,9 @@ export default function ProductDetailClient({ product, related }) {
           {/* Image */}
           <div className="relative overflow-hidden bg-cream-200 aspect-square flex items-center justify-center">
             <img
-              src={product.image}
+              src={productImageSrc(product.image)}
               alt={product.name}
+              onError={applyProductImageFallback}
               className="w-full h-full object-contain p-10 transition-transform duration-700 hover:scale-105"
             />
             {product.tag && (
