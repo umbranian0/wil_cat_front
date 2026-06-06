@@ -14,24 +14,27 @@ export function CartProvider({ children }) {
 
   const addItem = useCallback((product, qty = 1) => {
     setItems(prev => {
+      const maxQty = product.inventoryMode === 'made_to_order' ? Infinity : Number(product.stockQty ?? 1);
       const existing = prev.findIndex(item => item.id === product.id);
       if (existing >= 0) {
         const updated = [...prev];
-        updated[existing] = { ...updated[existing], qty: updated[existing].qty + qty };
+        updated[existing] = { ...updated[existing], qty: Math.min(updated[existing].qty + qty, maxQty) };
         return updated;
       }
-      return [...prev, { ...product, qty }];
+      return [...prev, { ...product, qty: Math.min(qty, maxQty) }];
     });
   }, []);
 
   const updateQty = useCallback((index, delta) => {
     setItems(prev => {
       const updated = [...prev];
-      const newQty = updated[index].qty + delta;
+      const item = updated[index];
+      const maxQty = item.inventoryMode === 'made_to_order' ? Infinity : Number(item.stockQty ?? 1);
+      const newQty = item.qty + delta;
       if (newQty <= 0) {
         return prev.filter((_, i) => i !== index);
       }
-      updated[index] = { ...updated[index], qty: newQty };
+      updated[index] = { ...item, qty: Math.min(newQty, maxQty) };
       return updated;
     });
   }, []);

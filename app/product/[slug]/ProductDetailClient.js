@@ -7,13 +7,17 @@ import Link from 'next/link';
 import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
 export default function ProductDetailClient({ product, related }) {
-  const { addItem } = useCart();
+  const { addItem, items: cartItems } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const maxQty = product.inventoryMode === 'made_to_order' ? Infinity : Number(product.stockQty ?? 1);
+  const cartQty = cartItems.find(i => i.id === product.id)?.qty ?? 0;
   const available = product.inStock !== false && (product.inventoryMode === 'made_to_order' || Number(product.stockQty ?? 1) > 0);
+  const canAdd = available && cartQty + qty <= maxQty;
 
   const handleAdd = () => {
-    if (!available) return;
+    if (!canAdd) return;
     addItem(product, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -36,7 +40,10 @@ export default function ProductDetailClient({ product, related }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
 
           {/* Image */}
-          <div className="relative overflow-hidden bg-cream-200 aspect-square flex items-center justify-center">
+          <div
+            className="relative overflow-hidden bg-cream-200 aspect-square flex items-center justify-center cursor-zoom-in"
+            onClick={() => setLightboxOpen(true)}
+          >
             <img
               src={productImageSrc(product.image)}
               alt={product.name}
@@ -49,6 +56,29 @@ export default function ProductDetailClient({ product, related }) {
               </span>
             )}
           </div>
+
+          {/* Lightbox */}
+          {lightboxOpen && (
+            <div
+              className="fixed inset-0 z-[500] bg-charcoal/80 backdrop-blur-sm flex items-center justify-center p-6"
+              onClick={() => setLightboxOpen(false)}
+            >
+              <button
+                className="absolute top-5 right-6 text-cream-100 text-3xl leading-none bg-transparent border-none cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
+                onClick={() => setLightboxOpen(false)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+              <img
+                src={productImageSrc(product.image)}
+                alt={product.name}
+                onError={applyProductImageFallback}
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-full max-h-[90vh] object-contain shadow-2xl"
+              />
+            </div>
+          )}
 
           {/* Info */}
           <div className="flex flex-col gap-5 py-2">
@@ -84,8 +114,9 @@ export default function ProductDetailClient({ product, related }) {
                   {qty}
                 </span>
                 <button
-                  onClick={() => setQty(qty + 1)}
-                  className="w-9 h-9 flex items-center justify-center bg-transparent border border-cream-400 cursor-pointer text-base text-charcoal hover:border-charcoal transition-colors"
+                  onClick={() => setQty(Math.min(qty + 1, Math.max(1, maxQty - cartQty)))}
+                  disabled={qty >= maxQty - cartQty}
+                  className="w-9 h-9 flex items-center justify-center bg-transparent border border-cream-400 cursor-pointer text-base text-charcoal hover:border-charcoal transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   +
                 </button>
@@ -95,16 +126,16 @@ export default function ProductDetailClient({ product, related }) {
             {/* Add to cart */}
             <button
               onClick={handleAdd}
-              disabled={!available}
+              disabled={!canAdd}
               className={`mt-1 font-sans text-[12px] font-semibold tracking-[0.14em] uppercase py-4 px-12 border-none cursor-pointer transition-all ${
-                !available
+                !canAdd
                   ? 'bg-charcoal/40 text-cream-100 cursor-not-allowed'
                   : added
                   ? 'bg-[#4A7C59] text-white'
                   : 'bg-charcoal text-cream-100 hover:bg-terracotta'
               }`}
             >
-              {!available ? 'Sold out' : added ? '✓ Added to cart!' : 'Add to cart'}
+              {!available ? 'Sold out' : !canAdd ? 'Max quantity reached' : added ? '✓ Added to cart!' : 'Add to cart'}
             </button>
 
             {/* Details */}

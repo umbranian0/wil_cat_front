@@ -7,8 +7,11 @@ import { applyProductImageFallback, productImageSrc } from '@/lib/productImages'
 
 export default function ProductCard({ product }) {
   const [hovered, setHovered] = useState(false);
-  const { addItem } = useCart();
+  const { addItem, items: cartItems } = useCart();
   const available = product.inStock !== false && (product.inventoryMode === 'made_to_order' || Number(product.stockQty ?? 1) > 0);
+  const maxQty = product.inventoryMode === 'made_to_order' ? Infinity : Number(product.stockQty ?? 1);
+  const cartQty = cartItems.find(i => i.id === product.id)?.qty ?? 0;
+  const canAdd = available && cartQty < maxQty;
 
   return (
     <div
@@ -40,16 +43,16 @@ export default function ProductCard({ product }) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (available) addItem(product);
+              if (canAdd) addItem(product);
             }}
-            disabled={!available}
+            disabled={!canAdd}
             className={`quick-add-btn absolute bottom-0 left-0 right-0 py-3.5 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-center border-none transition-colors ${
-              available
+              canAdd
                 ? 'bg-charcoal/92 text-cream-100 cursor-pointer hover:bg-terracotta'
                 : 'bg-charcoal/50 text-cream-100 cursor-not-allowed'
             }`}
           >
-            {available ? '+ Add to cart' : 'Sold out'}
+            {!available ? 'Sold out' : !canAdd ? 'Max qty in cart' : '+ Add to cart'}
           </button>
         </div>
 
