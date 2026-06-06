@@ -12,7 +12,7 @@ async function request(path, options = {}) {
   const response = await fetch(endpoint(path), {
     ...options,
     headers: {
-      ...(options.body ? { 'content-type': 'application/json' } : {}),
+      ...(options.body && !(options.body instanceof FormData) ? { 'content-type': 'application/json' } : {}),
       ...(options.headers || {}),
     },
   });
@@ -21,6 +21,20 @@ async function request(path, options = {}) {
     throw new Error(`${options.method || 'GET'} ${path} failed: ${response.status} ${body.error || ''}`);
   }
   return { response, body };
+}
+
+async function expectFailure(path, options = {}, status) {
+  const response = await fetch(endpoint(path), {
+    ...options,
+    headers: {
+      ...(options.body && !(options.body instanceof FormData) ? { 'content-type': 'application/json' } : {}),
+      ...(options.headers || {}),
+    },
+  });
+  if (response.status !== status) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(`${options.method || 'GET'} ${path} returned ${response.status} instead of ${status}: ${body.error || ''}`);
+  }
 }
 
 function cookieFrom(response) {
@@ -66,6 +80,9 @@ async function main() {
     cookie,
     'x-csrf-token': csrf,
   };
+
+  await expectFailure('/api/admin/assets/upload', { method: 'POST', body: new FormData() }, 401);
+  await expectFailure('/api/admin/assets/upload', { method: 'POST', headers: { cookie }, body: new FormData() }, 403);
 
   const { body: adminProducts } = await request('/api/admin/products', {
     headers: { cookie },

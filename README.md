@@ -20,6 +20,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm run build
 ```
 
+### 4. Run smoke checks
+```bash
+npm run smoke:media
+npm run smoke:backoffice
+```
+
 ## Run with Docker
 
 Build and run the production Next.js container locally:
@@ -70,9 +76,17 @@ UPSTASH_REDIS_REST_TOKEN=...
 ADMIN_EMAIL=owner@example.com
 ADMIN_PASSWORD=change-this-long-password
 ADMIN_SESSION_SECRET=change-this-random-32-byte-secret
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+CLOUDINARY_UPLOAD_FOLDER=wild-cat/products
+CLOUDINARY_MAX_UPLOAD_MB=5
+NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=/images/pannel.png
 ```
 
 `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` should come from the Upstash KV/Redis integration in Vercel Marketplace. Without those variables, the app uses `.data/backoffice-kv.json` as a local development fallback only.
+
+Cloudinary stores product image files. The upload folder does not need to be created manually; Cloudinary creates it on first upload. Product records in KV store only Cloudinary asset metadata and the selected secure image URL. Use a local/static fallback URL such as `/images/pannel.png`, not a Cloudinary URL, so product images degrade cleanly if Cloudinary is unavailable.
 
 For local `next start` smoke tests over plain HTTP, set:
 

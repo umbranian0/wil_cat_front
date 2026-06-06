@@ -1,5 +1,5 @@
 import { requireAdmin } from '@/lib/backoffice/auth';
-import { uploadProductImage } from '@/lib/backoffice/cloudinary';
+import { getMediaUploadLimitBytes, uploadProductImage } from '@/lib/backoffice/media';
 import { handleApiError, json } from '@/lib/backoffice/http';
 import { checkRateLimit, getClientContext } from '@/lib/backoffice/security';
 
@@ -11,6 +11,10 @@ export async function POST(request) {
   if (auth.error) return auth.error;
 
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    const maxRequestBytes = getMediaUploadLimitBytes() + 1024 * 1024;
+    if (contentLength > maxRequestBytes) return json({ error: 'Image upload request is too large.' }, { status: 413 });
+
     const context = getClientContext(request);
     const rate = await checkRateLimit('admin_upload', `${context.ipHash}:${auth.admin.id}`, {
       limit: 25,
@@ -21,7 +25,9 @@ export async function POST(request) {
     const form = await request.formData();
     const asset = await uploadProductImage(form.get('file'), {
       productName: form.get('productName'),
+      productId: form.get('productId'),
       productSlug: form.get('productSlug'),
+      actorId: auth.admin.id,
       actorEmail: auth.admin.email,
     });
 

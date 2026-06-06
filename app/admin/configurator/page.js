@@ -1,6 +1,6 @@
 import ConfiguratorClient from './ConfiguratorClient';
 import { getAdminFromCookies, getAuthReadiness } from '@/lib/backoffice/auth';
-import { getMediaReadiness } from '@/lib/backoffice/cloudinary';
+import { getMediaReadiness } from '@/lib/backoffice/media';
 import { getStorageInfo } from '@/lib/backoffice/kv';
 
 export const dynamic = 'force-dynamic';

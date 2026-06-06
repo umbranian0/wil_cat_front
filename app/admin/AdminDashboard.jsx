@@ -163,6 +163,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       const form = new FormData();
       form.append('file', file);
       form.append('productName', selectedProduct.name || '');
+      form.append('productId', selectedProduct.id || '');
       form.append('productSlug', selectedProduct.slug || '');
 
       const response = await fetch('/api/admin/assets/upload', {
@@ -174,6 +175,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       if (!response.ok) throw new Error(body.error || 'Image upload failed.');
 
       updateSelectedProduct('image', body.asset.secureUrl || body.asset.url);
+      updateSelectedProduct('imageAssetId', body.asset.id || '');
       setMessage('Image uploaded to Cloudinary. Save product to keep it.');
     } catch (error) {
       setMessage(error.message);
