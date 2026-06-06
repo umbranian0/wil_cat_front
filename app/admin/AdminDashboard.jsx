@@ -436,6 +436,17 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     }
   }
 
+  async function seedCmsDefaults() {
+    try {
+      const data = await api('/api/admin/cms/seed', { method: 'POST' });
+      await refreshPages();
+      await refreshSecurity();
+      showSuccess('CMS defaults seeded', `${data.pages.length} pages restored to default content.`);
+    } catch (error) {
+      showError(error);
+    }
+  }
+
   function updateSelectedProduct(field, value) {
     if (selectedProductId === 'new') {
       setDraftProduct((current) => ({ ...current, [field]: value }));
@@ -692,12 +703,20 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
         {activeTab === 'cms' && (
           <section className="grid gap-6 lg:grid-cols-[320px_1fr]">
             <Panel title="Content records">
-              <button
-                onClick={() => setSelectedPageId('new')}
-                className="mb-3 w-full border border-charcoal px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em]"
-              >
-                New content
-              </button>
+              <div className="mb-3 flex flex-col gap-2">
+                <button
+                  onClick={() => setSelectedPageId('new')}
+                  className="w-full border border-charcoal px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em]"
+                >
+                  New content
+                </button>
+                <button
+                  onClick={seedCmsDefaults}
+                  className="w-full border border-charcoal/30 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/60 hover:border-charcoal hover:text-charcoal transition-colors"
+                >
+                  Seed defaults
+                </button>
+              </div>
               <div className="flex flex-col gap-2">
                 {pages.map((page) => (
                   <button
