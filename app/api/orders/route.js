@@ -1,6 +1,7 @@
 import { createOrder } from '@/lib/backoffice/repository';
 import { checkRateLimit, getClientContext } from '@/lib/backoffice/security';
 import { handleApiError, json } from '@/lib/backoffice/http';
+import { getCustomerSessionFromRequest } from '@/lib/customer/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +17,8 @@ export async function POST(request) {
     }
 
     const body = await request.json();
+    const customerSession = getCustomerSessionFromRequest(request);
+    if (customerSession?.id) context.customerId = customerSession.id;
     const { order, idempotent } = await createOrder(body, context);
     return json({ order, idempotent }, { status: idempotent ? 200 : 201 });
   } catch (error) {

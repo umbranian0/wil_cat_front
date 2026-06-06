@@ -5,18 +5,20 @@ import { useCart } from './CartProvider';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-export default function Navbar() {
+export default function Navbar({ links: configuredLinks }) {
   const { totalItems, setIsOpen } = useCart();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const links = [
+  const defaultLinks = [
     { href: '/', label: 'Home' },
     { href: '/shop', label: 'Shop' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
     { href: '/faq', label: 'FAQ' },
+    { href: '/account', label: 'My Account' },
   ];
+  const links = configuredLinks?.length ? configuredLinks : defaultLinks;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-100/95 backdrop-blur-md border-b border-charcoal/[0.06]">

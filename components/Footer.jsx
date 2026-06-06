@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ navigationLinks = [] }) {
+  const accountLink = navigationLinks.find((link) => link.href === '/account') || { href: '/account', label: 'My Account' };
+
   return (
     <footer className="bg-cream-200 border-t border-charcoal/[0.07] px-6 md:px-10 pt-16 pb-10 mt-8">
       <div className="max-w-7xl mx-auto">
@@ -48,6 +50,11 @@ export default function Footer() {
                     Terms
                   </Link>
                 </li>
+                <li>
+                  <Link href="/privacy" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
+                    Privacy
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -58,6 +65,11 @@ export default function Footer() {
                 <li>
                   <Link href="/contact" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
                     Contact us
+                  </Link>
+                </li>
+                <li>
+                  <Link href={accountLink.href} className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
+                    {accountLink.label}
                   </Link>
                 </li>
                 <li>

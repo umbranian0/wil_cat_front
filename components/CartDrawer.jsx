@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCart } from './CartProvider';
 import { applyProductImageFallback, productImageSrc } from '@/lib/productImages';
 
@@ -24,6 +24,20 @@ export default function CartDrawer() {
     message: '',
     website: '',
   });
+  const [shippingAddress, setShippingAddress] = useState({
+    line1: '',
+    line2: '',
+    postalCode: '',
+    city: '',
+    region: '',
+    country: '',
+  });
+  const [privacy, setPrivacy] = useState({
+    privacyPolicyAccepted: false,
+    marketingEmailConsent: false,
+    saveAddressToAccount: true,
+  });
+  const [accountCustomer, setAccountCustomer] = useState(null);
   const [startedAt] = useState(() => Date.now());
   const [submitting, setSubmitting] = useState(false);
   const [orderResult, setOrderResult] = useState(null);
@@ -32,6 +46,30 @@ export default function CartDrawer() {
     () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
     []
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/customer/auth/session')
+      .then((response) => response.json())
+      .then((body) => {
+        if (cancelled || !body.customer) return;
+        setAccountCustomer(body.customer);
+        setCustomer((current) => ({
+          ...current,
+          name: current.name || body.customer.name || '',
+          email: current.email || body.customer.email || '',
+          phone: current.phone || body.customer.phone || '',
+        }));
+        setPrivacy((current) => ({
+          ...current,
+          marketingEmailConsent: Boolean(body.customer.dataProtectionFlags?.marketingEmailConsent),
+        }));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function submitOrder(event) {
     event.preventDefault();
@@ -47,9 +85,36 @@ export default function CartDrawer() {
           name: customer.name,
           email: customer.email,
           phone: customer.phone,
-          country: customer.country,
+          country: shippingAddress.country || customer.country,
           message: customer.message,
           consentToContact: true,
+          marketingEmailConsent: privacy.marketingEmailConsent,
+        },
+        shippingAddress: {
+          name: customer.name,
+          line1: shippingAddress.line1,
+          line2: shippingAddress.line2,
+          postalCode: shippingAddress.postalCode,
+          city: shippingAddress.city,
+          region: shippingAddress.region,
+          country: shippingAddress.country || customer.country,
+          phone: customer.phone,
+        },
+        billingAddress: {
+          name: customer.name,
+          line1: shippingAddress.line1,
+          line2: shippingAddress.line2,
+          postalCode: shippingAddress.postalCode,
+          city: shippingAddress.city,
+          region: shippingAddress.region,
+          country: shippingAddress.country || customer.country,
+          phone: customer.phone,
+        },
+        privacy: {
+          privacyPolicyAccepted: privacy.privacyPolicyAccepted,
+          privacyPolicyVersion: '2026-06-06',
+          marketingEmailConsent: privacy.marketingEmailConsent,
+          saveAddressToAccount: Boolean(accountCustomer && privacy.saveAddressToAccount),
         },
         items: items.map((item) => ({ id: item.id, qty: item.qty })),
         idempotencyKey,
@@ -108,6 +173,11 @@ export default function CartDrawer() {
               <span className="mt-2 block">
                 Reference {orderResult.publicOrderNumber}. We will confirm availability, shipping, and payment details before the order is final.
               </span>
+              {accountCustomer && (
+                <a href="/account/orders" className="mt-3 inline-block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-terracotta underline">
+                  View order status
+                </a>
+              )}
             </div>
           )}
 
@@ -177,8 +247,13 @@ export default function CartDrawer() {
                   placeholder="Email"
                   value={customer.email}
                   onChange={(event) => setCustomer({ ...customer, email: event.target.value })}
-                  className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                    className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                 />
+                {accountCustomer && (
+                  <p className="font-sans text-[11px] leading-relaxed text-charcoal/50">
+                    This order will be saved to your customer account.
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     placeholder="Phone"
@@ -186,10 +261,49 @@ export default function CartDrawer() {
                     onChange={(event) => setCustomer({ ...customer, phone: event.target.value })}
                     className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                   />
+                </div>
+                <input
+                  required
+                  placeholder="Address line 1"
+                  value={shippingAddress.line1}
+                  onChange={(event) => setShippingAddress({ ...shippingAddress, line1: event.target.value })}
+                  className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                />
+                <input
+                  placeholder="Address line 2"
+                  value={shippingAddress.line2}
+                  onChange={(event) => setShippingAddress({ ...shippingAddress, line2: event.target.value })}
+                  className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                />
+                <div className="grid grid-cols-2 gap-2">
                   <input
+                    required
+                    placeholder="Postal code"
+                    value={shippingAddress.postalCode}
+                    onChange={(event) => setShippingAddress({ ...shippingAddress, postalCode: event.target.value })}
+                    className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                  />
+                  <input
+                    required
+                    placeholder="City"
+                    value={shippingAddress.city}
+                    onChange={(event) => setShippingAddress({ ...shippingAddress, city: event.target.value })}
+                    className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                  />
+                  <input
+                    placeholder="Region"
+                    value={shippingAddress.region}
+                    onChange={(event) => setShippingAddress({ ...shippingAddress, region: event.target.value })}
+                    className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
+                  />
+                  <input
+                    required
                     placeholder="Country"
-                    value={customer.country}
-                    onChange={(event) => setCustomer({ ...customer, country: event.target.value })}
+                    value={shippingAddress.country}
+                    onChange={(event) => {
+                      setShippingAddress({ ...shippingAddress, country: event.target.value });
+                      setCustomer({ ...customer, country: event.target.value });
+                    }}
                     className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                   />
                 </div>
@@ -200,10 +314,46 @@ export default function CartDrawer() {
                   onChange={(event) => setCustomer({ ...customer, message: event.target.value })}
                   className="w-full resize-none border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                 />
+                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                  <input
+                    required
+                    type="checkbox"
+                    checked={privacy.privacyPolicyAccepted}
+                    onChange={(event) => setPrivacy({ ...privacy, privacyPolicyAccepted: event.target.checked })}
+                    className="mt-1"
+                  />
+                  <span>
+                    I accept the{' '}
+                    <a href="/privacy" className="underline hover:text-charcoal">
+                      privacy policy
+                    </a>{' '}
+                    and understand that my data is used to process this order.
+                  </span>
+                </label>
+                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                  <input
+                    type="checkbox"
+                    checked={privacy.marketingEmailConsent}
+                    onChange={(event) => setPrivacy({ ...privacy, marketingEmailConsent: event.target.checked })}
+                    className="mt-1"
+                  />
+                  <span>I want to receive occasional product and studio emails.</span>
+                </label>
+                {accountCustomer && (
+                  <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                    <input
+                      type="checkbox"
+                      checked={privacy.saveAddressToAccount}
+                      onChange={(event) => setPrivacy({ ...privacy, saveAddressToAccount: event.target.checked })}
+                      className="mt-1"
+                    />
+                    <span>Save this address to my account.</span>
+                  </label>
+                )}
                 {orderError && <p className="font-sans text-[12px] text-terracotta">{orderError}</p>}
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !privacy.privacyPolicyAccepted}
                   className="w-full bg-charcoal py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-cream-100 transition-all hover:bg-terracotta disabled:opacity-60"
                 >
                   {submitting ? 'Submitting...' : 'Submit order request'}

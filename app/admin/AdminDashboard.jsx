@@ -222,12 +222,202 @@ function AboutBlockEditor({ blocks, onChange }) {
   );
 }
 
+function NavigationBlockEditor({ blocks, onChange }) {
+  const items = blocks.filter((b) => b.type === 'nav_link');
+
+  function updateItem(index, field, value) {
+    onChange(items.map((item, i) => i === index ? { ...item, [field]: field === 'order' ? Number(value || 0) : value } : item));
+  }
+
+  function addItem() {
+    onChange([...items, { type: 'nav_link', order: items.length + 1, href: '/', label: 'New link' }]);
+  }
+
+  function removeItem(index) {
+    onChange(items.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {items.map((item, i) => (
+        <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Navigation link {i + 1}</span>
+            <button onClick={() => removeItem(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+          </div>
+          <div className="grid gap-3 md:grid-cols-[90px_1fr_1fr]">
+            <Field label="Order" type="number" value={item.order ?? i + 1} onChange={(v) => updateItem(i, 'order', v)} />
+            <Field label="Label" value={item.label || ''} onChange={(v) => updateItem(i, 'label', v)} />
+            <Field label="URL" value={item.href || ''} onChange={(v) => updateItem(i, 'href', v)} />
+          </div>
+        </div>
+      ))}
+      <button
+        onClick={addItem}
+        className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+      >
+        + Add link
+      </button>
+    </div>
+  );
+}
+
+function AccountBlockEditor({ blocks, onChange }) {
+  const header = blocks.find((b) => b.type === 'account_header') || { type: 'account_header' };
+  const auth = blocks.find((b) => b.type === 'account_auth') || { type: 'account_auth' };
+  const labels = blocks.find((b) => b.type === 'account_labels') || { type: 'account_labels' };
+  const features = blocks.filter((b) => b.type === 'account_feature');
+
+  function replaceBlock(type, value) {
+    const rest = blocks.filter((b) => b.type !== type);
+    onChange([...rest, value]);
+  }
+
+  function updateHeader(field, value) {
+    replaceBlock('account_header', { ...header, type: 'account_header', [field]: value });
+  }
+
+  function updateAuth(field, value) {
+    replaceBlock('account_auth', { ...auth, type: 'account_auth', [field]: value });
+  }
+
+  function updateLabels(field, value) {
+    replaceBlock('account_labels', { ...labels, type: 'account_labels', [field]: value });
+  }
+
+  function updateFeature(index, field, value) {
+    const nextFeatures = features.map((feature, i) => i === index ? { ...feature, [field]: value } : feature);
+    const rest = blocks.filter((b) => b.type !== 'account_feature');
+    onChange([...rest, ...nextFeatures]);
+  }
+
+  function addFeature() {
+    const rest = blocks.filter((b) => b.type !== 'account_feature');
+    onChange([...rest, ...features, { type: 'account_feature', title: 'New feature', text: '' }]);
+  }
+
+  function removeFeature(index) {
+    const rest = blocks.filter((b) => b.type !== 'account_feature');
+    onChange([...rest, ...features.filter((_, i) => i !== index)]);
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Account header</span>
+        <Field label="Eyebrow" value={header.eyebrow || ''} onChange={(v) => updateHeader('eyebrow', v)} />
+        <Field label="Heading" value={header.heading || ''} onChange={(v) => updateHeader('heading', v)} />
+        <Textarea label="Intro" value={header.intro || ''} onChange={(v) => updateHeader('intro', v)} rows={2} />
+      </div>
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Login and register copy</span>
+        <Field label="Login title" value={auth.loginTitle || ''} onChange={(v) => updateAuth('loginTitle', v)} />
+        <Field label="Register title" value={auth.registerTitle || ''} onChange={(v) => updateAuth('registerTitle', v)} />
+        <Textarea label="Auth intro" value={auth.authIntro || ''} onChange={(v) => updateAuth('authIntro', v)} rows={2} />
+      </div>
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Interface labels</span>
+        <div className="grid gap-3 md:grid-cols-2">
+          <Field label="Orders tab" value={labels.ordersLabel || ''} onChange={(v) => updateLabels('ordersLabel', v)} />
+          <Field label="Addresses tab" value={labels.addressesLabel || ''} onChange={(v) => updateLabels('addressesLabel', v)} />
+          <Field label="Privacy tab" value={labels.privacyLabel || ''} onChange={(v) => updateLabels('privacyLabel', v)} />
+          <Field label="Profile tab" value={labels.profileLabel || ''} onChange={(v) => updateLabels('profileLabel', v)} />
+          <Field label="Sign out" value={labels.signOutLabel || ''} onChange={(v) => updateLabels('signOutLabel', v)} />
+          <Field label="Orders title" value={labels.ordersTitle || ''} onChange={(v) => updateLabels('ordersTitle', v)} />
+          <Field label="Addresses title" value={labels.addressesTitle || ''} onChange={(v) => updateLabels('addressesTitle', v)} />
+          <Field label="Privacy title" value={labels.privacyTitle || ''} onChange={(v) => updateLabels('privacyTitle', v)} />
+          <Field label="Profile title" value={labels.profileTitle || ''} onChange={(v) => updateLabels('profileTitle', v)} />
+        </div>
+        <Textarea label="Empty orders text" value={labels.emptyOrdersText || ''} onChange={(v) => updateLabels('emptyOrdersText', v)} rows={2} />
+        <Textarea label="Empty privacy requests text" value={labels.emptyPrivacyRequestsText || ''} onChange={(v) => updateLabels('emptyPrivacyRequestsText', v)} rows={2} />
+        <Textarea label="Empty consent text" value={labels.emptyConsentText || ''} onChange={(v) => updateLabels('emptyConsentText', v)} rows={2} />
+      </div>
+      <div className="flex flex-col gap-4">
+        {features.map((feature, i) => (
+          <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Feature {i + 1}</span>
+              <button onClick={() => removeFeature(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+            </div>
+            <Field label="Title" value={feature.title || ''} onChange={(v) => updateFeature(i, 'title', v)} />
+            <Textarea label="Text" value={feature.text || ''} onChange={(v) => updateFeature(i, 'text', v)} rows={2} />
+          </div>
+        ))}
+        <button
+          onClick={addFeature}
+          className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+        >
+          + Add feature
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PrivacyBlockEditor({ blocks, onChange }) {
+  const header = blocks.find((b) => b.type === 'privacy_header') || { type: 'privacy_header' };
+  const sections = blocks.filter((b) => b.type === 'privacy_section');
+
+  function updateHeader(field, value) {
+    const rest = blocks.filter((b) => b.type !== 'privacy_header');
+    onChange([{ ...header, type: 'privacy_header', [field]: value }, ...rest]);
+  }
+
+  function updateSection(index, field, value) {
+    const nextSections = sections.map((section, i) => i === index ? { ...section, [field]: value } : section);
+    const rest = blocks.filter((b) => b.type !== 'privacy_section');
+    onChange([header, ...rest.filter((b) => b.type !== 'privacy_header'), ...nextSections]);
+  }
+
+  function addSection() {
+    const rest = blocks.filter((b) => b.type !== 'privacy_section' && b.type !== 'privacy_header');
+    onChange([header, ...rest, ...sections, { type: 'privacy_section', title: 'New section', body: '' }]);
+  }
+
+  function removeSection(index) {
+    const rest = blocks.filter((b) => b.type !== 'privacy_section' && b.type !== 'privacy_header');
+    onChange([header, ...rest, ...sections.filter((_, i) => i !== index)]);
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Privacy header</span>
+        <Field label="Eyebrow" value={header.eyebrow || ''} onChange={(v) => updateHeader('eyebrow', v)} />
+        <Field label="Heading" value={header.heading || ''} onChange={(v) => updateHeader('heading', v)} />
+        <Textarea label="Intro" value={header.intro || ''} onChange={(v) => updateHeader('intro', v)} rows={2} />
+      </div>
+      <div className="flex flex-col gap-4">
+        {sections.map((section, i) => (
+          <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Privacy section {i + 1}</span>
+              <button onClick={() => removeSection(i)} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+            </div>
+            <Field label="Title" value={section.title || ''} onChange={(v) => updateSection(i, 'title', v)} />
+            <Textarea label="Body" value={section.body || ''} onChange={(v) => updateSection(i, 'body', v)} rows={4} />
+          </div>
+        ))}
+        <button
+          onClick={addSection}
+          className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+        >
+          + Add privacy section
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function CmsBlockEditor({ page, onChange }) {
   const blocks = parseBlocks(page?.blocks);
   if (page?.type === 'homepage_section') return <HomepageBlockEditor blocks={blocks} onChange={onChange} />;
   if (page?.type === 'faq') return <FaqBlockEditor blocks={blocks} onChange={onChange} />;
   if (page?.type === 'terms') return <TermsBlockEditor blocks={blocks} onChange={onChange} />;
   if (page?.type === 'about') return <AboutBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'navigation') return <NavigationBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'account') return <AccountBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'privacy') return <PrivacyBlockEditor blocks={blocks} onChange={onChange} />;
   return (
     <Textarea
       label="Blocks JSON"
@@ -411,6 +601,8 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
           paymentMethod: selectedOrder.paymentMethod || '',
           internalNotes: selectedOrder.internalNotes || '',
           customerNotes: selectedOrder.customerNotes || '',
+          shippingAddress: selectedOrder.shippingAddress || {},
+          billingAddress: selectedOrder.billingAddress || selectedOrder.shippingAddress || {},
         }),
       });
       setOrders((current) => current.map((order) => (order.id === data.order.id ? data.order : order)));
@@ -460,6 +652,21 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
   function updateSelectedOrder(field, value) {
     setOrders((current) =>
       current.map((order) => (order.id === selectedOrderId ? { ...order, [field]: value } : order))
+    );
+  }
+
+  function updateSelectedOrderAddress(scope, field, value) {
+    setOrders((current) =>
+      current.map((order) => {
+        if (order.id !== selectedOrderId) return order;
+        return {
+          ...order,
+          [scope]: {
+            ...(order[scope] || {}),
+            [field]: value,
+          },
+        };
+      })
     );
   }
 
@@ -550,6 +757,106 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Field label="Email" value={selectedOrder.customer.email} readOnly />
                     <Field label="Phone" value={selectedOrder.customer.phone || ''} readOnly />
                     <Field label="Country" value={selectedOrder.customer.country || ''} readOnly />
+                  </div>
+                  <div className="grid gap-4 lg:grid-cols-2">
+                    <div className="border border-charcoal/10 p-4">
+                      <h3 className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/50">
+                        Shipping address
+                      </h3>
+                      <div className="grid gap-3">
+                        <Field
+                          label="Recipient"
+                          value={selectedOrder.shippingAddress?.name || selectedOrder.customer.name || ''}
+                          onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'name', value)}
+                        />
+                        <Field
+                          label="Address line 1"
+                          value={selectedOrder.shippingAddress?.line1 || ''}
+                          onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'line1', value)}
+                        />
+                        <Field
+                          label="Address line 2"
+                          value={selectedOrder.shippingAddress?.line2 || ''}
+                          onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'line2', value)}
+                        />
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <Field
+                            label="Postal code"
+                            value={selectedOrder.shippingAddress?.postalCode || ''}
+                            onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'postalCode', value)}
+                          />
+                          <Field
+                            label="City"
+                            value={selectedOrder.shippingAddress?.city || ''}
+                            onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'city', value)}
+                          />
+                          <Field
+                            label="Region"
+                            value={selectedOrder.shippingAddress?.region || ''}
+                            onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'region', value)}
+                          />
+                          <Field
+                            label="Country"
+                            value={selectedOrder.shippingAddress?.country || selectedOrder.customer.country || ''}
+                            onChange={(value) => updateSelectedOrderAddress('shippingAddress', 'country', value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border border-charcoal/10 p-4">
+                      <h3 className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/50">
+                        Billing address
+                      </h3>
+                      <div className="grid gap-3">
+                        <Field
+                          label="Name"
+                          value={selectedOrder.billingAddress?.name || selectedOrder.shippingAddress?.name || selectedOrder.customer.name || ''}
+                          onChange={(value) => updateSelectedOrderAddress('billingAddress', 'name', value)}
+                        />
+                        <Field
+                          label="Address line 1"
+                          value={selectedOrder.billingAddress?.line1 || ''}
+                          onChange={(value) => updateSelectedOrderAddress('billingAddress', 'line1', value)}
+                        />
+                        <Field
+                          label="Address line 2"
+                          value={selectedOrder.billingAddress?.line2 || ''}
+                          onChange={(value) => updateSelectedOrderAddress('billingAddress', 'line2', value)}
+                        />
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <Field
+                            label="Postal code"
+                            value={selectedOrder.billingAddress?.postalCode || ''}
+                            onChange={(value) => updateSelectedOrderAddress('billingAddress', 'postalCode', value)}
+                          />
+                          <Field
+                            label="City"
+                            value={selectedOrder.billingAddress?.city || ''}
+                            onChange={(value) => updateSelectedOrderAddress('billingAddress', 'city', value)}
+                          />
+                          <Field
+                            label="Region"
+                            value={selectedOrder.billingAddress?.region || ''}
+                            onChange={(value) => updateSelectedOrderAddress('billingAddress', 'region', value)}
+                          />
+                          <Field
+                            label="Country"
+                            value={selectedOrder.billingAddress?.country || selectedOrder.shippingAddress?.country || ''}
+                            onChange={(value) => updateSelectedOrderAddress('billingAddress', 'country', value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border border-charcoal/10 bg-cream-200 p-4 font-sans text-sm text-charcoal/65">
+                    <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+                      Data protection
+                    </span>
+                    <span className="mt-1 block">
+                      Order processing basis: {selectedOrder.privacy?.lawfulBasisOrderProcessing || 'contract'}.
+                      Privacy policy version: {selectedOrder.privacy?.privacyPolicyVersion || 'not recorded'}.
+                      Marketing consent: {selectedOrder.privacy?.marketingEmailConsent ? 'yes' : 'no'}.
+                    </span>
                   </div>
                   <div className="grid gap-4 md:grid-cols-3">
                     <Select
@@ -739,7 +1046,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Field label="Title" value={selectedPage.title || ''} onChange={(value) => updateSelectedPage('title', value)} />
                     <Field label="Slug" value={selectedPage.slug || ''} onChange={(value) => updateSelectedPage('slug', value)} />
                     <Select label="Status" value={selectedPage.status || 'draft'} options={['draft', 'published', 'archived']} onChange={(value) => updateSelectedPage('status', value)} />
-                    <Select label="Type" value={selectedPage.type || 'custom'} options={['homepage_section', 'about', 'faq', 'terms', 'contact', 'custom']} onChange={(value) => updateSelectedPage('type', value)} />
+                    <Select label="Type" value={selectedPage.type || 'custom'} options={['homepage_section', 'about', 'faq', 'terms', 'contact', 'navigation', 'account', 'privacy', 'custom']} onChange={(value) => updateSelectedPage('type', value)} />
                   </div>
                   <CmsBlockEditor
                     page={selectedPage}
@@ -760,6 +1067,8 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 <ReadinessRow label="Upstash configured" ready={summary.storage.upstashConfigured} value={summary.storage.upstashConfigured ? 'yes' : 'no'} />
                 <ReadinessRow label="Auth configured" ready={summary.auth?.productionReady} value={summary.auth?.productionReady ? 'yes' : 'no'} />
                 <ReadinessRow label="Secure admin cookies" ready={summary.auth?.secureCookie} value={summary.auth?.secureCookie ? 'enabled' : 'disabled'} />
+                <ReadinessRow label="Customer auth configured" ready={summary.customerAuth?.productionReady} value={summary.customerAuth?.productionReady ? 'yes' : 'no'} />
+                <ReadinessRow label="Secure customer cookies" ready={summary.customerAuth?.secureCookie} value={summary.customerAuth?.secureCookie ? 'enabled' : 'disabled'} />
                 <ReadinessRow label="Media uploads" ready={summary.media?.productionReady} value={summary.media?.provider || 'url-only'} />
                 <ReadinessRow label="Image fallback" ready={Boolean(summary.media?.fallbackImage)} value={summary.media?.fallbackImage || '/images/pannel.png'} />
                 <a
@@ -768,7 +1077,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 >
                   Open configurator
                 </a>
-                {[...(summary.storage.warnings || []), ...(summary.auth?.warnings || []), ...(summary.media?.warnings || [])].map((warning) => (
+                {[...(summary.storage.warnings || []), ...(summary.auth?.warnings || []), ...(summary.customerAuth?.warnings || []), ...(summary.media?.warnings || [])].map((warning) => (
                   <div key={warning} className="border border-terracotta/40 bg-cream-200 p-3 text-terracotta">
                     {warning}
                   </div>
