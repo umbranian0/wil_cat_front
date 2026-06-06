@@ -115,7 +115,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
               </>
             )}
             <Field label="Email" type="email" value={form.email} onChange={(value) => update('email', value)} required />
-            <Field label="Password" type="password" value={form.password} onChange={(value) => update('password', value)} required />
+            <Field label="Password" type="password" value={form.password} onChange={(value) => update('password', value)} required minLength={mode === 'register' ? 8 : undefined} hint={mode === 'register' ? 'Minimum 8 characters.' : undefined} />
 
             {mode === 'register' && (
               <>
@@ -163,7 +163,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
   );
 }
 
-function Field({ label, value, onChange, type = 'text', required = false }) {
+function Field({ label, value, onChange, type = 'text', required = false, minLength, hint }) {
   return (
     <label className="block">
       <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
@@ -172,10 +172,12 @@ function Field({ label, value, onChange, type = 'text', required = false }) {
       <input
         type={type}
         required={required}
+        minLength={minLength}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="w-full border border-charcoal/15 bg-transparent px-3 py-3 font-sans text-sm outline-none focus:border-charcoal"
       />
+      {hint && <span className="mt-1 block font-sans text-[11px] text-charcoal/40">{hint}</span>}
     </label>
   );
 }
