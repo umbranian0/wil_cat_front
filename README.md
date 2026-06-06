@@ -1,6 +1,6 @@
 # Wild Cat Ceramic — Next.js Website
 
-A static e-commerce website for Wild Cat Ceramic, built with Next.js 14 and Tailwind CSS.
+A server-capable e-commerce website for Wild Cat Ceramic, built with Next.js 14 and Tailwind CSS.
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ npm run build
 
 ## Run with Docker
 
-Build and run the production container locally:
+Build and run the production Next.js container locally:
 
 ```bash
 docker compose up --build
@@ -50,6 +50,30 @@ npm i -g vercel
 vercel
 ```
 
+## Backoffice POC
+
+The admin backoffice is available at `/admin`. It includes product CMS, order management, CMS content records, audit events, and a security/fraud dashboard.
+
+For production or Vercel Preview deployments, configure these environment variables:
+
+```bash
+UPSTASH_REDIS_REST_URL=...
+UPSTASH_REDIS_REST_TOKEN=...
+ADMIN_EMAIL=owner@example.com
+ADMIN_PASSWORD=change-this-long-password
+ADMIN_SESSION_SECRET=change-this-random-32-byte-secret
+```
+
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` should come from the Upstash KV/Redis integration in Vercel Marketplace. Without those variables, the app uses `.data/backoffice-kv.json` as a local development fallback only.
+
+For local `next start` smoke tests over plain HTTP, set:
+
+```bash
+ADMIN_COOKIE_SECURE=false
+```
+
+Do not use `ADMIN_COOKIE_SECURE=false` on Vercel production.
+
 ## Project Structure
 
 ```
@@ -72,7 +96,7 @@ wildcat-ceramic/
 │   ├── Hero.jsx            # Homepage hero section
 │   └── FeaturedBanner.jsx  # Featured product banner
 ├── data/
-│   └── products.json       # Product catalog (static data)
+│   └── products.json       # Product catalog seed data
 ├── public/
 │   └── images/             # Product photos
 └── ...config files
@@ -81,10 +105,10 @@ wildcat-ceramic/
 ## Configuration
 
 ### Products
-Edit `data/products.json` to update product names, prices, descriptions, and images.
+Use `/admin` to manage products once the backoffice is configured. `data/products.json` remains seed data for the first local or Upstash-backed store initialization.
 
 ### Contact Info
-Update these in `components/CartProvider.jsx`:
+Update these in `lib/config.js`:
 - `WHATSAPP_NUMBER` — your WhatsApp number with country code (no + or spaces)
 - `ORDER_EMAIL` — your order email address
 

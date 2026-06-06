@@ -9,8 +9,10 @@ export default function ProductDetailClient({ product, related }) {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const available = product.inStock !== false && (product.inventoryMode === 'made_to_order' || Number(product.stockQty ?? 1) > 0);
 
   const handleAdd = () => {
+    if (!available) return;
     addItem(product, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -91,13 +93,16 @@ export default function ProductDetailClient({ product, related }) {
             {/* Add to cart */}
             <button
               onClick={handleAdd}
+              disabled={!available}
               className={`mt-1 font-sans text-[12px] font-semibold tracking-[0.14em] uppercase py-4 px-12 border-none cursor-pointer transition-all ${
-                added
+                !available
+                  ? 'bg-charcoal/40 text-cream-100 cursor-not-allowed'
+                  : added
                   ? 'bg-[#4A7C59] text-white'
                   : 'bg-charcoal text-cream-100 hover:bg-terracotta'
               }`}
             >
-              {added ? '✓ Added to cart!' : 'Add to cart'}
+              {!available ? 'Sold out' : added ? '✓ Added to cart!' : 'Add to cart'}
             </button>
 
             {/* Details */}

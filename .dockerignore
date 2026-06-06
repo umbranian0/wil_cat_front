@@ -2,6 +2,7 @@
 .gitignore
 .next
 .vercel
+.data
 coverage
 node_modules
 npm-debug.log*

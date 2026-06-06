@@ -40,6 +40,10 @@ export function CartProvider({ children }) {
     setItems(prev => prev.filter((_, i) => i !== index));
   }, []);
 
+  const clearCart = useCallback(() => {
+    setItems([]);
+  }, []);
+
   const totalItems = items.reduce((sum, item) => sum + item.qty, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -69,6 +73,7 @@ export function CartProvider({ children }) {
     <CartContext.Provider value={{
       items, isOpen, setIsOpen,
       addItem, updateQty, removeItem,
+      clearCart,
       totalItems, totalPrice,
       checkoutWhatsApp, checkoutEmail,
     }}>

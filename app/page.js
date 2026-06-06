@@ -2,15 +2,18 @@ import Link from 'next/link';
 import Hero from '@/components/Hero';
 import FeaturedBanner from '@/components/FeaturedBanner';
 import ProductGrid from './ProductGrid';
-import products from '@/data/products.json';
+import { getFeaturedProduct, listPublishedProducts } from '@/lib/catalog';
 
-export default function Home() {
-  const featured = products[0];
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const products = await listPublishedProducts();
+  const featured = await getFeaturedProduct();
 
   return (
     <div className="page-enter">
       <Hero />
-      <FeaturedBanner product={featured} />
+      {featured && <FeaturedBanner product={featured} />}
 
       {/* Product Grid */}
       <div className="px-6 md:px-10 mb-20">

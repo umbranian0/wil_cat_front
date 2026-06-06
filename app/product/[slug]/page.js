@@ -1,15 +1,14 @@
-import products from '@/data/products.json';
 import ProductDetailClient from './ProductDetailClient';
+import {
+  getProductBySlug,
+  getRelatedProducts,
+} from '@/lib/catalog';
 import { notFound } from 'next/navigation';
 
-export function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
-}
+export const dynamic = 'force-dynamic';
 
-export function generateMetadata({ params }) {
-  const product = products.find(p => p.slug === params.slug);
+export async function generateMetadata({ params }) {
+  const product = await getProductBySlug(params.slug);
   if (!product) return { title: 'Product not found' };
   return {
     title: `${product.name} — Wild Cat Ceramic`,
@@ -17,14 +16,11 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function ProductPage({ params }) {
-  const product = products.find(p => p.slug === params.slug);
+export default async function ProductPage({ params }) {
+  const product = await getProductBySlug(params.slug);
   if (!product) notFound();
 
-  // Get related products (same category, exclude current)
-  const related = products
-    .filter(p => p.id !== product.id)
-    .slice(0, 3);
+  const related = await getRelatedProducts(product.id);
 
   return <ProductDetailClient product={product} related={related} />;
 }

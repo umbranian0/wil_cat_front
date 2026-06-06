@@ -1,12 +1,16 @@
-import products from '@/data/products.json';
+import { listPublishedProducts } from '@/lib/catalog';
 import ShopClient from './ShopClient';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Shop — Wild Cat Ceramic',
   description: 'Browse our full collection of handmade ceramics.',
 };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const products = await listPublishedProducts();
+
   return (
     <div className="page-enter pt-28 pb-16 px-6 md:px-10">
       <div className="max-w-7xl mx-auto">

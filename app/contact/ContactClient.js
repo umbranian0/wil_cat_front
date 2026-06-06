@@ -4,22 +4,38 @@ import { useState } from 'react';
 import siteConfig from '@/lib/config';
 
 export default function ContactClient() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '', website: '' });
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [startedAt] = useState(() => Date.now());
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Contact from ${form.name}`);
-    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
-    window.open(`mailto:${siteConfig.orderEmail}?subject=${subject}&body=${body}`, '_blank');
+    setSubmitting(true);
+    setError('');
+
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ ...form, submittedAt: startedAt }),
+    });
+    const body = await response.json().catch(() => ({}));
+    setSubmitting(false);
+
+    if (!response.ok) {
+      setError(body.error || 'Could not send the message.');
+      return;
+    }
+
     setSent(true);
+    setForm({ name: '', email: '', message: '', website: '' });
     setTimeout(() => setSent(false), 3000);
   };
 
   return (
     <div className="page-enter pt-28 pb-16 px-6">
       <div className="max-w-xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <span className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-cream-500 block mb-3">
             Get in touch
@@ -32,7 +48,6 @@ export default function ContactClient() {
           </p>
         </div>
 
-        {/* Contact methods */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
           <a
             href={`mailto:${siteConfig.orderEmail}`}
@@ -60,34 +75,29 @@ export default function ContactClient() {
           </a>
         </div>
 
-        {/* Contact form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div>
-            <label className="font-sans text-[12px] font-medium tracking-[0.05em] uppercase text-cream-500 block mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              required
-              value={form.name}
-              onChange={e => setForm({ ...form, name: e.target.value })}
-              className="w-full bg-transparent border border-cream-400 px-4 py-3 font-sans text-[14px] text-charcoal outline-none focus:border-charcoal transition-colors"
-              placeholder="Your name"
-            />
-          </div>
-          <div>
-            <label className="font-sans text-[12px] font-medium tracking-[0.05em] uppercase text-cream-500 block mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={form.email}
-              onChange={e => setForm({ ...form, email: e.target.value })}
-              className="w-full bg-transparent border border-cream-400 px-4 py-3 font-sans text-[14px] text-charcoal outline-none focus:border-charcoal transition-colors"
-              placeholder="your@email.com"
-            />
-          </div>
+          <input
+            className="hidden"
+            tabIndex="-1"
+            autoComplete="off"
+            value={form.website}
+            onChange={e => setForm({ ...form, website: e.target.value })}
+          />
+          <FormField
+            label="Name"
+            required
+            value={form.name}
+            onChange={(value) => setForm({ ...form, name: value })}
+            placeholder="Your name"
+          />
+          <FormField
+            label="Email"
+            type="email"
+            required
+            value={form.email}
+            onChange={(value) => setForm({ ...form, email: value })}
+            placeholder="your@email.com"
+          />
           <div>
             <label className="font-sans text-[12px] font-medium tracking-[0.05em] uppercase text-cream-500 block mb-2">
               Message
@@ -103,16 +113,36 @@ export default function ContactClient() {
           </div>
           <button
             type="submit"
+            disabled={submitting}
             className={`font-sans text-[13px] font-semibold tracking-[0.1em] uppercase py-4 border-none cursor-pointer transition-all ${
               sent
                 ? 'bg-[#4A7C59] text-white'
                 : 'bg-charcoal text-cream-100 hover:bg-charcoal-light'
-            }`}
+            } disabled:opacity-60`}
           >
-            {sent ? '✓ Opening email client...' : 'Send message'}
+            {submitting ? 'Sending...' : sent ? 'Message sent' : 'Send message'}
           </button>
+          {error && <p className="font-sans text-[13px] text-terracotta">{error}</p>}
         </form>
       </div>
+    </div>
+  );
+}
+
+function FormField({ label, value, onChange, type = 'text', required = false, placeholder = '' }) {
+  return (
+    <div>
+      <label className="font-sans text-[12px] font-medium tracking-[0.05em] uppercase text-cream-500 block mb-2">
+        {label}
+      </label>
+      <input
+        type={type}
+        required={required}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="w-full bg-transparent border border-cream-400 px-4 py-3 font-sans text-[14px] text-charcoal outline-none focus:border-charcoal transition-colors"
+        placeholder={placeholder}
+      />
     </div>
   );
 }

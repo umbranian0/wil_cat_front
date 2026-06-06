@@ -7,6 +7,7 @@ import { useCart } from './CartProvider';
 export default function ProductCard({ product }) {
   const [hovered, setHovered] = useState(false);
   const { addItem } = useCart();
+  const available = product.inStock !== false && (product.inventoryMode === 'made_to_order' || Number(product.stockQty ?? 1) > 0);
 
   return (
     <div
@@ -37,11 +38,16 @@ export default function ProductCard({ product }) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              addItem(product);
+              if (available) addItem(product);
             }}
-            className="quick-add-btn absolute bottom-0 left-0 right-0 py-3.5 bg-charcoal/92 text-cream-100 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-center border-none cursor-pointer hover:bg-terracotta transition-colors"
+            disabled={!available}
+            className={`quick-add-btn absolute bottom-0 left-0 right-0 py-3.5 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-center border-none transition-colors ${
+              available
+                ? 'bg-charcoal/92 text-cream-100 cursor-pointer hover:bg-terracotta'
+                : 'bg-charcoal/50 text-cream-100 cursor-not-allowed'
+            }`}
           >
-            + Add to cart
+            {available ? '+ Add to cart' : 'Sold out'}
           </button>
         </div>
 
