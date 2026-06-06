@@ -1,12 +1,13 @@
 import { handleApiError, json } from '@/lib/backoffice/http';
 import { checkRateLimit, getClientContext } from '@/lib/backoffice/security';
-import { CUSTOMER_COOKIE, createCustomerSession, customerCookieOptions } from '@/lib/customer/auth';
+import { assertCustomerAuthReady, CUSTOMER_COOKIE, createCustomerSession, customerCookieOptions } from '@/lib/customer/auth';
 import { createCustomer, publicCustomer } from '@/lib/customer/repository';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request) {
   try {
+    assertCustomerAuthReady();
     const context = getClientContext(request);
     const body = await request.json();
     const rate = await checkRateLimit('customer_register', `${context.ipHash}:${body.email || ''}`, {
