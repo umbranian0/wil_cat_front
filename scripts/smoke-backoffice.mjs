@@ -139,6 +139,7 @@ async function main() {
     headers: { cookie },
   });
   if (!security.summary) throw new Error('Security dashboard returned no summary.');
+  if (!security.notifications?.length) throw new Error('Admin notifications were not persisted.');
 
   await request('/api/admin/auth/logout', {
     method: 'POST',
@@ -153,6 +154,7 @@ async function main() {
         order: orderResult.order.publicOrderNumber,
         createdDraftProduct: createdProduct.product.slug,
         createdCmsPage: createdPage.page.slug,
+        notifications: security.notifications.length,
         storage: security.summary.storage.provider,
       },
       null,

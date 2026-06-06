@@ -55,6 +55,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
   const [pages, setPages] = useState(initialData.pages);
   const [riskEvents, setRiskEvents] = useState(initialData.riskEvents);
   const [auditEvents, setAuditEvents] = useState(initialData.auditEvents);
+  const [notifications, setNotifications] = useState(initialData.notifications || []);
   const [selectedProductId, setSelectedProductId] = useState(products[0]?.id || 'new');
   const [selectedOrderId, setSelectedOrderId] = useState(orders[0]?.id || '');
   const [selectedPageId, setSelectedPageId] = useState(pages[0]?.id || 'new');
@@ -66,12 +67,34 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     status: 'draft',
     blocks: '[]',
   });
-  const [message, setMessage] = useState('');
+  const [toasts, setToasts] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const selectedProduct = selectedProductId === 'new' ? draftProduct : products.find((item) => item.id === selectedProductId);
   const selectedOrder = orders.find((item) => item.id === selectedOrderId);
   const selectedPage = selectedPageId === 'new' ? draftPage : pages.find((item) => item.id === selectedPageId);
+
+  function dismissToast(id) {
+    setToasts((current) => current.filter((toast) => toast.id !== id));
+  }
+
+  function showToast({ title, message, type = 'success' }) {
+    const id = `${Date.now()}-${Math.random()}`;
+    setToasts((current) => [{ id, title, message, type }, ...current].slice(0, 4));
+    window.setTimeout(() => dismissToast(id), 5500);
+  }
+
+  function showSuccess(title, message) {
+    showToast({ title, message, type: 'success' });
+  }
+
+  function showError(error) {
+    showToast({
+      title: 'Action failed',
+      message: error?.message || 'The action could not be completed.',
+      type: 'error',
+    });
+  }
 
   async function api(path, options = {}) {
     const response = await fetch(path, {
@@ -92,6 +115,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     setSummary(data.summary);
     setRiskEvents(data.riskEvents);
     setAuditEvents(data.auditEvents);
+    setNotifications(data.notifications || []);
   }
 
   async function refreshOrders() {
@@ -133,10 +157,11 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       const method = selectedProductId === 'new' ? 'POST' : 'PATCH';
       const data = await api(path, { method, body: JSON.stringify(payload) });
       await refreshProducts();
+      await refreshSecurity();
       setSelectedProductId(data.product.id);
-      setMessage('Product saved.');
+      showSuccess('Product saved', `${data.product.name} was saved.`);
     } catch (error) {
-      setMessage(error.message);
+      showError(error);
     }
   }
 
@@ -145,9 +170,10 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     try {
       await api(`/api/admin/products/${selectedProduct.id}`, { method: 'DELETE' });
       await refreshProducts();
-      setMessage('Product archived.');
+      await refreshSecurity();
+      showSuccess('Product archived', `${selectedProduct.name} was archived.`);
     } catch (error) {
-      setMessage(error.message);
+      showError(error);
     }
   }
 
@@ -157,8 +183,6 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     if (!file || !selectedProduct) return;
 
     setUploadingImage(true);
-    setMessage('');
-
     try {
       const form = new FormData();
       form.append('file', file);
@@ -176,9 +200,10 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
 
       updateSelectedProduct('image', body.asset.secureUrl || body.asset.url);
       updateSelectedProduct('imageAssetId', body.asset.id || '');
-      setMessage('Image uploaded to Cloudinary. Save product to keep it.');
+      await refreshSecurity();
+      showSuccess('Image uploaded', 'Image uploaded to Cloudinary. Save product to attach it.');
     } catch (error) {
-      setMessage(error.message);
+      showError(error);
     } finally {
       setUploadingImage(false);
     }
@@ -199,9 +224,9 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       });
       setOrders((current) => current.map((order) => (order.id === data.order.id ? data.order : order)));
       await refreshSecurity();
-      setMessage('Order updated.');
+      showSuccess('Order saved', `${data.order.publicOrderNumber} was updated.`);
     } catch (error) {
-      setMessage(error.message);
+      showError(error);
     }
   }
 
@@ -212,10 +237,11 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
       const method = selectedPageId === 'new' ? 'POST' : 'PATCH';
       const data = await api(path, { method, body: JSON.stringify(payload) });
       await refreshPages();
+      await refreshSecurity();
       setSelectedPageId(data.page.id);
-      setMessage('CMS page saved.');
+      showSuccess('CMS content saved', `${data.page.title} was saved.`);
     } catch (error) {
-      setMessage(error.message);
+      showError(error);
     }
   }
 
@@ -244,6 +270,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
   }
 
   const visibleAuditEvents = useMemo(() => auditEvents.slice(0, 20), [auditEvents]);
+  const visibleNotifications = useMemo(() => notifications.slice(0, 20), [notifications]);
 
   return (
     <div className="min-h-screen bg-cream-100 text-charcoal">
@@ -291,11 +318,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
           ))}
         </nav>
 
-        {message && (
-          <div className="mb-5 border border-charcoal/15 bg-cream-200 px-4 py-3 font-sans text-sm text-charcoal/70">
-            {message}
-          </div>
-        )}
+        <ToastStack toasts={toasts} onDismiss={dismissToast} />
 
         {activeTab === 'orders' && (
           <section className="grid gap-6 lg:grid-cols-[360px_1fr]">
@@ -550,12 +573,53 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
               </button>
               <EventList events={riskEvents} kind="risk" />
             </Panel>
+            <Panel title="Action notifications">
+              <NotificationList notifications={visibleNotifications} />
+            </Panel>
             <Panel title="Audit trail">
               <EventList events={visibleAuditEvents} kind="audit" />
             </Panel>
           </section>
         )}
       </main>
+    </div>
+  );
+}
+
+function ToastStack({ toasts, onDismiss }) {
+  if (!toasts.length) return null;
+  return (
+    <div className="fixed right-4 top-4 z-[400] flex w-[360px] max-w-[calc(100vw-2rem)] flex-col gap-3">
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          role="status"
+          className={`border px-4 py-3 shadow-lg ${
+            toast.type === 'error'
+              ? 'border-terracotta/60 bg-cream-100 text-terracotta'
+              : 'border-[#4A7C59]/50 bg-cream-100 text-charcoal'
+          }`}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em]">
+                {toast.title}
+              </p>
+              <p className="mt-1 font-sans text-sm leading-5 text-charcoal/70">
+                {toast.message}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => onDismiss(toast.id)}
+              className="font-sans text-lg leading-none text-charcoal/45 hover:text-charcoal"
+              aria-label="Dismiss notification"
+            >
+              x
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -643,6 +707,28 @@ function PrimaryButton({ children, onClick }) {
     >
       {children}
     </button>
+  );
+}
+
+function NotificationList({ notifications }) {
+  if (!notifications.length) return <p className="font-sans text-sm text-charcoal/55">No action notifications recorded.</p>;
+  return (
+    <div className="max-h-[620px] space-y-3 overflow-auto">
+      {notifications.map((notification) => (
+        <div key={notification.id} className="border border-charcoal/10 p-3 font-sans text-sm">
+          <div className="flex justify-between gap-3">
+            <span className="font-semibold">{notification.title}</span>
+            <span className="text-xs uppercase tracking-[0.08em] text-[#4A7C59]">
+              {notification.type}
+            </span>
+          </div>
+          <p className="mt-1 text-charcoal/60">{notification.message}</p>
+          <p className="mt-1 text-xs text-charcoal/40">
+            {notification.actorEmail || notification.actorId} · {notification.createdAt}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }
 
