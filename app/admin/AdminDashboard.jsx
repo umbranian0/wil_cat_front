@@ -467,6 +467,12 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 <ReadinessRow label="Upstash configured" ready={summary.storage.upstashConfigured} value={summary.storage.upstashConfigured ? 'yes' : 'no'} />
                 <ReadinessRow label="Auth configured" ready={summary.auth?.productionReady} value={summary.auth?.productionReady ? 'yes' : 'no'} />
                 <ReadinessRow label="Secure admin cookies" ready={summary.auth?.secureCookie} value={summary.auth?.secureCookie ? 'enabled' : 'disabled'} />
+                <a
+                  href="/admin/configurator"
+                  className="inline-block border border-charcoal px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] hover:bg-charcoal hover:text-cream-100"
+                >
+                  Open configurator
+                </a>
                 {[...(summary.storage.warnings || []), ...(summary.auth?.warnings || [])].map((warning) => (
                   <div key={warning} className="border border-terracotta/40 bg-cream-200 p-3 text-terracotta">
                     {warning}

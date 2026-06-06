@@ -54,6 +54,14 @@ vercel
 
 The admin backoffice is available at `/admin`. It includes product CMS, order management, CMS content records, audit events, and a security/fraud dashboard.
 
+First-start configuration is available at `/admin/configurator`. Use it to generate or regenerate the admin environment values, then save them in Vercel and redeploy.
+
+You can also generate values locally:
+
+```bash
+npm run env:generate -- --email=owner@example.com
+```
+
 For production or Vercel Preview deployments, configure these environment variables:
 
 ```bash

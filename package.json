@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "env:generate": "node scripts/generate-admin-env.mjs",
     "smoke:backoffice": "node scripts/smoke-backoffice.mjs"
   },
   "dependencies": {

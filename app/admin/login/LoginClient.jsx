@@ -42,6 +42,12 @@ export default function LoginClient({ showLocalFallback = false }) {
             </span>
           )}
         </p>
+        <a
+          href="/admin/configurator"
+          className="mt-4 inline-block font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-terracotta underline"
+        >
+          First-start configurator
+        </a>
         <form onSubmit={submit} className="mt-8 grid gap-5">
           <label>
             <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
