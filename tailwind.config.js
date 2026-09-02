@@ -8,31 +8,31 @@ module.exports = {
     extend: {
       colors: {
         cream: {
-          50: '#FBF7F0',
-          100: '#F8F1E6',
-          200: '#EDE3D1',
-          300: '#DCCFBA',
-          400: '#C4AF97',
-          500: '#8C7B66',
+          50: '#FAF9F6',
+          100: '#F4F2EC',
+          200: '#E7E3D8',
+          300: '#D2CBB8',
+          400: '#AFA48C',
+          500: '#7C7263',
         },
         charcoal: {
-          DEFAULT: '#1C1814',
-          light: '#3A342E',
-          muted: '#6B5D50',
+          DEFAULT: '#15161A',
+          light: '#33353C',
+          muted: '#5C5E66',
         },
         terracotta: {
-          DEFAULT: '#B85532',
-          light: '#CB6B47',
-          dark: '#9A4226',
+          DEFAULT: '#2B3A55',
+          light: '#3F5170',
+          dark: '#1E2A40',
         },
         gold: {
-          DEFAULT: '#C09050',
-          light: '#D4AA70',
+          DEFAULT: '#B7A88D',
+          light: '#CFC3AC',
         },
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        serif: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       animation: {
         'marquee': 'marquee 40s linear infinite',

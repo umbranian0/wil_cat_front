@@ -55,9 +55,9 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
       'CLOUDINARY_CLOUD_NAME=<your_cloud_name>',
       'CLOUDINARY_API_KEY=<your_api_key>',
       'CLOUDINARY_API_SECRET=<your_api_secret>',
-      `CLOUDINARY_UPLOAD_FOLDER=${initialMedia.uploadFolder || 'wild-cat/products'}`,
+      `CLOUDINARY_UPLOAD_FOLDER=${initialMedia.uploadFolder || 'atelier/products'}`,
       `CLOUDINARY_MAX_UPLOAD_MB=${initialMedia.maxUploadMb || 5}`,
-      `NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=${initialMedia.fallbackImage || '/images/pannel.png'}`,
+      `NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=${initialMedia.fallbackImage || '/images/placeholder-top.svg'}`,
     ].join('\n'),
     [initialMedia]
   );
@@ -67,9 +67,9 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
       'printf "<your_cloud_name>" | vercel env add CLOUDINARY_CLOUD_NAME production',
       'printf "<your_api_key>" | vercel env add CLOUDINARY_API_KEY production',
       'printf "<your_api_secret>" | vercel env add CLOUDINARY_API_SECRET production',
-      `printf "${initialMedia.uploadFolder || 'wild-cat/products'}" | vercel env add CLOUDINARY_UPLOAD_FOLDER production`,
+      `printf "${initialMedia.uploadFolder || 'atelier/products'}" | vercel env add CLOUDINARY_UPLOAD_FOLDER production`,
       `printf "${initialMedia.maxUploadMb || 5}" | vercel env add CLOUDINARY_MAX_UPLOAD_MB production`,
-      `printf "${initialMedia.fallbackImage || '/images/pannel.png'}" | vercel env add NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL production`,
+      `printf "${initialMedia.fallbackImage || '/images/placeholder-top.svg'}" | vercel env add NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL production`,
       'vercel --prod',
     ].join('\n'),
     [initialMedia]
@@ -80,7 +80,7 @@ export default function ConfiguratorClient({ canRegenerate, initialAuth, initial
       <div className="mx-auto max-w-4xl">
         <div className="mb-8">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-cream-500">
-            Wild Cat Ceramic
+            Atelier Studio
           </p>
           <h1 className="mt-2 font-serif text-4xl font-light">First-start configurator</h1>
           <p className="mt-3 max-w-2xl font-sans text-sm leading-6 text-charcoal/65">

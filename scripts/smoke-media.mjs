@@ -46,7 +46,7 @@ async function main() {
     const fallbackReadiness = getMediaReadiness();
     if (fallbackReadiness.productionReady) throw new Error('Media readiness should not be production-ready without credentials.');
     if (fallbackReadiness.provider !== 'url-only') throw new Error('Missing Cloudinary credentials should use url-only provider.');
-    if (fallbackReadiness.fallbackImage !== '/images/pannel.png') throw new Error('Default fallback image changed unexpectedly.');
+    if (fallbackReadiness.fallbackImage !== '/images/placeholder-top.svg') throw new Error('Default fallback image changed unexpectedly.');
 
     process.env.CLOUDINARY_CLOUD_NAME = 'demo-cloud';
     process.env.CLOUDINARY_API_KEY = 'demo-key';
@@ -54,9 +54,9 @@ async function main() {
 
     const configuredReadiness = getMediaReadiness();
     if (!configuredReadiness.productionReady) throw new Error('Media readiness should be production-ready with the three required credentials.');
-    if (configuredReadiness.uploadFolder !== 'wild-cat/products') throw new Error('Default upload folder changed unexpectedly.');
-    if (!isAllowedProductImageUrl('/images/pannel.png')) throw new Error('Local fallback product image URL should be allowed.');
-    if (!isAllowedProductImageUrl('https://res.cloudinary.com/demo-cloud/image/upload/v1/wild-cat/products/test.png')) {
+    if (configuredReadiness.uploadFolder !== 'atelier/products') throw new Error('Default upload folder changed unexpectedly.');
+    if (!isAllowedProductImageUrl('/images/placeholder-top.svg')) throw new Error('Local fallback product image URL should be allowed.');
+    if (!isAllowedProductImageUrl('https://res.cloudinary.com/demo-cloud/image/upload/v1/atelier/products/test.png')) {
       throw new Error('Configured Cloudinary product image URL should be allowed.');
     }
     if (isAllowedProductImageUrl('https://example.com/product.png')) throw new Error('Arbitrary third-party image URL should be rejected.');

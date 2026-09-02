@@ -4,8 +4,8 @@ import ShopClient from './ShopClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Shop — Wild Cat Ceramic',
-  description: 'Browse our full collection of handmade ceramics.',
+  title: 'Shop — Atelier Studio',
+  description: 'Browse the full clothing collection from Atelier Studio.',
 };
 
 export default async function ShopPage() {
@@ -23,7 +23,7 @@ export default async function ShopPage() {
             All Pieces
           </h1>
           <p className="font-sans text-[15px] text-charcoal-muted max-w-[400px] mx-auto">
-            Each piece is handmade and one-of-a-kind. Browse, fall in love, and make it yours.
+            Small-batch pieces, designed and finished with care. Browse the current collection.
           </p>
         </div>
 

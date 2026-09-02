@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
   const product = await getProductBySlug(params.slug);
   if (!product) return { title: 'Product not found' };
   return {
-    title: `${product.name} — Wild Cat Ceramic`,
+    title: `${product.name} — Atelier Studio`,
     description: product.description,
   };
 }

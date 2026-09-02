@@ -3,19 +3,19 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'About — Wild Cat Ceramica',
-  description: 'The story behind Wild Cat Ceramica — a small studio dedicated to playful, handmade ceramics.',
+  title: 'About — Atelier Studio',
+  description: 'The story behind Atelier Studio — a small design studio making considered clothing and hands-on workshops.',
 };
 
 const FALLBACK_BLOCKS = [
-  { type: 'header', eyebrow: 'The studio', heading: 'About Wild Cat', tagline: 'A small studio. A lot of clay. Made with love.' },
-  { type: 'paragraph', text: 'Wild Cat Ceramica is a small studio dedicated to making playful, hand-shaped ceramics that bring color and character to everyday life.' },
-  { type: 'paragraph', text: "Each piece begins as a lump of clay and is shaped, carved, and glazed entirely by hand. No two pieces are exactly alike — and that's the whole point." },
+  { type: 'header', eyebrow: 'The studio', heading: 'About Atelier Studio', tagline: 'A small studio built around fabric, form, and hands-on learning.' },
+  { type: 'paragraph', text: "Atelier Studio is a small design studio creating considered, made-to-last clothing — and a home for anyone who wants to learn how it's made." },
+  { type: 'paragraph', text: 'Every piece starts on the cutting table and is finished by hand. We keep runs small on purpose, so fit, fabric, and finishing get the attention they deserve.' },
   { type: 'section_heading', text: 'The process' },
-  { type: 'paragraph', text: 'Every piece goes through a careful process: hand-building or throwing on the wheel, followed by a first firing (bisque), then hand-painting and glazing, and finally a second firing at high temperature.' },
-  { type: 'paragraph', text: 'From ring holders to decorative tiles, everything is made with food-safe glazes and fired with care. We believe objects should make you smile.' },
-  { type: 'section_heading', text: 'Made in Portugal' },
-  { type: 'paragraph', text: "Based in Portugal, Wild Cat Ceramica draws inspiration from the country's rich ceramic traditions while adding a modern, playful twist. Each piece is a little celebration of color, texture, and handmade imperfection." },
+  { type: 'paragraph', text: 'Each garment moves through pattern-cutting, cutting, construction, and finishing in-house. We work with natural and responsibly sourced fabrics wherever we can, and every piece is checked by hand before it ships.' },
+  { type: 'paragraph', text: 'Beyond the collection, we run hands-on workshops — sewing, pattern-cutting, styling — for anyone who wants to get closer to how clothes are actually made.' },
+  { type: 'section_heading', text: 'Based in Portugal' },
+  { type: 'paragraph', text: "Based in Portugal, Atelier Studio draws on the country's textile and craft traditions while keeping a modern, considered point of view. Come make something with us." },
 ];
 
 export default async function AboutPage() {
@@ -42,7 +42,7 @@ export default async function AboutPage() {
           className="font-serif font-light text-charcoal mb-4"
           style={{ fontSize: 'clamp(40px, 6vw, 64px)' }}
         >
-          {header.heading || 'About Wild Cat'}
+          {header.heading || 'About Atelier Studio'}
         </h1>
         <p className="font-sans text-[15px] text-charcoal/50 max-w-[360px] mx-auto">
           {header.tagline || ''}

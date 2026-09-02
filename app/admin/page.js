@@ -15,7 +15,7 @@ import { listAllCustomers } from '@/lib/customer/repository';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Backoffice - Wild Cat Ceramic',
+  title: 'Backoffice - Atelier Studio',
 };
 
 export default async function AdminPage() {

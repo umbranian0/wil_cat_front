@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCart } from './CartProvider';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import siteConfig from '@/lib/config';
 
 export default function Navbar({ links: configuredLinks }) {
   const { totalItems, setIsOpen } = useCart();
@@ -13,6 +14,7 @@ export default function Navbar({ links: configuredLinks }) {
   const defaultLinks = [
     { href: '/', label: 'Home' },
     { href: '/shop', label: 'Shop' },
+    { href: '/workshops', label: 'Workshops' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
     { href: '/faq', label: 'FAQ' },
@@ -26,11 +28,10 @@ export default function Navbar({ links: configuredLinks }) {
 
         {/* Logo */}
         <Link href="/" className="flex items-center flex-shrink-0">
-          <img
-            src="/logo/imagem-transparent.png"
-            alt="Wild Cat Ceramica"
-            className="h-11 w-auto object-contain"
-          />
+          <span className="font-serif text-2xl tracking-tight text-charcoal">
+            {siteConfig.siteName.split(' ')[0]}
+            <em className="italic text-terracotta"> {siteConfig.siteName.split(' ').slice(1).join(' ')}</em>
+          </span>
         </Link>
 
         {/* Desktop links */}

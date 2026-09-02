@@ -5,7 +5,7 @@ import { getAdminFromCookies } from '@/lib/backoffice/auth';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Backoffice Login - Wild Cat Ceramic',
+  title: 'Backoffice Login - Atelier Studio',
 };
 
 export default async function LoginPage() {

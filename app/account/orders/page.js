@@ -15,7 +15,7 @@ import AccountDashboardClient from '../AccountDashboardClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Order status - Wild Cat Ceramic',
+  title: 'Order status - Atelier Studio',
 };
 
 export default async function AccountOrdersPage() {

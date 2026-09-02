@@ -3,21 +3,21 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'FAQ — Wild Cat Ceramic',
-  description: 'Frequently asked questions about orders, shipping, and care.',
+  title: 'FAQ — Atelier Studio',
+  description: 'Frequently asked questions about orders, sizing, shipping, and workshop bookings.',
 };
 
 const FALLBACK_FAQS = [
-  { question: 'How do I place an order?', answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, shipping, and payment before the order is final.' },
+  { question: 'How do I place an order?', answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, sizing, and payment before the order is final.' },
   { question: 'How do I pay?', answer: 'We send payment details after confirmation. Bank transfer and PayPal are currently available.' },
-  { question: 'How long does shipping take?', answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Custom timelines are confirmed separately.' },
+  { question: 'How long does shipping take?', answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Made-to-order timelines are confirmed separately.' },
   { question: 'Do you ship internationally?', answer: 'Yes. We ship from Portugal, and shipping is quoted before payment.' },
-  { question: 'Are your pieces food safe?', answer: 'Yes. All glazes used on our functional pieces (cups, bowls, plates, jars) are food-safe and lead-free. Decorative pieces like tiles are for display only.' },
-  { question: 'How should I care for my ceramics?', answer: 'Hand washing is recommended. Avoid sudden temperature changes, and check each product page for specific use notes.' },
-  { question: 'Can I request a custom piece?', answer: 'Yes. Send your idea by email or WhatsApp, and we will confirm scope, price, and timing before work begins.' },
-  { question: 'What if my piece arrives damaged?', answer: 'Contact us within 48 hours with photos. Because each piece is unique, we may refund, repair, or discuss a close alternative rather than send an identical replacement.' },
-  { question: 'Are pieces exactly like the photos?', answer: 'Each piece is handmade and one-of-a-kind. Product photos represent the listed piece as accurately as possible.' },
-  { question: 'Do you do wholesale?', answer: 'We work with select shops and galleries. Contact us to discuss availability.' },
+  { question: 'How do I know my size?', answer: "Each product page lists available sizes and a short fit note. Message us if you're between sizes and we'll help you choose." },
+  { question: 'How should I care for my pieces?', answer: 'Care instructions are listed on each product page. In general, wash cold and air dry to keep fabric and colour looking their best.' },
+  { question: 'How do workshop bookings work?', answer: "Pick a workshop, choose an available session, and request a seat. We confirm your spot immediately if there's space, or add you to the waitlist if the session is full." },
+  { question: 'What if a workshop session is full?', answer: 'You can join the waitlist. If a seat opens up, we contact you directly to confirm.' },
+  { question: 'Can I cancel or change a workshop booking?', answer: 'Contact us as soon as you can — see our Terms for the cancellation and no-show policy.' },
+  { question: 'Do you do wholesale or collaborations?', answer: 'We work with select shops and studios. Contact us to discuss.' },
 ];
 
 export default async function FAQPage() {

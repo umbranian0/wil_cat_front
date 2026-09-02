@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#F4F2EC"/>
+  <g fill="none" stroke="#15161A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <ellipse cx="400" cy="480" rx="220" ry="140"/>
+    <ellipse cx="400" cy="480" rx="120" ry="70"/>
+    <line x1="400" y1="340" x2="400" y2="240"/>
+    <circle cx="400" cy="220" r="20"/>
+  </g>
+  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="#2B3A55" opacity="0.6">Atelier Studio</text>
+</svg>

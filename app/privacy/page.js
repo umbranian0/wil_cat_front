@@ -4,8 +4,8 @@ import { privacyContentFromPage } from '@/lib/cmsContent';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Privacy policy - Wild Cat Ceramic',
-  description: 'Privacy information for Wild Cat Ceramic customer accounts and orders.',
+  title: 'Privacy policy - Atelier Studio',
+  description: 'Privacy information for Atelier Studio customer accounts, orders, and workshop bookings.',
 };
 
 export default async function PrivacyPage() {

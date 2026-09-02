@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#F4F2EC"/>
+  <g fill="none" stroke="#15161A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M280 220 L520 220 L540 500 L560 800 L460 800 L410 520 L390 520 L340 800 L240 800 L260 500 Z"/>
+    <line x1="280" y1="300" x2="520" y2="300"/>
+  </g>
+  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="#2B3A55" opacity="0.6">Atelier Studio</text>
+</svg>

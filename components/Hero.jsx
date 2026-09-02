@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const DEFAULTS = {
-  eyebrow: 'Wild Cat Ceramica — Portugal',
-  headline: 'Pieces made to bring joy',
-  tagline: 'Every piece is shaped by hand, glazed with care, and made to add a little wonder to your everyday.',
-  marquee: '  ✶  Handmade  ✶  One of a kind  ✶  Made with love  ✶  Handcrafted in Portugal  ✶  Unique pieces  ',
+  eyebrow: 'Atelier Studio — Portugal',
+  headline: 'Clothes made\nwith intention',
+  tagline: 'Small-batch clothing designed and finished by hand, alongside hands-on workshops to learn the craft yourself.',
+  marquee: '  ✶  Small-batch  ✶  Made by hand  ✶  Designed in Portugal  ✶  Workshops open  ✶  Considered clothing  ',
 };
 
 export default function Hero({ eyebrow, headline, tagline, marquee }) {
@@ -48,7 +48,7 @@ export default function Hero({ eyebrow, headline, tagline, marquee }) {
           href="/shop"
           className="font-sans text-[11px] font-semibold tracking-[0.14em] uppercase bg-charcoal text-cream-100 px-12 py-4 transition-all duration-300 hover:bg-terracotta"
         >
-          Shop Collection
+          Shop the Collection
         </Link>
         <Link
           href="/about"

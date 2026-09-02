@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function LoginClient({ showLocalFallback = false }) {
-  const [email, setEmail] = useState('owner@wildcat.local');
+  const [email, setEmail] = useState('owner@atelierstudio.local');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function LoginClient({ showLocalFallback = false }) {
     <main className="min-h-screen bg-cream-100 px-6 py-20 text-charcoal">
       <div className="mx-auto max-w-md border border-charcoal/10 bg-cream-200 p-8">
         <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-cream-500">
-          Wild Cat Ceramic
+          Atelier Studio
         </p>
         <h1 className="mt-2 font-serif text-4xl font-light">Backoffice login</h1>
         <p className="mt-3 font-sans text-sm leading-6 text-charcoal/60">
@@ -38,7 +38,7 @@ export default function LoginClient({ showLocalFallback = false }) {
           {showLocalFallback && (
             <span>
               {' '}Local development fallback password:
-              <span className="font-semibold"> wildcat-admin-demo</span>.
+              <span className="font-semibold"> atelier-admin-demo</span>.
             </span>
           )}
         </p>

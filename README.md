@@ -1,6 +1,6 @@
-# Wild Cat Ceramic — Next.js Website
+# Atelier Studio — Next.js Website
 
-A server-capable e-commerce website for Wild Cat Ceramic, built with Next.js 14 and Tailwind CSS.
+A server-capable e-commerce and workshop-booking website for Atelier Studio, built with Next.js 14 and Tailwind CSS. Forked from the Wild Cat Ceramic storefront template — same backoffice, auth, and order-request architecture, adapted for a clothing design studio that also runs bookable workshops.
 
 ## Getting Started
 
@@ -79,14 +79,14 @@ ADMIN_SESSION_SECRET=change-this-random-32-byte-secret
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
-CLOUDINARY_UPLOAD_FOLDER=wild-cat/products
+CLOUDINARY_UPLOAD_FOLDER=atelier/products
 CLOUDINARY_MAX_UPLOAD_MB=5
-NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=/images/pannel.png
+NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=/images/placeholder-top.svg
 ```
 
 `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` should come from the Upstash KV/Redis integration in Vercel Marketplace. Without those variables, the app uses `.data/backoffice-kv.json` as a local development fallback only.
 
-Cloudinary stores product image files. The upload folder does not need to be created manually; Cloudinary creates it on first upload. Product records in KV store only Cloudinary asset metadata and the selected secure image URL. Use a local/static fallback URL such as `/images/pannel.png`, not a Cloudinary URL, so product images degrade cleanly if Cloudinary is unavailable.
+Cloudinary stores product image files. The upload folder does not need to be created manually; Cloudinary creates it on first upload. Product records in KV store only Cloudinary asset metadata and the selected secure image URL. Use a local/static fallback URL such as `/images/placeholder-top.svg`, not a Cloudinary URL, so product images degrade cleanly if Cloudinary is unavailable.
 
 For local `next start` smoke tests over plain HTTP, set:
 

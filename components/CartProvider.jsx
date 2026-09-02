@@ -7,6 +7,7 @@ const CartContext = createContext();
 
 const WHATSAPP_NUMBER = siteConfig.whatsappNumber;
 const ORDER_EMAIL = siteConfig.orderEmail;
+const SITE_NAME = siteConfig.siteName;
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
@@ -67,7 +68,7 @@ export function CartProvider({ children }) {
   }, [buildOrderSummary]);
 
   const checkoutEmail = useCallback(() => {
-    const subject = encodeURIComponent('New Order — Wild Cat Ceramic');
+    const subject = encodeURIComponent(`New Order — ${SITE_NAME}`);
     const body = encodeURIComponent(buildOrderSummary());
     window.open(`mailto:${ORDER_EMAIL}?subject=${subject}&body=${body}`, '_blank');
   }, [buildOrderSummary]);

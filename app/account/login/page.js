@@ -8,7 +8,7 @@ import AccountLoginClient from './AccountLoginClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Customer login - Wild Cat Ceramic',
+  title: 'Customer login - Atelier Studio',
 };
 
 export default async function AccountLoginPage() {

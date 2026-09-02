@@ -1,110 +1,178 @@
 [
   {
-    "id": "luna-tile",
-    "slug": "luna-tile",
-    "name": "Luna Tile",
-    "price": 68,
+    "id": "linen-wrap-shirt",
+    "slug": "linen-wrap-shirt",
+    "name": "Linen Wrap Shirt",
+    "price": 128,
     "currency": "€",
-    "category": "Decorative",
+    "category": "Tops",
     "tag": "Bestseller",
-    "image": "/images/pannel.png",
-    "description": "Hand-carved decorative tile with a crescent moon, dotted sky, and woven-earth motif.",
+    "image": "/images/placeholder-top.svg",
+    "description": "A relaxed wrap shirt cut from washed linen, finished with mother-of-pearl buttons and a soft roll to the collar.",
     "details": [
-      "Approximately 15 × 15 cm",
-      "One-of-a-kind handmade piece",
-      "Wall-mount ready with cork backing",
-      "Food-safe glaze"
+      "100% washed linen",
+      "Relaxed fit — sizes down to shirt size",
+      "Mother-of-pearl buttons",
+      "Machine wash cold, line dry"
     ],
-    "inStock": true
+    "size": ["XS", "S", "M", "L", "XL"],
+    "color": ["Ecru", "Ink"],
+    "material": "100% linen",
+    "inStock": true,
+    "featuredRank": null
   },
   {
-    "id": "moo-ring-dish",
-    "slug": "moo-ring-dish",
-    "name": "Moo Ring Dish",
-    "price": 45,
+    "id": "structured-wool-coat",
+    "slug": "structured-wool-coat",
+    "name": "Structured Wool Coat",
+    "price": 340,
+    "currency": "€",
+    "category": "Outerwear",
+    "tag": "New",
+    "image": "/images/placeholder-outerwear.svg",
+    "description": "A tailored, single-breasted coat in a heavyweight wool blend, cut for a clean line over knitwear.",
+    "details": [
+      "70% wool, 30% recycled polyester",
+      "Structured shoulder, straight silhouette",
+      "Interior pocket, horn-effect buttons",
+      "Dry clean only"
+    ],
+    "size": ["S", "M", "L", "XL"],
+    "color": ["Charcoal", "Bone"],
+    "material": "Wool blend",
+    "inStock": true,
+    "featuredRank": null
+  },
+  {
+    "id": "tapered-cotton-trousers",
+    "slug": "tapered-cotton-trousers",
+    "name": "Tapered Cotton Trousers",
+    "price": 112,
+    "currency": "€",
+    "category": "Bottoms",
+    "tag": "",
+    "image": "/images/placeholder-bottom.svg",
+    "description": "Mid-rise trousers in brushed cotton twill with a tapered leg and a clean, pressed finish.",
+    "details": [
+      "98% cotton, 2% elastane",
+      "Mid-rise, tapered leg",
+      "Side seam pockets, hidden hook closure",
+      "Machine wash cold"
+    ],
+    "size": ["XS", "S", "M", "L", "XL"],
+    "color": ["Ink", "Clay"],
+    "material": "Cotton twill",
+    "inStock": true,
+    "featuredRank": null
+  },
+  {
+    "id": "silk-slip-dress",
+    "slug": "silk-slip-dress",
+    "name": "Silk Slip Dress",
+    "price": 210,
+    "currency": "€",
+    "category": "Dresses",
+    "tag": "Bestseller",
+    "image": "/images/placeholder-dress.svg",
+    "description": "A bias-cut slip dress in weighted silk that skims the body and falls to a soft midi length.",
+    "details": [
+      "100% mulberry silk",
+      "Bias cut, adjustable straps",
+      "Midi length",
+      "Dry clean only"
+    ],
+    "size": ["XS", "S", "M", "L"],
+    "color": ["Ecru", "Rose"],
+    "material": "100% silk",
+    "inStock": true,
+    "featuredRank": 1
+  },
+  {
+    "id": "raw-edge-denim-jacket",
+    "slug": "raw-edge-denim-jacket",
+    "name": "Raw-Edge Denim Jacket",
+    "price": 168,
+    "currency": "€",
+    "category": "Outerwear",
+    "tag": "",
+    "image": "/images/placeholder-outerwear.svg",
+    "description": "An organic cotton denim jacket with a boxy fit and raw, unfinished seams for a lived-in feel from day one.",
+    "details": [
+      "100% organic cotton denim",
+      "Boxy fit, raw-edge seams",
+      "Antiqued brass hardware",
+      "Wash cold, inside out"
+    ],
+    "size": ["S", "M", "L", "XL"],
+    "color": ["Indigo"],
+    "material": "Organic cotton denim",
+    "inStock": true,
+    "featuredRank": null
+  },
+  {
+    "id": "merino-crewneck",
+    "slug": "merino-crewneck",
+    "name": "Merino Crewneck",
+    "price": 98,
+    "currency": "€",
+    "category": "Tops",
+    "tag": "",
+    "image": "/images/placeholder-top.svg",
+    "description": "A fine-gauge crewneck in extra-fine merino wool — breathable, temperature-regulating, and built to last.",
+    "details": [
+      "100% extra-fine merino wool",
+      "Fine 14-gauge knit",
+      "Ribbed collar, cuffs, and hem",
+      "Hand wash cold, dry flat"
+    ],
+    "size": ["XS", "S", "M", "L", "XL"],
+    "color": ["Bone", "Charcoal", "Clay"],
+    "material": "Merino wool",
+    "inStock": true,
+    "featuredRank": null
+  },
+  {
+    "id": "pleated-midi-skirt",
+    "slug": "pleated-midi-skirt",
+    "name": "Pleated Midi Skirt",
+    "price": 134,
+    "currency": "€",
+    "category": "Bottoms",
+    "tag": "New",
+    "image": "/images/placeholder-bottom.svg",
+    "description": "A fluid, permanently pleated midi skirt in a Tencel blend that moves with every step.",
+    "details": [
+      "70% Tencel, 30% cotton",
+      "Permanent pleating",
+      "Elasticated waistband",
+      "Machine wash cold, gentle cycle"
+    ],
+    "size": ["XS", "S", "M", "L"],
+    "color": ["Ink", "Ecru"],
+    "material": "Tencel blend",
+    "inStock": true,
+    "featuredRank": null
+  },
+  {
+    "id": "woven-leather-belt",
+    "slug": "woven-leather-belt",
+    "name": "Woven Leather Belt",
+    "price": 64,
     "currency": "€",
     "category": "Accessories",
-    "tag": "New",
-    "image": "/images/ring-holder.png",
-    "description": "Cow-print ring dish with a coral hand for holding everyday rings.",
-    "details": [
-      "Approximately 14 cm diameter",
-      "One-of-a-kind handmade piece",
-      "Hand-painted cow print pattern",
-      "Holds 3–5 rings comfortably"
-    ],
-    "inStock": true
-  },
-  {
-    "id": "cloud-candle-holder",
-    "slug": "cloud-candle-holder",
-    "name": "Cloud Candle Holder",
-    "price": 52,
-    "currency": "€",
-    "category": "Home",
     "tag": "",
-    "image": "/images/candle-holder.png",
-    "description": "Sky-blue candle holder on a textured cloud-like base for tea lights or small candles.",
+    "image": "/images/placeholder-accessory.svg",
+    "description": "A hand-woven, full-grain leather belt with a matte brass buckle, finished in the studio.",
     "details": [
-      "Approximately 8 cm tall × 12 cm wide",
-      "One-of-a-kind handmade piece",
-      "Fits standard tea lights",
-      "Textured white stoneware base"
+      "Full-grain leather",
+      "Hand-woven construction",
+      "Matte brass buckle",
+      "Wipe clean, condition occasionally"
     ],
-    "inStock": true
-  },
-  {
-    "id": "sunrise-egg-cup",
-    "slug": "sunrise-egg-cup",
-    "name": "Sunrise Egg Cup",
-    "price": 38,
-    "currency": "€",
-    "category": "Kitchen",
-    "tag": "",
-    "image": "/images/egg.png",
-    "description": "Hand-glazed egg cup in warm sunrise tones, sized for soft-boiled eggs.",
-    "details": [
-      "Approximately 6 cm tall",
-      "One-of-a-kind handmade piece",
-      "Food-safe glaze",
-      "Dishwasher safe"
-    ],
-    "inStock": true
-  },
-  {
-    "id": "check-tray",
-    "slug": "check-tray",
-    "name": "Check Tray",
-    "price": 42,
-    "currency": "€",
-    "category": "Accessories",
-    "tag": "New",
-    "image": "/images/hashtrae.png",
-    "description": "Checkered trinket tray for keys, coins, jewellery, or small keepsakes.",
-    "details": [
-      "Approximately 16 × 12 cm",
-      "One-of-a-kind handmade piece",
-      "Hand-painted checkerboard pattern",
-      "Slightly raised edges"
-    ],
-    "inStock": true
-  },
-  {
-    "id": "speckle-jar",
-    "slug": "speckle-jar",
-    "name": "Speckle Jar",
-    "price": 56,
-    "currency": "€",
-    "category": "Kitchen",
-    "tag": "",
-    "image": "/images/jar.png",
-    "description": "Speckled ceramic jar for dry goods, utensils, or wildflowers.",
-    "details": [
-      "Approximately 14 cm tall × 10 cm diameter",
-      "One-of-a-kind handmade piece",
-      "Food-safe glaze",
-      "Includes fitted lid"
-    ],
-    "inStock": true
+    "size": ["S", "M", "L"],
+    "color": ["Tan", "Black"],
+    "material": "Full-grain leather",
+    "inStock": true,
+    "featuredRank": null
   }
 ]

@@ -116,7 +116,7 @@ export default function CartDrawer() {
           marketingEmailConsent: privacy.marketingEmailConsent,
           saveAddressToAccount: Boolean(accountCustomer && privacy.saveAddressToAccount),
         },
-        items: items.map((item) => ({ id: item.id, qty: item.qty })),
+        items: items.map((item) => ({ id: item.id, qty: item.qty, size: item.selectedSize || '', color: item.selectedColor || '' })),
         idempotencyKey,
         website: customer.website,
         submittedAt: startedAt,

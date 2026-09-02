@@ -3,18 +3,19 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Terms & Conditions — Wild Cat Ceramica',
-  description: 'Order, shipping, payment, and damage terms for Wild Cat Ceramica.',
+  title: 'Terms & Conditions — Atelier Studio',
+  description: 'Order, shipping, payment, workshop booking, and damage terms for Atelier Studio.',
 };
 
 const FALLBACK_SECTIONS = [
-  { title: 'Orders', body: 'Cart checkout sends an order request. An order is confirmed only after we confirm availability, shipping cost, payment details, and any relevant timing.' },
-  { title: 'Unique Pieces', body: 'Each ceramic piece is handmade and one-of-a-kind. Small differences in colour, size, glaze, and texture are part of the work. Product photos represent the listed piece as accurately as possible.' },
+  { title: 'Orders', body: 'Cart checkout sends an order request. An order is confirmed only after we confirm availability, sizing, shipping cost, payment details, and any relevant timing.' },
+  { title: 'Made & Fitted', body: 'Pieces may be produced in small batches or made to order. Small differences in colour, texture, and finish are part of natural fabrics and small-batch production. Product photos represent the listed piece as accurately as possible.' },
   { title: 'Payment', body: 'Payment details are sent after order confirmation. We currently accept bank transfer and PayPal unless another method is agreed in writing.' },
   { title: 'Processing & Shipping', body: 'Ready-to-ship pieces usually leave the studio within 5–7 business days after payment. Shipping is sent from Portugal and quoted before payment. Delivery times depend on destination and carrier.' },
-  { title: 'Custom Work', body: 'Custom pieces are agreed individually. Scope, price, payment terms, and estimated timing must be confirmed before work begins.' },
+  { title: 'Workshop Bookings', body: 'Booking a workshop session reserves a seat directly if space is available, or places you on a waitlist if the session is full. We will contact you if a waitlisted seat becomes available.' },
+  { title: 'Cancellations & No-Shows', body: 'Please contact us at least 48 hours before your session if you need to cancel or reschedule, so we can offer the seat to someone on the waitlist. Cancellations made after that window, or a no-show on the day, may not be eligible for a refund or credit.' },
   { title: 'Damage in Transit', body: 'If a piece arrives damaged, contact us within 48 hours with photos of the item and packaging. Because each piece is unique, we cannot guarantee an identical replacement. Depending on the situation, we may offer a refund, repair, store credit, or a close alternative.' },
-  { title: 'Returns', body: 'For eligible distance purchases, contact us within 14 days of delivery before returning an item. Custom or clearly personalised pieces are not returnable unless faulty or damaged. These terms do not limit any statutory consumer rights that apply to your order.' },
+  { title: 'Returns', body: 'For eligible distance purchases, contact us within 14 days of delivery before returning an item. Made-to-order or clearly personalised pieces are not returnable unless faulty or damaged. These terms do not limit any statutory consumer rights that apply to your order.' },
 ];
 
 export default async function TermsPage() {

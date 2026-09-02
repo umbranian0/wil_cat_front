@@ -9,8 +9,8 @@ import { navigationLinksFromPage } from '@/lib/cmsContent';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Wild Cat Ceramic — Handmade Ceramics',
-  description: 'Playful handcrafted ceramics made with soul. Each piece is shaped by hand and glazed with care.',
+  title: 'Atelier Studio — Considered Clothing & Workshops',
+  description: 'Small-batch clothing designed and finished by hand, alongside hands-on workshops to learn the craft.',
 };
 
 export default async function RootLayout({ children }) {

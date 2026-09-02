@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
 :root {
-  --cream: #F8F1E6;
-  --linen: #EDE3D1;
-  --ink: #1C1814;
-  --clay: #B85532;
-  --gold: #C09050;
+  --cream: #F4F2EC;
+  --linen: #E7E3D8;
+  --ink: #15161A;
+  --clay: #2B3A55;
+  --gold: #B7A88D;
 }
 
 ::selection {
@@ -30,8 +30,8 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--linen); }
-::-webkit-scrollbar-thumb { background: #C4AF97; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #8C7B66; }
+::-webkit-scrollbar-thumb { background: #AFA48C; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #7C7263; }
 
 /* Marquee */
 .marquee-track {
@@ -87,7 +87,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  color: #C4AF97;
+  color: #AFA48C;
 }
 .ornament::before,
 .ornament::after {

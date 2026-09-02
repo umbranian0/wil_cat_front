@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import siteConfig from '@/lib/config';
 
 export default function Footer({ navigationLinks = [] }) {
   const accountLink = navigationLinks.find((link) => link.href === '/account') || { href: '/account', label: 'My Account' };
@@ -12,14 +13,13 @@ export default function Footer({ navigationLinks = [] }) {
 
           {/* Brand */}
           <div className="flex flex-col items-start gap-4 max-w-[240px]">
-            <img
-              src="/logo/imagem-transparent.png"
-              alt="Wild Cat Ceramica"
-              className="h-16 w-auto object-contain"
-            />
+            <span className="font-serif text-3xl tracking-tight text-charcoal">
+              {siteConfig.siteName.split(' ')[0]}
+              <em className="italic text-terracotta"> {siteConfig.siteName.split(' ').slice(1).join(' ')}</em>
+            </span>
             <p className="font-sans text-[13px] text-charcoal/55 leading-relaxed">
-              Handmade ceramics with soul.<br />
-              One-of-a-kind pieces from Portugal.
+              Considered clothing, made in Portugal.<br />
+              Workshops for the curious.
             </p>
           </div>
 
@@ -33,6 +33,11 @@ export default function Footer({ navigationLinks = [] }) {
                 <li>
                   <Link href="/shop" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
                     All pieces
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/workshops" className="font-sans text-[13px] text-charcoal/65 hover:text-charcoal transition-colors">
+                    Workshops
                   </Link>
                 </li>
                 <li>
@@ -92,10 +97,10 @@ export default function Footer({ navigationLinks = [] }) {
         {/* Bottom row */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
           <span className="font-sans text-[11px] text-charcoal/35 tracking-wide">
-            &copy; 2026 Wild Cat Ceramica. All rights reserved.
+            &copy; 2026 {siteConfig.siteName}. All rights reserved.
           </span>
           <span className="font-sans text-[11px] text-charcoal/35 tracking-wide">
-            Handmade in Portugal
+            Designed &amp; made in Portugal
           </span>
         </div>
 

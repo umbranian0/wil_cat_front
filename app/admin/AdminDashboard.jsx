@@ -31,7 +31,7 @@ function emptyProduct() {
     name: '',
     slug: '',
     status: 'draft',
-    category: 'Decorative',
+    category: 'Tops',
     tag: '',
     priceAmount: 0,
     currency: '€',
@@ -41,6 +41,9 @@ function emptyProduct() {
     inventoryMode: 'one_of_one',
     stockQty: 1,
     inStock: true,
+    size: '',
+    color: '',
+    material: '',
   };
 }
 
@@ -727,7 +730,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-cream-500">
-              Wild Cat Ceramic
+              Atelier Studio
             </p>
             <h1 className="font-serif text-3xl font-light">Backoffice</h1>
             <p className="mt-1 font-sans text-sm text-charcoal/60">
@@ -998,6 +1001,17 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Field label="Currency" value={selectedProduct.currency || '€'} onChange={(value) => updateSelectedProduct('currency', value)} />
                     <Field label="Tag" value={selectedProduct.tag || ''} onChange={(value) => updateSelectedProduct('tag', value)} />
                     <Field label="Stock" type="number" value={selectedProduct.stockQty || 0} onChange={(value) => updateSelectedProduct('stockQty', value)} />
+                    <Field
+                      label="Sizes (comma separated)"
+                      value={Array.isArray(selectedProduct.size) ? selectedProduct.size.join(', ') : selectedProduct.size || ''}
+                      onChange={(value) => updateSelectedProduct('size', value)}
+                    />
+                    <Field
+                      label="Colors (comma separated)"
+                      value={Array.isArray(selectedProduct.color) ? selectedProduct.color.join(', ') : selectedProduct.color || ''}
+                      onChange={(value) => updateSelectedProduct('color', value)}
+                    />
+                    <Field label="Material" value={selectedProduct.material || ''} onChange={(value) => updateSelectedProduct('material', value)} />
                   </div>
                   <div className="grid gap-4 md:grid-cols-[180px_1fr]">
                     <div className="aspect-square overflow-hidden border border-charcoal/10 bg-cream-200">
@@ -1212,7 +1226,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 <ReadinessRow label="Customer auth configured" ready={summary.customerAuth?.productionReady} value={summary.customerAuth?.productionReady ? 'yes' : 'no'} />
                 <ReadinessRow label="Secure customer cookies" ready={summary.customerAuth?.secureCookie} value={summary.customerAuth?.secureCookie ? 'enabled' : 'disabled'} />
                 <ReadinessRow label="Media uploads" ready={summary.media?.productionReady} value={summary.media?.provider || 'url-only'} />
-                <ReadinessRow label="Image fallback" ready={Boolean(summary.media?.fallbackImage)} value={summary.media?.fallbackImage || '/images/pannel.png'} />
+                <ReadinessRow label="Image fallback" ready={Boolean(summary.media?.fallbackImage)} value={summary.media?.fallbackImage || '/images/placeholder-top.svg'} />
                 <a
                   href="/admin/configurator"
                   className="inline-block border border-charcoal px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] hover:bg-charcoal hover:text-cream-100"

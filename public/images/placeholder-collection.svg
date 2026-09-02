@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <rect width="1600" height="1000" fill="#E7E3D8"/>
+  <g fill="none" stroke="#15161A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity="0.75">
+    <path d="M360 260 L330 300 L230 350 L200 470 L280 500 L310 430 L310 830 L590 830 L590 430 L620 500 L700 470 L670 350 L570 300 L540 260 C 520 300 380 300 360 260 Z"/>
+    <path d="M900 260 L840 300 L750 350 L720 470 L810 500 L840 410 L840 830 L1000 830 L1000 490"/>
+    <path d="M1080 260 L1140 300 L1230 350 L1260 470 L1170 500 L1140 410 L1140 830 L1000 830 L1000 490"/>
+    <line x1="1000" y1="340" x2="1000" y2="830"/>
+    <path d="M900 260 C 930 300 1050 300 1080 260" />
+  </g>
+  <text x="800" y="950" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="28" fill="#2B3A55" opacity="0.6">Atelier Studio — The Collection</text>
+</svg>
