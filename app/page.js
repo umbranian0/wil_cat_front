@@ -49,8 +49,8 @@ export default async function Home() {
         style={{ height: '65vh', minHeight: '420px' }}
       >
         <img
-          src="/images/placeholder-collection.svg"
-          alt="Atelier Studio — full collection"
+          src="/images/all_products.jpg"
+          alt="Wild Cat Ceramica — full collection"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/65 via-charcoal/15 to-transparent" />
@@ -63,7 +63,7 @@ export default async function Home() {
               className="font-serif font-light text-cream-100 leading-tight mb-7 max-w-[520px]"
               style={{ fontSize: 'clamp(30px, 5vw, 54px)' }}
             >
-              {(bannerBlock.heading || 'Made to be worn, not just owned').split('\n').map((line, i, arr) => (
+              {(bannerBlock.heading || 'Every piece has a story to tell').split('\n').map((line, i, arr) => (
                 i < arr.length - 1 ? <span key={i}>{line}<br /></span> : <em key={i} className="italic">{line}</em>
               ))}
             </h2>
@@ -71,7 +71,7 @@ export default async function Home() {
               href="/shop"
               className="inline-block font-sans text-[11px] font-semibold tracking-[0.14em] uppercase border border-cream-100/60 text-cream-100 px-9 py-3.5 transition-all hover:bg-cream-100 hover:text-charcoal"
             >
-              Browse all pieces &rarr;
+              Browse all pieces →
             </Link>
           </div>
         </div>
@@ -91,13 +91,13 @@ export default async function Home() {
           className="font-serif font-light text-charcoal max-w-[540px] leading-tight"
           style={{ fontSize: 'clamp(24px, 3.5vw, 36px)' }}
         >
-          {(calloutBlock.heading || 'Every piece is cut, sewn, and finished by hand.').split('\n').map((line, i, arr) => (
+          {(calloutBlock.heading || 'Every piece is made by hand. No two are ever the same.').split('\n').map((line, i, arr) => (
             i < arr.length - 1 ? <span key={i}>{line}<br /></span> : <em key={i} className="italic text-terracotta">{line}</em>
           ))}
         </h3>
         <Link
           href="/about"
-          className="mt-2 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-charcoal border border-charcoal/30 px-9 py-3.5 transition-all hover:bg-charcoal hover:text-cream-100 hover:border-charcoal"
+          className="mt-2 font-sans text-[11px] font-semibold tracking-[0.14em] uppercase text-charcoal border border-charcoal/30 px-9 py-3.5 transition-all hover:bg-charcoal hover:text-cream-100"
         >
           Learn about us
         </Link>
