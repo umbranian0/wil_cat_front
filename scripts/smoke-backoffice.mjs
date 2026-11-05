@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:3100';
-const adminEmail = process.env.ADMIN_EMAIL || 'wildcatceramic@gmail.com';
+const adminEmail = process.env.ADMIN_EMAIL || 'owner@example.com';
 const adminPassword = process.env.ADMIN_PASSWORD || 'wildcat-admin-demo';
 
 function endpoint(path) {

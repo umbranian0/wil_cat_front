@@ -65,7 +65,7 @@ First-start configuration is available at `/admin/configurator`. Use it to gener
 You can also generate values locally:
 
 ```bash
-npm run env:generate -- --email=wildcatceramic@gmail.com
+npm run env:generate -- --email=owner@example.com
 ```
 
 For production or Vercel Preview deployments, configure these environment variables:
@@ -73,7 +73,7 @@ For production or Vercel Preview deployments, configure these environment variab
 ```bash
 UPSTASH_REDIS_REST_URL=...
 UPSTASH_REDIS_REST_TOKEN=...
-ADMIN_EMAIL=wildcatceramic@gmail.com
+ADMIN_EMAIL=owner@example.com
 ADMIN_PASSWORD=change-this-long-password
 ADMIN_SESSION_SECRET=change-this-random-32-byte-secret
 CLOUDINARY_CLOUD_NAME=...

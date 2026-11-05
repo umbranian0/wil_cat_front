@@ -15,7 +15,7 @@ function makePassword() {
   return `${randomBase64Url(12)}-${randomBase64Url(12)}`;
 }
 
-function makeConfig(email = 'wildcatceramic@gmail.com') {
+function makeConfig(email = '') {
   return {
     adminEmail: email,
     adminPassword: makePassword(),
@@ -24,8 +24,8 @@ function makeConfig(email = 'wildcatceramic@gmail.com') {
 }
 
 export default function ConfiguratorClient({ canRegenerate, initialAuth, initialMedia, initialStorage, isAdmin }) {
-  const [email, setEmail] = useState('wildcatceramic@gmail.com');
-  const [config, setConfig] = useState(() => makeConfig('wildcatceramic@gmail.com'));
+  const [email, setEmail] = useState('');
+  const [config, setConfig] = useState(() => makeConfig(''));
 
   function regenerate() {
     setConfig(makeConfig(email));

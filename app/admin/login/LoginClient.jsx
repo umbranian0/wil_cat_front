@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function LoginClient({ showLocalFallback = false }) {
-  const [email, setEmail] = useState('wildcatceramic@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

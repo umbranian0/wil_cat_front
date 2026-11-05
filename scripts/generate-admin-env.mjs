@@ -9,7 +9,7 @@ function valueFor(name, value) {
 }
 
 const emailArg = process.argv.find((arg) => arg.startsWith('--email='));
-const email = emailArg ? emailArg.split('=').slice(1).join('=').trim() : 'wildcatceramic@gmail.com';
+const email = emailArg ? emailArg.split('=').slice(1).join('=').trim() : 'owner@example.com';
 const password = `${randomBase64Url(12)}-${randomBase64Url(12)}`;
 const sessionSecret = randomBase64Url(48);
 
