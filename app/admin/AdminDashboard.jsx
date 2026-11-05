@@ -831,6 +831,22 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     }
   }
 
+  async function deleteSelectedOrder() {
+    if (!selectedOrder) return;
+    const label = selectedOrder.publicOrderNumber || 'this order';
+    if (!window.confirm(`Delete ${label} permanently? This cannot be undone. Stock is not changed.`)) return;
+    try {
+      await api(`/api/admin/orders/${selectedOrder.id}`, { method: 'DELETE' });
+      const remaining = orders.filter((order) => order.id !== selectedOrder.id);
+      setOrders(remaining);
+      setSelectedOrderId(remaining[0]?.id || '');
+      await refreshSecurity();
+      showSuccess('Order deleted', `${label} was deleted.`);
+    } catch (error) {
+      showError(error);
+    }
+  }
+
   async function saveOrder() {
     if (!selectedOrder) return;
     try {
@@ -1153,7 +1169,16 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                       ))}
                     </div>
                   </div>
-                  <PrimaryButton onClick={saveOrder}>Save order</PrimaryButton>
+                  <div className="flex flex-wrap gap-3">
+                    <PrimaryButton onClick={saveOrder}>Save order</PrimaryButton>
+                    <button
+                      onClick={deleteSelectedOrder}
+                      className="border border-terracotta px-5 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-terracotta hover:bg-terracotta hover:text-white"
+                    >
+                      Delete order
+                    </button>
+                  </div>
+                  <Hint>Use Delete only for test or spam orders. For real orders that will not happen, set the status to "cancelled" instead, so you keep a record.</Hint>
                 </div>
               ) : (
                 <p className="font-sans text-sm text-charcoal/55">No orders yet.</p>
