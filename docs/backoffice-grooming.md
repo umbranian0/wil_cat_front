@@ -120,6 +120,8 @@ The customer account module should be planned as a separate iteration after the 
 | P2 | Enquiries | As customer support, I need contact form submissions stored. | Contact form creates enquiry records; enquiries can be marked open or resolved. |
 | P2 | Audit trail | As the owner, I need critical admin changes logged. | Product, order, inventory, and CMS writes create append-only audit events. |
 | P2 | Reporting | As the owner, I need basic operational reporting. | Dashboard shows order counts by status, completed order value, and sold/out-of-stock products for a selected date range. |
+| P1 | Email notifications (Resend) | As the studio owner, I need an email whenever a new order, contact message, or workshop interest request arrives, so I never miss a customer. | Uses Resend (API key in Vercel env `RESEND_API_KEY`, sender on a verified domain, recipient from env, never hard-coded or shown in UI); sent from the repository layer after the record is saved; email includes type, customer name/contact, workshop or order summary, and an admin link; send failure is logged and never blocks or deletes the saved record; rate-limited to avoid spam floods; no-op when not configured locally. |
+| P2 | Enquiry status | As customer support, I need to mark enquiries (contact + workshop interest) as open / replied / done. | Admin Enquiries tab shows status filter; status changes are audited. |
 | P1 | Security/fraud dashboard | As the owner, I need visibility into abusive or suspicious activity. | Dashboard shows recent failed login attempts, rate-limit hits, suspicious orders, audit events, and storage/auth configuration warnings. |
 
 ## Architecture Decisions
