@@ -3,13 +3,13 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Terms & Conditions — Atelier Studio',
-  description: 'Order, shipping, payment, workshop booking, and damage terms for Atelier Studio.',
+  title: 'Terms & Conditions — Wild Cat Ceramic',
+  description: 'Order, shipping, payment, workshop booking, and damage terms for Wild Cat Ceramic.',
 };
 
 const FALLBACK_SECTIONS = [
-  { title: 'Orders', body: 'Cart checkout sends an order request. An order is confirmed only after we confirm availability, sizing, shipping cost, payment details, and any relevant timing.' },
-  { title: 'Made & Fitted', body: 'Pieces may be produced in small batches or made to order. Small differences in colour, texture, and finish are part of natural fabrics and small-batch production. Product photos represent the listed piece as accurately as possible.' },
+  { title: 'Orders', body: 'Cart checkout sends an order request. An order is confirmed only after we confirm availability, shipping cost, payment details, and any relevant timing.' },
+  { title: 'Handmade Pieces', body: 'Pieces are made by hand, in small batches or to order. Small differences in shape, colour, texture, and glaze are part of handmade ceramics and craft. Product photos represent the listed piece as accurately as possible.' },
   { title: 'Payment', body: 'Payment details are sent after order confirmation. We currently accept bank transfer and PayPal unless another method is agreed in writing.' },
   { title: 'Processing & Shipping', body: 'Ready-to-ship pieces usually leave the studio within 5–7 business days after payment. Shipping is sent from Portugal and quoted before payment. Delivery times depend on destination and carrier.' },
   { title: 'Workshop Bookings', body: 'Booking a workshop session reserves a seat directly if space is available, or places you on a waitlist if the session is full. We will contact you if a waitlisted seat becomes available.' },

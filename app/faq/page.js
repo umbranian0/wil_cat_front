@@ -3,17 +3,17 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'FAQ — Atelier Studio',
-  description: 'Frequently asked questions about orders, sizing, shipping, and workshop bookings.',
+  title: 'FAQ — Wild Cat Ceramic',
+  description: 'Frequently asked questions about orders, shipping, care, and workshop bookings.',
 };
 
 const FALLBACK_FAQS = [
-  { question: 'How do I place an order?', answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability, sizing, and payment before the order is final.' },
+  { question: 'How do I place an order?', answer: 'Add pieces to your cart, then send the request by WhatsApp or email. We confirm availability and payment before the order is final.' },
   { question: 'How do I pay?', answer: 'We send payment details after confirmation. Bank transfer and PayPal are currently available.' },
   { question: 'How long does shipping take?', answer: 'Ready-to-ship orders usually leave within 5–7 business days after payment. Made-to-order timelines are confirmed separately.' },
   { question: 'Do you ship internationally?', answer: 'Yes. We ship from Portugal, and shipping is quoted before payment.' },
-  { question: 'How do I know my size?', answer: "Each product page lists available sizes and a short fit note. Message us if you're between sizes and we'll help you choose." },
-  { question: 'How should I care for my pieces?', answer: 'Care instructions are listed on each product page. In general, wash cold and air dry to keep fabric and colour looking their best.' },
+  { question: 'Is every piece unique?', answer: 'Yes. Every piece is made by hand, so small differences in shape, colour, and glaze are part of its character. Photos show each piece as accurately as possible.' },
+  { question: 'How should I care for my pieces?', answer: 'Care instructions are listed on each product page. In general, wash ceramics gently by hand and avoid sudden temperature changes to keep the glaze looking its best.' },
   { question: 'How do workshop bookings work?', answer: "Pick a workshop, choose an available session, and request a seat. We confirm your spot immediately if there's space, or add you to the waitlist if the session is full." },
   { question: 'What if a workshop session is full?', answer: 'You can join the waitlist. If a seat opens up, we contact you directly to confirm.' },
   { question: 'Can I cancel or change a workshop booking?', answer: 'Contact us as soon as you can — see our Terms for the cancellation and no-show policy.' },

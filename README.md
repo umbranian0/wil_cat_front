@@ -1,6 +1,6 @@
-# Atelier Studio — Next.js Website
+# Wild Cat Ceramic — Next.js Website
 
-A server-capable e-commerce and workshop-booking website for Atelier Studio, built with Next.js 14 and Tailwind CSS. Forked from the Wild Cat Ceramic storefront template — same backoffice, auth, and order-request architecture, adapted for a clothing design studio that also runs bookable workshops.
+A server-capable e-commerce and workshop-booking website for Wild Cat Ceramic, a small Portuguese studio selling handmade ceramics and craft accessories, with bookable workshops planned for the future. Built with Next.js 14 and Tailwind CSS.
 
 ## Getting Started
 
@@ -65,7 +65,7 @@ First-start configuration is available at `/admin/configurator`. Use it to gener
 You can also generate values locally:
 
 ```bash
-npm run env:generate -- --email=owner@example.com
+npm run env:generate -- --email=wildcatceramic@gmail.com
 ```
 
 For production or Vercel Preview deployments, configure these environment variables:
@@ -73,13 +73,13 @@ For production or Vercel Preview deployments, configure these environment variab
 ```bash
 UPSTASH_REDIS_REST_URL=...
 UPSTASH_REDIS_REST_TOKEN=...
-ADMIN_EMAIL=owner@example.com
+ADMIN_EMAIL=wildcatceramic@gmail.com
 ADMIN_PASSWORD=change-this-long-password
 ADMIN_SESSION_SECRET=change-this-random-32-byte-secret
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
-CLOUDINARY_UPLOAD_FOLDER=atelier/products
+CLOUDINARY_UPLOAD_FOLDER=wildcat/products
 CLOUDINARY_MAX_UPLOAD_MB=5
 NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=/images/placeholder-top.svg
 ```

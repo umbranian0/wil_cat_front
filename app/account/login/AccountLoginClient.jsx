@@ -118,14 +118,14 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
           <h1 className="mt-3 font-serif text-5xl font-light leading-tight md:text-6xl">
             {content.heading}
           </h1>
-          <p className="mt-5 max-w-md font-sans text-sm leading-7 text-charcoal/60">
+          <p className="mt-5 max-w-md font-sans text-sm leading-7 text-charcoal/80">
             {content.authIntro || content.intro}
           </p>
           <div className="mt-8 grid gap-3 md:grid-cols-3 lg:max-w-3xl">
             {(content.features || []).slice(0, 3).map((feature) => (
               <div key={feature.title} className="border border-charcoal/10 bg-cream-200/60 p-4">
                 <h2 className="font-serif text-xl font-light">{feature.title}</h2>
-                <p className="mt-2 font-sans text-xs leading-5 text-charcoal/55">{feature.text}</p>
+                <p className="mt-2 font-sans text-xs leading-5 text-charcoal/80">{feature.text}</p>
               </div>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
               type="button"
               onClick={() => switchMode('login')}
               className={`py-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] ${
-                mode === 'login' ? 'bg-charcoal text-cream-100' : 'text-charcoal/55'
+                mode === 'login' ? 'bg-charcoal text-cream-100' : 'text-charcoal/80'
               }`}
             >
               Login
@@ -146,7 +146,7 @@ export default function AccountLoginClient({ content = DEFAULT_ACCOUNT_CONTENT }
               type="button"
               onClick={() => switchMode('register')}
               className={`py-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] ${
-                mode === 'register' ? 'bg-charcoal text-cream-100' : 'text-charcoal/55'
+                mode === 'register' ? 'bg-charcoal text-cream-100' : 'text-charcoal/80'
               }`}
             >
               Register
@@ -266,7 +266,7 @@ const Field = forwardRef(function Field({ label, value, onChange, type = 'text',
     <label className="block">
       <span
         className={`mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] ${
-          error ? 'text-terracotta' : 'text-charcoal/45'
+          error ? 'text-terracotta' : 'text-charcoal/75'
         }`}
       >
         {label}
@@ -287,7 +287,7 @@ const Field = forwardRef(function Field({ label, value, onChange, type = 'text',
       {error ? (
         <span className="mt-1 block font-sans text-[11px] text-terracotta">{error}</span>
       ) : hint ? (
-        <span className="mt-1 block font-sans text-[11px] text-charcoal/40">{hint}</span>
+        <span className="mt-1 block font-sans text-[11px] text-charcoal/75">{hint}</span>
       ) : null}
     </label>
   );

@@ -9,7 +9,7 @@ function valueFor(name, value) {
 }
 
 const emailArg = process.argv.find((arg) => arg.startsWith('--email='));
-const email = emailArg ? emailArg.split('=').slice(1).join('=').trim() : 'owner@example.com';
+const email = emailArg ? emailArg.split('=').slice(1).join('=').trim() : 'wildcatceramic@gmail.com';
 const password = `${randomBase64Url(12)}-${randomBase64Url(12)}`;
 const sessionSecret = randomBase64Url(48);
 
@@ -24,7 +24,7 @@ console.log('\n# Cloudinary media variables');
 console.log('CLOUDINARY_CLOUD_NAME=<your_cloud_name>');
 console.log('CLOUDINARY_API_KEY=<your_api_key>');
 console.log('CLOUDINARY_API_SECRET=<your_api_secret>');
-console.log('CLOUDINARY_UPLOAD_FOLDER=atelier/products');
+console.log('CLOUDINARY_UPLOAD_FOLDER=wildcat/products');
 console.log('CLOUDINARY_MAX_UPLOAD_MB=5');
 console.log('NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL=/images/placeholder-top.svg');
 console.log('\n# Vercel CLI helper');
@@ -34,6 +34,6 @@ console.log(`printf "${sessionSecret}" | vercel env add ADMIN_SESSION_SECRET pro
 console.log('printf "<your_cloud_name>" | vercel env add CLOUDINARY_CLOUD_NAME production');
 console.log('printf "<your_api_key>" | vercel env add CLOUDINARY_API_KEY production');
 console.log('printf "<your_api_secret>" | vercel env add CLOUDINARY_API_SECRET production');
-console.log('printf "atelier/products" | vercel env add CLOUDINARY_UPLOAD_FOLDER production');
+console.log('printf "wildcat/products" | vercel env add CLOUDINARY_UPLOAD_FOLDER production');
 console.log('printf "5" | vercel env add CLOUDINARY_MAX_UPLOAD_MB production');
 console.log('printf "/images/placeholder-top.svg" | vercel env add NEXT_PUBLIC_PRODUCT_IMAGE_FALLBACK_URL production');

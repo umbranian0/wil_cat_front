@@ -1,8 +1,8 @@
 import { randomUUID } from 'crypto';
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:3100';
-const adminEmail = process.env.ADMIN_EMAIL || 'owner@atelierstudio.local';
-const adminPassword = process.env.ADMIN_PASSWORD || 'atelier-admin-demo';
+const adminEmail = process.env.ADMIN_EMAIL || 'wildcatceramic@gmail.com';
+const adminPassword = process.env.ADMIN_PASSWORD || 'wildcat-admin-demo';
 
 function endpoint(path) {
   return `${baseUrl}${path.endsWith('/') ? path : `${path}/`}`;

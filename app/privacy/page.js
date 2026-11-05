@@ -4,8 +4,8 @@ import { privacyContentFromPage } from '@/lib/cmsContent';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Privacy policy - Atelier Studio',
-  description: 'Privacy information for Atelier Studio customer accounts, orders, and workshop bookings.',
+  title: 'Privacy policy - Wild Cat Ceramic',
+  description: 'Privacy information for Wild Cat Ceramic customer accounts, orders, and workshop bookings.',
 };
 
 export default async function PrivacyPage() {
@@ -20,7 +20,7 @@ export default async function PrivacyPage() {
             {content.eyebrow}
           </p>
           <h1 className="mt-3 font-serif text-5xl font-light md:text-6xl">{content.heading}</h1>
-          <p className="mt-5 max-w-2xl font-sans text-sm leading-7 text-charcoal/60">
+          <p className="mt-5 max-w-2xl font-sans text-sm leading-7 text-charcoal/80">
             {content.intro}
           </p>
         </header>

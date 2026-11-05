@@ -28,7 +28,7 @@ export default function ProductDetailClient({ product, related }) {
       <div className="max-w-6xl mx-auto">
 
         {/* Breadcrumb */}
-        <div className="font-sans text-[11px] text-charcoal/40 mb-10 flex items-center gap-2 tracking-wide">
+        <div className="font-sans text-[11px] text-charcoal/75 mb-10 flex items-center gap-2 tracking-wide">
           <Link href="/" className="hover:text-charcoal transition-colors">Home</Link>
           <span>/</span>
           <Link href="/shop" className="hover:text-charcoal transition-colors">Shop</Link>
@@ -94,13 +94,13 @@ export default function ProductDetailClient({ product, related }) {
             <div className="font-serif text-[30px] font-light text-charcoal/75 tracking-tight">
               {product.currency}{product.price}
             </div>
-            <p className="font-sans text-[15px] leading-[1.8] text-charcoal/60 max-w-[420px]">
+            <p className="font-sans text-[15px] leading-[1.8] text-charcoal/80 max-w-[420px]">
               {product.description}
             </p>
 
             {/* Qty */}
             <div className="flex items-center gap-4 mt-2">
-              <span className="font-sans text-[12px] font-medium uppercase tracking-[0.1em] text-charcoal/50">
+              <span className="font-sans text-[12px] font-medium uppercase tracking-[0.1em] text-charcoal/75">
                 Qty
               </span>
               <div className="flex items-center gap-3">
@@ -141,8 +141,8 @@ export default function ProductDetailClient({ product, related }) {
             {/* Details */}
             <div className="mt-6 pt-6 border-t border-charcoal/[0.07] flex flex-col gap-3">
               {product.details.map((detail, i) => (
-                <div key={i} className="font-sans text-[13px] text-charcoal/55 flex items-start gap-3">
-                  <span className="text-terracotta/60 mt-0.5 text-[10px]">✦</span>
+                <div key={i} className="font-sans text-[13px] text-charcoal/80 flex items-start gap-3">
+                  <span className="text-terracotta/60 mt-0.5 text-[10px]">♡</span>
                   <span>{detail}</span>
                 </div>
               ))}

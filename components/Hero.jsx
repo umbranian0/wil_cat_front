@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const DEFAULTS = {
-  eyebrow: 'Atelier Studio — Portugal',
-  headline: 'Clothes made\nwith intention',
-  tagline: 'Small-batch clothing designed and finished by hand, alongside hands-on workshops to learn the craft yourself.',
-  marquee: '  ✶  Small-batch  ✶  Made by hand  ✶  Designed in Portugal  ✶  Workshops open  ✶  Considered clothing  ',
+  eyebrow: 'Wild Cat Ceramica — Portugal',
+  headline: 'Pieces made\nto bring joy',
+  tagline: 'Every piece is shaped by hand, glazed with care, and made to add a little wonder to your everyday.',
+  marquee: '  ♡  Small-batch  ♡  Made by hand  ♡  Handcrafted in Portugal  ♡  One of a kind  ',
 };
 
 export default function Hero({ eyebrow, headline, tagline, marquee }) {
@@ -21,7 +21,7 @@ export default function Hero({ eyebrow, headline, tagline, marquee }) {
       {/* Eyebrow with flanking rules */}
       <div className="flex items-center gap-5 mb-8">
         <div className="h-px w-10 bg-charcoal/20" />
-        <span className="font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-charcoal/45">
+        <span className="font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-charcoal/75">
           {text.eyebrow}
         </span>
         <div className="h-px w-10 bg-charcoal/20" />
@@ -38,7 +38,7 @@ export default function Hero({ eyebrow, headline, tagline, marquee }) {
       </h1>
 
       {/* Tagline */}
-      <p className="font-sans text-[15px] md:text-[16px] leading-[1.75] text-charcoal/55 max-w-[400px] mb-10">
+      <p className="font-sans text-[15px] md:text-[16px] leading-[1.75] text-charcoal/80 max-w-[400px] mb-10">
         {text.tagline}
       </p>
 
@@ -52,7 +52,7 @@ export default function Hero({ eyebrow, headline, tagline, marquee }) {
         </Link>
         <Link
           href="/about"
-          className="font-sans text-[11px] font-medium tracking-[0.12em] uppercase text-charcoal/60 border-b border-charcoal/25 pb-px hover:text-charcoal hover:border-charcoal transition-colors"
+          className="font-sans text-[11px] font-medium tracking-[0.12em] uppercase text-charcoal/80 border-b border-charcoal/25 pb-px hover:text-charcoal hover:border-charcoal transition-colors"
         >
           Our Story &rarr;
         </Link>
@@ -60,7 +60,7 @@ export default function Hero({ eyebrow, headline, tagline, marquee }) {
 
       {/* Marquee strip */}
       <div className="mt-20 w-screen overflow-hidden border-y border-charcoal/[0.07] py-4 bg-cream-200/50">
-        <div className="marquee-track font-serif text-[13px] tracking-[0.28em] text-charcoal/30 uppercase italic">
+        <div className="marquee-track font-serif text-[13px] tracking-[0.28em] text-charcoal/80 uppercase italic">
           {text.marquee}{text.marquee}{text.marquee}{text.marquee}
         </div>
       </div>

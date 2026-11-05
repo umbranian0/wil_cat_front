@@ -7,6 +7,7 @@ const tabs = [
   { id: 'orders', label: 'Orders' },
   { id: 'products', label: 'Products' },
   { id: 'cms', label: 'CMS' },
+  { id: 'enquiries', label: 'Enquiries' },
   { id: 'customers', label: 'Customers' },
   { id: 'security', label: 'Security' },
 ];
@@ -31,7 +32,7 @@ function emptyProduct() {
     name: '',
     slug: '',
     status: 'draft',
-    category: 'Tops',
+    category: 'Ceramics',
     tag: '',
     priceAmount: 0,
     currency: '€',
@@ -44,6 +45,7 @@ function emptyProduct() {
     size: '',
     color: '',
     material: '',
+    featuredRank: null,
   };
 }
 
@@ -52,9 +54,91 @@ function parseBlocks(value) {
   try { return JSON.parse(value); } catch { return []; }
 }
 
-const HOMEPAGE_BLOCK_ORDER = ['hero', 'callout', 'collection_banner'];
+const HOMEPAGE_BLOCK_ORDER = ['hero', 'callout', 'collection_banner', 'carousel_slide'];
+const CAROUSEL_POSITIONS = ['Not in carousel', ...Array.from({ length: 20 }, (_, i) => String(i + 1))];
 
-function HomepageBlockEditor({ blocks, onChange }) {
+function CarouselSlidesEditor({ blocks, onChange, onUploadImage }) {
+  const slides = blocks.filter((b) => b.type === 'carousel_slide');
+  const others = blocks.filter((b) => b.type !== 'carousel_slide');
+  const [uploadingIndex, setUploadingIndex] = useState(null);
+
+  function setSlides(next) {
+    onChange([...others, ...next]);
+  }
+  function updateSlide(index, field, value) {
+    setSlides(slides.map((slide, i) => (i === index ? { ...slide, [field]: value } : slide)));
+  }
+  async function upload(index, event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    setUploadingIndex(index);
+    const url = await onUploadImage(file);
+    setUploadingIndex(null);
+    if (url) updateSlide(index, 'image', url);
+  }
+
+  return (
+    <div className="border border-charcoal/10 p-4 flex flex-col gap-4">
+      <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Homepage carousel: extra slides</span>
+      <p className="font-sans text-xs text-charcoal/55">
+        Use these for workshops, news, or anything that is not a product. To show a product in the carousel,
+        open it in the Products tab and choose a carousel position. Slides are shown in position order (1 first).
+      </p>
+      {slides.map((slide, i) => (
+        <div key={i} className="border border-charcoal/10 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Slide {i + 1}</span>
+            <button onClick={() => setSlides(slides.filter((_, j) => j !== i))} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+          </div>
+          <label className="flex items-center gap-2 font-sans text-sm">
+            <input type="checkbox" checked={slide.enabled !== false} onChange={(e) => updateSlide(i, 'enabled', e.target.checked)} />
+            Show on the website
+          </label>
+          <div className="grid gap-3 md:grid-cols-2">
+            <Select
+              label="Carousel position"
+              value={slide.position ? String(slide.position) : '1'}
+              options={CAROUSEL_POSITIONS.slice(1)}
+              onChange={(v) => updateSlide(i, 'position', Number(v))}
+            />
+            <Field label="Small label above title (e.g. Workshop)" value={slide.eyebrow || ''} onChange={(v) => updateSlide(i, 'eyebrow', v)} />
+            <Field label="Title" value={slide.title || ''} onChange={(v) => updateSlide(i, 'title', v)} />
+            <Field label="Badge on photo (e.g. New, Coming soon)" value={slide.tag || ''} onChange={(v) => updateSlide(i, 'tag', v)} />
+            <Field label="Price or date (optional)" value={slide.price || ''} onChange={(v) => updateSlide(i, 'price', v)} />
+            <Field label="Button text" value={slide.linkLabel || ''} onChange={(v) => updateSlide(i, 'linkLabel', v)} />
+            <Field label="Button link (e.g. /contact)" value={slide.link || ''} onChange={(v) => updateSlide(i, 'link', v)} />
+          </div>
+          <Textarea label="Short text" value={slide.text || ''} onChange={(v) => updateSlide(i, 'text', v)} rows={2} />
+          <div className="grid gap-3 md:grid-cols-[120px_1fr] items-start">
+            <div className="aspect-square overflow-hidden border border-charcoal/10 bg-cream-200">
+              {slide.image && <img src={slide.image} alt="" className="h-full w-full object-cover" />}
+            </div>
+            <div className="grid gap-2">
+              <Field label="Image URL" value={slide.image || ''} onChange={(v) => updateSlide(i, 'image', v)} />
+              <input
+                type="file"
+                accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+                disabled={uploadingIndex !== null}
+                onChange={(e) => upload(i, e)}
+                className="w-full border border-charcoal/15 bg-transparent px-3 py-2 font-sans text-sm file:mr-3 file:border-0 file:bg-charcoal file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.1em] file:text-cream-100 disabled:opacity-50"
+              />
+              {uploadingIndex === i && <span className="font-sans text-xs text-charcoal/50">Uploading...</span>}
+            </div>
+          </div>
+        </div>
+      ))}
+      <button
+        onClick={() => setSlides([...slides, { type: 'carousel_slide', enabled: true, position: slides.length + 1, eyebrow: 'Workshop', linkLabel: 'Find out more', link: '/contact' }])}
+        className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal transition-colors"
+      >
+        + Add carousel slide
+      </button>
+    </div>
+  );
+}
+
+function HomepageBlockEditor({ blocks, onChange, onUploadImage }) {
   const hero = blocks.find((b) => b.type === 'hero') || { type: 'hero' };
   const callout = blocks.find((b) => b.type === 'callout') || { type: 'callout' };
   const banner = blocks.find((b) => b.type === 'collection_banner') || { type: 'collection_banner' };
@@ -86,6 +170,7 @@ function HomepageBlockEditor({ blocks, onChange }) {
         <Field label="Eyebrow" value={banner.eyebrow || ''} onChange={(v) => update('collection_banner', 'eyebrow', v)} />
         <Field label="Heading" value={banner.heading || ''} onChange={(v) => update('collection_banner', 'heading', v)} />
       </div>
+      <CarouselSlidesEditor blocks={blocks} onChange={onChange} onUploadImage={onUploadImage} />
     </div>
   );
 }
@@ -413,9 +498,102 @@ function PrivacyBlockEditor({ blocks, onChange }) {
   );
 }
 
-function CmsBlockEditor({ page, onChange }) {
+function Hint({ children }) {
+  return <p className="font-sans text-xs leading-relaxed text-charcoal/60 bg-cream-200/60 border-l-2 border-terracotta px-3 py-2">{children}</p>;
+}
+
+function WorkshopBlockEditor({ blocks, onChange, onUploadImage }) {
+  const info = blocks.find((b) => b.type === 'workshop_info') || { type: 'workshop_info' };
+  const media = blocks.filter((b) => b.type === 'workshop_media');
+  const [uploading, setUploading] = useState(false);
+
+  function setInfo(field, value) {
+    onChange([{ ...info, [field]: value }, ...media]);
+  }
+  function setMedia(next) {
+    onChange([info, ...next]);
+  }
+  async function upload(event, apply) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    setUploading(true);
+    const url = await onUploadImage(file);
+    setUploading(false);
+    if (url) apply(url);
+  }
+  const fileInput = (apply) => (
+    <input
+      type="file"
+      accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+      disabled={uploading}
+      onChange={(e) => upload(e, apply)}
+      className="w-full border border-charcoal/15 px-3 py-2 font-sans text-sm file:mr-3 file:border-0 file:bg-charcoal file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:text-cream-100 disabled:opacity-50"
+    />
+  );
+
+  return (
+    <div className="flex flex-col gap-5">
+      <Hint>
+        How to create a workshop: 1) fill the title above and a short web address (slug, e.g. <b>pottery-for-beginners</b>);
+        2) fill the details below; 3) add photos and videos; 4) set Status to <b>published</b> and click Save content.
+        It will appear at /workshops. Use <b>draft</b> to hide it while you prepare it.
+      </Hint>
+      <div className="border border-charcoal/10 p-4 grid gap-3 md:grid-cols-2">
+        <span className="md:col-span-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Workshop details</span>
+        <Field label="Date (e.g. 2026-12-14 10:00)" type="datetime-local" value={info.date || ''} onChange={(v) => setInfo('date', v)} />
+        <Field label="Duration (e.g. 3 hours)" value={info.duration || ''} onChange={(v) => setInfo('duration', v)} />
+        <Field label="Price (e.g. €45 per person)" value={info.price || ''} onChange={(v) => setInfo('price', v)} />
+        <Field label="Place (e.g. Studio, Lisbon)" value={info.location || ''} onChange={(v) => setInfo('location', v)} />
+        <Field label="Spots (e.g. 6 people max)" value={info.spots || ''} onChange={(v) => setInfo('spots', v)} />
+        <Field label="Badge on photo (e.g. New, Coming soon)" value={info.tag || ''} onChange={(v) => setInfo('tag', v)} />
+        <div className="md:col-span-2"><Textarea label="Short summary (shown on the list)" value={info.summary || ''} onChange={(v) => setInfo('summary', v)} rows={2} /></div>
+        <div className="md:col-span-2"><Textarea label="Full description (leave an empty line between paragraphs)" value={info.description || ''} onChange={(v) => setInfo('description', v)} rows={6} /></div>
+      </div>
+      <div className="border border-charcoal/10 p-4 grid gap-3 md:grid-cols-[140px_1fr] items-start">
+        <span className="md:col-span-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Cover photo</span>
+        <div className="aspect-square overflow-hidden border border-charcoal/10 bg-cream-200">
+          {info.coverImage && <img src={info.coverImage} alt="" className="h-full w-full object-cover" />}
+        </div>
+        <div className="grid gap-2">
+          {fileInput((url) => setInfo('coverImage', url))}
+          <Field label="...or paste an image link" value={info.coverImage || ''} onChange={(v) => setInfo('coverImage', v)} />
+          {uploading && <span className="font-sans text-xs text-charcoal/60">Uploading...</span>}
+        </div>
+      </div>
+      <div className="border border-charcoal/10 p-4 flex flex-col gap-3">
+        <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">Photos and videos</span>
+        <Hint>
+          Videos: upload them to YouTube, Instagram, TikTok or Vimeo, then paste the link here (e.g. https://youtu.be/abc123
+          or https://www.instagram.com/reel/abc123/). They will play inside the page. Photos: upload a file or paste an image link.
+          Items are shown in this order.
+        </Hint>
+        {media.map((item, i) => (
+          <div key={i} className="border border-charcoal/10 p-3 grid gap-2">
+            <div className="flex justify-between">
+              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">Item {i + 1}</span>
+              <button onClick={() => setMedia(media.filter((_, j) => j !== i))} className="font-sans text-[11px] text-terracotta hover:underline">Remove</button>
+            </div>
+            <Field label="Video or photo link" value={item.url || ''} onChange={(v) => setMedia(media.map((m, j) => (j === i ? { ...m, url: v } : m)))} />
+            {fileInput((url) => setMedia(media.map((m, j) => (j === i ? { ...m, url } : m))))}
+            <Field label="Caption (optional)" value={item.caption || ''} onChange={(v) => setMedia(media.map((m, j) => (j === i ? { ...m, caption: v } : m)))} />
+          </div>
+        ))}
+        <button
+          onClick={() => setMedia([...media, { type: 'workshop_media', url: '', caption: '' }])}
+          className="border border-dashed border-charcoal/25 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-charcoal/50 hover:border-charcoal hover:text-charcoal"
+        >
+          + Add photo or video
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CmsBlockEditor({ page, onChange, onUploadImage }) {
   const blocks = parseBlocks(page?.blocks);
-  if (page?.type === 'homepage_section') return <HomepageBlockEditor blocks={blocks} onChange={onChange} />;
+  if (page?.type === 'homepage_section') return <HomepageBlockEditor blocks={blocks} onChange={onChange} onUploadImage={onUploadImage} />;
+  if (page?.type === 'workshop') return <WorkshopBlockEditor blocks={blocks} onChange={onChange} onUploadImage={onUploadImage} />;
   if (page?.type === 'faq') return <FaqBlockEditor blocks={blocks} onChange={onChange} />;
   if (page?.type === 'terms') return <TermsBlockEditor blocks={blocks} onChange={onChange} />;
   if (page?.type === 'about') return <AboutBlockEditor blocks={blocks} onChange={onChange} />;
@@ -633,6 +811,26 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
     }
   }
 
+  async function uploadCmsImage(file) {
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      form.append('productName', 'Homepage carousel');
+      const response = await fetch('/api/admin/assets/upload', {
+        method: 'POST',
+        headers: { 'x-csrf-token': csrf },
+        body: form,
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.error || 'Image upload failed.');
+      showSuccess('Image uploaded', 'Save content to keep it.');
+      return body.asset.secureUrl || body.asset.url;
+    } catch (error) {
+      showError(error);
+      return null;
+    }
+  }
+
   async function saveOrder() {
     if (!selectedOrder) return;
     try {
@@ -730,7 +928,7 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
         <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-cream-500">
-              Atelier Studio
+              Wild Cat Ceramic
             </p>
             <h1 className="font-serif text-3xl font-light">Backoffice</h1>
             <p className="mt-1 font-sans text-sm text-charcoal/60">
@@ -992,6 +1190,10 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
             <Panel title={selectedProductId === 'new' ? 'New product' : selectedProduct?.name || 'Product'}>
               {selectedProduct && (
                 <div className="grid gap-4">
+                  <Hint>
+                    Fill name, price and category, upload a photo, then set Status to <b>published</b> and save.
+                    "Draft" keeps the product hidden. Tag shows a small badge (e.g. New). Carousel position puts it on the homepage slider.
+                  </Hint>
                   <div className="grid gap-4 md:grid-cols-2">
                     <Field label="Name" value={selectedProduct.name} onChange={(value) => updateSelectedProduct('name', value)} />
                     <Field label="Slug" value={selectedProduct.slug || ''} onChange={(value) => updateSelectedProduct('slug', value)} />
@@ -1012,6 +1214,12 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                       onChange={(value) => updateSelectedProduct('color', value)}
                     />
                     <Field label="Material" value={selectedProduct.material || ''} onChange={(value) => updateSelectedProduct('material', value)} />
+                    <Select
+                      label="Homepage carousel position"
+                      value={selectedProduct.featuredRank == null ? 'Not in carousel' : String(selectedProduct.featuredRank)}
+                      options={CAROUSEL_POSITIONS}
+                      onChange={(value) => updateSelectedProduct('featuredRank', value === 'Not in carousel' ? null : Number(value))}
+                    />
                   </div>
                   <div className="grid gap-4 md:grid-cols-[180px_1fr]">
                     <div className="aspect-square overflow-hidden border border-charcoal/10 bg-cream-200">
@@ -1061,6 +1269,29 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
           </section>
         )}
 
+        {activeTab === 'enquiries' && (
+          <Panel title={`Enquiries (${(initialData.enquiries || []).length})`}>
+            <Hint>Messages from the Contact page and workshop "I'm interested" forms, newest first. Reply by email or phone.</Hint>
+            <div className="mt-4 flex flex-col gap-3">
+              {(initialData.enquiries || []).length === 0 && <p className="font-sans text-sm text-charcoal/60">No messages yet.</p>}
+              {(initialData.enquiries || []).map((e) => (
+                <div key={e.id} className="border border-charcoal/10 p-4 grid gap-1 font-sans text-sm">
+                  <div className="flex flex-wrap justify-between gap-2">
+                    <b>{e.name}</b>
+                    <span className="text-charcoal/60">{new Date(e.createdAt).toLocaleString('en-GB')}</span>
+                  </div>
+                  {e.topic && <span className="font-semibold text-terracotta">{e.topic}{e.participants ? ` · ${e.participants} people` : ''}</span>}
+                  <span>
+                    <a className="underline" href={`mailto:${e.email}`}>{e.email}</a>
+                    {e.phone && <> · <a className="underline" href={`tel:${e.phone}`}>{e.phone}</a></>}
+                  </span>
+                  <p className="whitespace-pre-line text-charcoal/80 m-0">{e.message}</p>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        )}
+
         {activeTab === 'cms' && (
           <section className="grid gap-6 lg:grid-cols-[320px_1fr]">
             <Panel title="Content records">
@@ -1071,6 +1302,16 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                 >
                   New content
                 </button>
+                <button
+                  onClick={() => {
+                    setDraftPage({ title: '', slug: '', type: 'workshop', status: 'draft', blocks: [{ type: 'workshop_info' }] });
+                    setSelectedPageId('new');
+                  }}
+                  className="w-full bg-terracotta text-white px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em]"
+                >
+                  + New workshop
+                </button>
+                <Hint>Click a record to edit it. Workshops are records of type "workshop". The "workshops" record holds the title text of the /workshops page.</Hint>
                 <button
                   onClick={seedCmsDefaults}
                   className="w-full border border-charcoal/30 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/60 hover:border-charcoal hover:text-charcoal transition-colors"
@@ -1100,11 +1341,12 @@ export default function AdminDashboard({ admin, csrf, initialData }) {
                     <Field label="Title" value={selectedPage.title || ''} onChange={(value) => updateSelectedPage('title', value)} />
                     <Field label="Slug" value={selectedPage.slug || ''} onChange={(value) => updateSelectedPage('slug', value)} />
                     <Select label="Status" value={selectedPage.status || 'draft'} options={['draft', 'published', 'archived']} onChange={(value) => updateSelectedPage('status', value)} />
-                    <Select label="Type" value={selectedPage.type || 'custom'} options={['homepage_section', 'about', 'faq', 'terms', 'contact', 'navigation', 'account', 'privacy', 'custom']} onChange={(value) => updateSelectedPage('type', value)} />
+                    <Select label="Type" value={selectedPage.type || 'custom'} options={['workshop', 'workshops', 'homepage_section', 'about', 'faq', 'terms', 'contact', 'navigation', 'account', 'privacy', 'custom']} onChange={(value) => updateSelectedPage('type', value)} />
                   </div>
                   <CmsBlockEditor
                     page={selectedPage}
                     onChange={(value) => updateSelectedPage('blocks', value)}
+                    onUploadImage={uploadCmsImage}
                   />
                   <PrimaryButton onClick={savePage}>Save content</PrimaryButton>
                 </div>

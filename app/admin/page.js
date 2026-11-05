@@ -8,6 +8,7 @@ import {
   listProducts,
   listAuditEvents,
   listNotifications,
+  listEnquiries,
 } from '@/lib/backoffice/repository';
 import { listRiskEvents } from '@/lib/backoffice/security';
 import { listAllCustomers } from '@/lib/customer/repository';
@@ -15,14 +16,14 @@ import { listAllCustomers } from '@/lib/customer/repository';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Backoffice - Atelier Studio',
+  title: 'Backoffice - Wild Cat Ceramic',
 };
 
 export default async function AdminPage() {
   const admin = await getAdminFromCookies();
   if (!admin) redirect('/admin/login');
 
-  const [summary, products, orders, pages, riskEvents, auditEvents, notifications, customers] = await Promise.all([
+  const [summary, products, orders, pages, riskEvents, auditEvents, notifications, customers, enquiries] = await Promise.all([
     getDashboardSummary(),
     listProducts(),
     listOrders({ limit: 100 }),
@@ -31,13 +32,14 @@ export default async function AdminPage() {
     listAuditEvents(80),
     listNotifications(80),
     listAllCustomers(),
+    listEnquiries(),
   ]);
 
   return (
     <AdminDashboard
       admin={{ email: admin.email, role: admin.role }}
       csrf={admin.csrf}
-      initialData={{ summary, products, orders, pages, riskEvents, auditEvents, notifications, customers }}
+      initialData={{ summary, products, orders, pages, riskEvents, auditEvents, notifications, customers, enquiries }}
     />
   );
 }

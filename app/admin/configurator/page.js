@@ -6,7 +6,7 @@ import { getStorageInfo } from '@/lib/backoffice/kv';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'First-start Configurator - Atelier Studio',
+  title: 'First-start Configurator - Wild Cat Ceramic',
 };
 
 export default async function ConfiguratorPage() {

@@ -1,8 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
-  <rect width="800" height="1000" fill="#F4F2EC"/>
-  <g fill="none" stroke="#15161A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M280 220 L520 220 L540 500 L560 800 L460 800 L410 520 L390 520 L340 800 L240 800 L260 500 Z"/>
-    <line x1="280" y1="300" x2="520" y2="300"/>
+  <rect width="800" height="1000" fill="#F9E3EA"/>
+  <ellipse cx="400" cy="800" rx="230" ry="26" fill="#F2CBD7"/>
+  <g fill="#FFF9FB" stroke="#3E2433" stroke-width="5" stroke-linejoin="round" opacity="0.85">
+    <path d="M330 250 L470 250 L465 300 C 600 360 620 560 545 690 C 515 745 470 790 400 790 C 330 790 285 745 255 690 C 180 560 200 360 335 300 Z"/>
+    <ellipse cx="400" cy="250" rx="70" ry="14"/>
   </g>
-  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="#2B3A55" opacity="0.6">Atelier Studio</text>
+  <g fill="none" stroke="#D0628A" stroke-width="5" stroke-linecap="round">
+    <path d="M250 470 C 320 440 480 440 550 470"/>
+    <path d="M240 540 C 320 510 480 510 560 540"/>
+  </g>
+  <path d="M400 395 C 385 370 350 380 360 410 C 368 432 400 450 400 450 C 400 450 432 432 440 410 C 450 380 415 370 400 395 Z" fill="#D0628A"/>
+  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="#3E2433" opacity="0.6">Wild Cat Ceramic</text>
 </svg>

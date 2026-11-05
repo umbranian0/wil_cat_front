@@ -250,7 +250,7 @@ export default function CartDrawer() {
                     className="w-full border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                 />
                 {accountCustomer && (
-                  <p className="font-sans text-[11px] leading-relaxed text-charcoal/50">
+                  <p className="font-sans text-[11px] leading-relaxed text-charcoal/75">
                     This order will be saved to your customer account.
                   </p>
                 )}
@@ -314,7 +314,7 @@ export default function CartDrawer() {
                   onChange={(event) => setCustomer({ ...customer, message: event.target.value })}
                   className="w-full resize-none border border-cream-400 bg-transparent px-3 py-2.5 font-sans text-[13px] outline-none focus:border-charcoal"
                 />
-                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/80">
                   <input
                     required
                     type="checkbox"
@@ -330,7 +330,7 @@ export default function CartDrawer() {
                     and understand that my data is used to process this order.
                   </span>
                 </label>
-                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/80">
                   <input
                     type="checkbox"
                     checked={privacy.marketingEmailConsent}
@@ -340,7 +340,7 @@ export default function CartDrawer() {
                   <span>I want to receive occasional product and studio emails.</span>
                 </label>
                 {accountCustomer && (
-                  <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/60">
+                  <label className="flex items-start gap-2 font-sans text-[11px] leading-relaxed text-charcoal/80">
                     <input
                       type="checkbox"
                       checked={privacy.saveAddressToAccount}

@@ -3,19 +3,19 @@ import { getCmsPageBySlug } from '@/lib/catalog';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'About — Atelier Studio',
-  description: 'The story behind Atelier Studio — a small design studio making considered clothing and hands-on workshops.',
+  title: 'About — Wild Cat Ceramic',
+  description: 'The story behind Wild Cat Ceramic — a small studio making handcrafted ceramics and accessories in Portugal.',
 };
 
 const FALLBACK_BLOCKS = [
-  { type: 'header', eyebrow: 'The studio', heading: 'About Atelier Studio', tagline: 'A small studio built around fabric, form, and hands-on learning.' },
-  { type: 'paragraph', text: "Atelier Studio is a small design studio creating considered, made-to-last clothing — and a home for anyone who wants to learn how it's made." },
-  { type: 'paragraph', text: 'Every piece starts on the cutting table and is finished by hand. We keep runs small on purpose, so fit, fabric, and finishing get the attention they deserve.' },
+  { type: 'header', eyebrow: 'The studio', heading: 'About Wild Cat Ceramic', tagline: 'A small studio built around clay, colour, and hands-on making.' },
+  { type: 'paragraph', text: "Wild Cat Ceramic is a small studio in Portugal making handcrafted ceramics and accessories — playful, one-of-a-kind pieces made to bring a little joy to everyday life." },
+  { type: 'paragraph', text: 'Every piece is shaped, painted, and glazed by hand. We keep things small on purpose, so each piece gets the time and attention it deserves — and no two are ever exactly the same.' },
   { type: 'section_heading', text: 'The process' },
-  { type: 'paragraph', text: 'Each garment moves through pattern-cutting, cutting, construction, and finishing in-house. We work with natural and responsibly sourced fabrics wherever we can, and every piece is checked by hand before it ships.' },
-  { type: 'paragraph', text: 'Beyond the collection, we run hands-on workshops — sewing, pattern-cutting, styling — for anyone who wants to get closer to how clothes are actually made.' },
+  { type: 'paragraph', text: 'Each piece moves from raw clay through shaping, drying, firing, painting, and glazing in the studio. Every piece is checked by hand and carefully packed before it ships.' },
+  { type: 'paragraph', text: 'Soon we will also open hands-on workshops, for anyone who wants to get their hands in the clay and make something of their own.' },
   { type: 'section_heading', text: 'Based in Portugal' },
-  { type: 'paragraph', text: "Based in Portugal, Atelier Studio draws on the country's textile and craft traditions while keeping a modern, considered point of view. Come make something with us." },
+  { type: 'paragraph', text: "Based in Portugal, Wild Cat Ceramic draws on the country's rich ceramic and craft traditions while keeping a playful, modern point of view. Come make something with us." },
 ];
 
 export default async function AboutPage() {
@@ -33,7 +33,7 @@ export default async function AboutPage() {
       <div className="text-center px-6 mb-16">
         <div className="flex items-center justify-center gap-5 mb-6">
           <div className="h-px w-10 bg-charcoal/20" />
-          <span className="font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-charcoal/40">
+          <span className="font-sans text-[10px] font-semibold tracking-[0.28em] uppercase text-charcoal/75">
             {header.eyebrow || 'The studio'}
           </span>
           <div className="h-px w-10 bg-charcoal/20" />
@@ -42,9 +42,9 @@ export default async function AboutPage() {
           className="font-serif font-light text-charcoal mb-4"
           style={{ fontSize: 'clamp(40px, 6vw, 64px)' }}
         >
-          {header.heading || 'About Atelier Studio'}
+          {header.heading || 'About Wild Cat Ceramic'}
         </h1>
-        <p className="font-sans text-[15px] text-charcoal/50 max-w-[360px] mx-auto">
+        <p className="font-sans text-[15px] text-charcoal/75 max-w-[360px] mx-auto">
           {header.tagline || ''}
         </p>
       </div>
@@ -55,9 +55,9 @@ export default async function AboutPage() {
           if (block.type === 'section_heading') {
             return (
               <div key={i}>
-                <div className="flex items-center gap-4 text-charcoal/20 mb-10">
+                <div className="flex items-center gap-4 text-charcoal/80 mb-10">
                   <div className="flex-1 h-px bg-current" />
-                  <span className="font-serif italic text-[14px]">✦</span>
+                  <span className="font-serif italic text-[14px]">♡</span>
                   <div className="flex-1 h-px bg-current" />
                 </div>
                 <h2 className="font-serif text-[28px] font-light text-charcoal mb-5">

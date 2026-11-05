@@ -15,7 +15,7 @@ import AccountDashboardClient from './AccountDashboardClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Customer account - Atelier Studio',
+  title: 'Customer account - Wild Cat Ceramic',
 };
 
 export default async function AccountPage() {

@@ -2,14 +2,14 @@ import Link from 'next/link';
 import Hero from '@/components/Hero';
 import FeaturedBanner from '@/components/FeaturedBanner';
 import ProductGrid from './ProductGrid';
-import { getFeaturedProduct, listPublishedProducts, getCmsPageBySlug } from '@/lib/catalog';
+import { listCarouselProducts, listPublishedProducts, getCmsPageBySlug } from '@/lib/catalog';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [products, featured, cmsPage] = await Promise.all([
+  const [products, carouselProducts, cmsPage] = await Promise.all([
     listPublishedProducts(),
-    getFeaturedProduct(),
+    listCarouselProducts(),
     getCmsPageBySlug('homepage'),
   ]);
 
@@ -17,32 +17,10 @@ export default async function Home() {
   const heroBlock = blocks.find((b) => b.type === 'hero') || {};
   const calloutBlock = blocks.find((b) => b.type === 'callout') || {};
   const bannerBlock = blocks.find((b) => b.type === 'collection_banner') || {};
+  const carouselSlides = buildCarouselSlides(carouselProducts, blocks, products);
 
   return (
     <div className="page-enter">
-      <Hero
-        eyebrow={heroBlock.eyebrow}
-        headline={heroBlock.headline}
-        tagline={heroBlock.tagline}
-        marquee={heroBlock.marquee}
-      />
-      {featured && <FeaturedBanner product={featured} />}
-
-      {/* Product Grid */}
-      <div className="px-6 md:px-10 mb-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-baseline mb-10">
-            <h2 className="font-serif text-[clamp(26px,3vw,34px)] font-light text-charcoal">
-              The Collection
-            </h2>
-            <span className="font-sans text-[11px] font-medium tracking-[0.12em] uppercase text-charcoal/40">
-              {products.length} pieces
-            </span>
-          </div>
-          <ProductGrid products={products} />
-        </div>
-      </div>
-
       {/* Full collection atmospheric image */}
       <div
         className="relative w-full overflow-hidden"
@@ -77,14 +55,38 @@ export default async function Home() {
         </div>
       </div>
 
+      <Hero
+        eyebrow={heroBlock.eyebrow}
+        headline={heroBlock.headline}
+        tagline={heroBlock.tagline}
+        marquee={heroBlock.marquee}
+      />
+      <FeaturedBanner slides={carouselSlides} />
+
+
+      {/* Product Grid */}
+      <div className="px-6 md:px-10 mb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-baseline mb-10">
+            <h2 className="font-serif text-[clamp(26px,3vw,34px)] font-light text-charcoal">
+              The Collection
+            </h2>
+            <span className="font-sans text-[11px] font-medium tracking-[0.12em] uppercase text-charcoal/75">
+              {products.length} pieces
+            </span>
+          </div>
+          <ProductGrid products={products} />
+        </div>
+      </div>
+
       {/* Studio callout */}
-      <div className="mx-0 md:mx-10 my-20 p-14 md:p-18 bg-cream-200 text-center flex flex-col items-center gap-5">
-        <div className="flex items-center gap-4 text-charcoal/25">
+      <div className="mx-0 md:mx-10 my-20 p-14 md:p-18 bg-cream-200 md:rounded-[2rem] text-center flex flex-col items-center gap-5">
+        <div className="flex items-center gap-4 text-charcoal/80">
           <div className="h-px w-8 bg-current" />
-          <span className="font-serif italic text-[13px]">✦</span>
+          <span className="font-serif italic text-[13px]">♡</span>
           <div className="h-px w-8 bg-current" />
         </div>
-        <span className="font-sans text-[10px] font-semibold tracking-[0.22em] uppercase text-charcoal/40">
+        <span className="font-sans text-[10px] font-semibold tracking-[0.22em] uppercase text-charcoal/75">
           {calloutBlock.eyebrow || 'From the studio'}
         </span>
         <h3
@@ -104,4 +106,51 @@ export default async function Home() {
       </div>
     </div>
   );
+}
+// Carousel = products marked "show in carousel" + custom slides from the CMS
+// (e.g. workshops), sorted by their position. If nothing is marked yet,
+// fall back to showing every published product.
+function buildCarouselSlides(carouselProducts, blocks, allProducts) {
+  const productSlides = carouselProducts.map((p) => ({
+    key: `product-${p.id}`,
+    position: Number(p.featuredRank),
+    image: p.image,
+    tag: p.tag,
+    eyebrow: 'Featured piece',
+    title: p.name,
+    text: p.description,
+    price: `${p.currency || '€'}${p.price ?? p.priceAmount ?? ''}`,
+    href: `/product/${p.slug}`,
+    linkLabel: 'View piece',
+  }));
+
+  const customSlides = blocks
+    .filter((b) => b.type === 'carousel_slide' && b.enabled !== false && b.title)
+    .map((b, i) => ({
+      key: `slide-${i}`,
+      position: b.position === '' || b.position == null ? 1000 + i : Number(b.position),
+      image: b.image,
+      tag: b.tag,
+      eyebrow: b.eyebrow || 'Workshops',
+      title: b.title,
+      text: b.text,
+      price: b.price,
+      href: b.link || '/',
+      linkLabel: b.linkLabel || 'Find out more',
+    }));
+
+  const slides = [...productSlides, ...customSlides].sort((a, b) => a.position - b.position);
+  if (slides.length) return slides;
+
+  return allProducts.map((p) => ({
+    key: `product-${p.id}`,
+    image: p.image,
+    tag: p.tag,
+    eyebrow: 'From the collection',
+    title: p.name,
+    text: p.description,
+    price: `${p.currency || '€'}${p.price ?? p.priceAmount ?? ''}`,
+    href: `/product/${p.slug}`,
+    linkLabel: 'View piece',
+  }));
 }

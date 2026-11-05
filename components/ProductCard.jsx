@@ -62,11 +62,11 @@ export default function ProductCard({ product }) {
             <span className="font-serif text-[18px] font-light text-charcoal leading-snug">
               {product.name}
             </span>
-            <span className="font-sans text-[13px] text-charcoal/55 flex-shrink-0">
+            <span className="font-sans text-[13px] text-charcoal/80 flex-shrink-0">
               {product.currency}{product.price}
             </span>
           </div>
-          <span className="font-sans text-[11px] text-charcoal/35 mt-1 block tracking-wide">
+          <span className="font-sans text-[11px] text-charcoal/80 mt-1 block tracking-wide">
             {product.category}
           </span>
         </div>

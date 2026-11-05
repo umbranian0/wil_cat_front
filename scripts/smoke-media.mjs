@@ -54,9 +54,9 @@ async function main() {
 
     const configuredReadiness = getMediaReadiness();
     if (!configuredReadiness.productionReady) throw new Error('Media readiness should be production-ready with the three required credentials.');
-    if (configuredReadiness.uploadFolder !== 'atelier/products') throw new Error('Default upload folder changed unexpectedly.');
+    if (configuredReadiness.uploadFolder !== 'wildcat/products') throw new Error('Default upload folder changed unexpectedly.');
     if (!isAllowedProductImageUrl('/images/placeholder-top.svg')) throw new Error('Local fallback product image URL should be allowed.');
-    if (!isAllowedProductImageUrl('https://res.cloudinary.com/demo-cloud/image/upload/v1/atelier/products/test.png')) {
+    if (!isAllowedProductImageUrl('https://res.cloudinary.com/demo-cloud/image/upload/v1/wildcat/products/test.png')) {
       throw new Error('Configured Cloudinary product image URL should be allowed.');
     }
     if (isAllowedProductImageUrl('https://example.com/product.png')) throw new Error('Arbitrary third-party image URL should be rejected.');

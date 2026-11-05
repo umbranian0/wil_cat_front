@@ -217,15 +217,15 @@ export default function AccountDashboardClient({ initialData }) {
               {content.eyebrow}
             </p>
             <h1 className="mt-2 font-serif text-5xl font-light md:text-6xl">{content.heading}</h1>
-            <p className="mt-3 max-w-xl font-sans text-sm leading-7 text-charcoal/60">{content.intro}</p>
-            <p className="mt-3 font-sans text-xs uppercase tracking-[0.12em] text-charcoal/40">{customer.email}</p>
+            <p className="mt-3 max-w-xl font-sans text-sm leading-7 text-charcoal/80">{content.intro}</p>
+            <p className="mt-3 font-sans text-xs uppercase tracking-[0.12em] text-charcoal/75">{customer.email}</p>
           </div>
           <div className="border border-charcoal/10 bg-cream-200/70 p-5">
             <div className="grid gap-3">
               {(content.features || []).slice(0, 3).map((feature) => (
                 <div key={feature.title} className="border-b border-charcoal/10 pb-3 last:border-b-0 last:pb-0">
                   <h2 className="font-serif text-xl font-light">{feature.title}</h2>
-                  <p className="mt-1 font-sans text-xs leading-5 text-charcoal/55">{feature.text}</p>
+                  <p className="mt-1 font-sans text-xs leading-5 text-charcoal/80">{feature.text}</p>
                 </div>
               ))}
             </div>
@@ -254,7 +254,7 @@ export default function AccountDashboardClient({ initialData }) {
               className={`border px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] ${
                 activeTab === tab.id
                   ? 'border-charcoal bg-charcoal text-cream-100'
-                  : 'border-charcoal/15 text-charcoal/55 hover:border-charcoal hover:text-charcoal'
+                  : 'border-charcoal/15 text-charcoal/80 hover:border-charcoal hover:text-charcoal'
               }`}
             >
               {tab.label}
@@ -275,7 +275,7 @@ export default function AccountDashboardClient({ initialData }) {
               <button
                 type="button"
                 onClick={refreshOrders}
-                className="border border-charcoal/20 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/55 hover:border-charcoal hover:text-charcoal"
+                className="border border-charcoal/20 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/80 hover:border-charcoal hover:text-charcoal"
               >
                 Refresh
               </button>
@@ -316,7 +316,7 @@ export default function AccountDashboardClient({ initialData }) {
                     }`}
                   >
                     <span className="block font-semibold">{address.label || 'Address'}</span>
-                    <span className="block text-charcoal/55">{address.city || address.country || address.line1}</span>
+                    <span className="block text-charcoal/80">{address.city || address.country || address.line1}</span>
                   </button>
                 ))}
               </div>
@@ -404,7 +404,7 @@ export default function AccountDashboardClient({ initialData }) {
                         <span className="font-semibold">{formatStatus(request.type)}</span>
                         <span className="text-xs uppercase tracking-[0.08em] text-terracotta">{formatStatus(request.status)}</span>
                       </div>
-                      <p className="mt-1 text-xs text-charcoal/45">{request.createdAt}</p>
+                      <p className="mt-1 text-xs text-charcoal/75">{request.createdAt}</p>
                     </div>
                   ))}
                 </div>
@@ -424,7 +424,7 @@ export default function AccountDashboardClient({ initialData }) {
                           {consent.granted ? 'granted' : 'not granted'}
                         </span>
                       </div>
-                      <p className="mt-1 text-xs text-charcoal/45">{consent.source} - {consent.createdAt}</p>
+                      <p className="mt-1 text-xs text-charcoal/75">{consent.source} - {consent.createdAt}</p>
                     </div>
                   ))}
                 </div>
@@ -456,7 +456,7 @@ export default function AccountDashboardClient({ initialData }) {
         {activeTab === 'security' && (
           <section className="grid gap-6 lg:grid-cols-2">
             <Panel title="Change password">
-              <p className="mb-4 font-sans text-sm text-charcoal/55">
+              <p className="mb-4 font-sans text-sm text-charcoal/80">
                 To update your password, please enter your current password first. Your new password must be at least 8 characters.
               </p>
               <div className="grid gap-4">
@@ -482,7 +482,7 @@ export default function AccountDashboardClient({ initialData }) {
               </div>
             </Panel>
             <Panel title="Need help?">
-              <p className="font-sans text-sm leading-7 text-charcoal/60">
+              <p className="font-sans text-sm leading-7 text-charcoal/80">
                 If you have forgotten your password and cannot sign in, please contact us via the{' '}
                 <a href="/contact" className="underline hover:text-charcoal">contact page</a> and we will reset your account manually.
               </p>
@@ -502,7 +502,7 @@ function OrderPanel({ order }) {
           <h3 className="font-serif text-2xl font-light">{order.publicOrderNumber}</h3>
           <p className="mt-1 font-sans text-sm capitalize text-terracotta">{formatStatus(order.status)}</p>
         </div>
-        <div className="font-sans text-sm text-charcoal/60 md:text-right">
+        <div className="font-sans text-sm text-charcoal/80 md:text-right">
           <span className="block">{order.createdAt}</span>
           <span className="block font-semibold text-charcoal">{money(order.items?.[0]?.currency, order.total)}</span>
         </div>
@@ -518,7 +518,7 @@ function OrderPanel({ order }) {
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <AddressSummary title="Shipping" address={order.shippingAddress} />
         <div>
-          <h4 className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+          <h4 className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/75">
             Timeline
           </h4>
           <div className="space-y-2">
@@ -526,7 +526,7 @@ function OrderPanel({ order }) {
               <div key={`${entry.createdAt}-${index}`} className="border-l border-charcoal/20 pl-3 font-sans text-sm text-charcoal/65">
                 <span className="font-semibold text-charcoal">{formatStatus(entry.status)}</span>
                 <span className="block">{entry.note}</span>
-                <span className="block text-xs text-charcoal/40">{entry.createdAt}</span>
+                <span className="block text-xs text-charcoal/75">{entry.createdAt}</span>
               </div>
             ))}
           </div>
@@ -539,10 +539,10 @@ function OrderPanel({ order }) {
 function AddressSummary({ title, address }) {
   return (
     <div>
-      <h4 className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+      <h4 className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-charcoal/75">
         {title}
       </h4>
-      <div className="font-sans text-sm leading-6 text-charcoal/60">
+      <div className="font-sans text-sm leading-6 text-charcoal/80">
         <span className="block">{address?.name || ''}</span>
         <span className="block">{address?.line1 || ''}</span>
         {address?.line2 && <span className="block">{address.line2}</span>}
@@ -559,7 +559,7 @@ function Metric({ label, value }) {
   return (
     <div className="border border-charcoal/10 bg-cream-200 p-4">
       <div className="font-serif text-3xl font-light">{value}</div>
-      <div className="font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-charcoal/45">{label}</div>
+      <div className="font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-charcoal/75">{label}</div>
     </div>
   );
 }
@@ -576,7 +576,7 @@ function Panel({ title, children }) {
 function Field({ label, value, onChange, type = 'text', readOnly = false }) {
   return (
     <label className="block">
-      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/75">
         {label}
       </span>
       <input
@@ -584,7 +584,7 @@ function Field({ label, value, onChange, type = 'text', readOnly = false }) {
         value={value ?? ''}
         readOnly={readOnly}
         onChange={(event) => onChange?.(event.target.value)}
-        className="w-full border border-charcoal/15 bg-transparent px-3 py-2 font-sans text-sm outline-none focus:border-charcoal read-only:text-charcoal/50"
+        className="w-full border border-charcoal/15 bg-transparent px-3 py-2 font-sans text-sm outline-none focus:border-charcoal read-only:text-charcoal/75"
       />
     </label>
   );
@@ -593,7 +593,7 @@ function Field({ label, value, onChange, type = 'text', readOnly = false }) {
 function Select({ label, value, options, onChange }) {
   return (
     <label className="block">
-      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/75">
         {label}
       </span>
       <select
@@ -612,7 +612,7 @@ function Select({ label, value, options, onChange }) {
 function Textarea({ label, value, onChange, rows = 5 }) {
   return (
     <label className="block">
-      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">
+      <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/75">
         {label}
       </span>
       <textarea
@@ -657,7 +657,7 @@ function ReadinessRow({ label, value }) {
 
 function EmptyState({ text }) {
   return (
-    <div className="border border-charcoal/10 bg-cream-200 p-5 font-sans text-sm text-charcoal/55">
+    <div className="border border-charcoal/10 bg-cream-200 p-5 font-sans text-sm text-charcoal/80">
       {text}
     </div>
   );

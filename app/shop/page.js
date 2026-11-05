@@ -4,8 +4,8 @@ import ShopClient from './ShopClient';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Shop — Atelier Studio',
-  description: 'Browse the full clothing collection from Atelier Studio.',
+  title: 'Shop — Wild Cat Ceramic',
+  description: 'Browse the full collection of handmade ceramics and accessories from Wild Cat Ceramic.',
 };
 
 export default async function ShopPage() {
