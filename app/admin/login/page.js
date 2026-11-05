@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import LoginClient from './LoginClient';
-import { getAdminFromCookies } from '@/lib/backoffice/auth';
+import { getAdminFromCookies, isAuthConfiguredForProduction } from '@/lib/backoffice/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,5 +11,10 @@ export const metadata = {
 export default async function LoginPage() {
   const admin = await getAdminFromCookies();
   if (admin) redirect('/admin');
-  return <LoginClient showLocalFallback={process.env.NODE_ENV !== 'production'} />;
+  return (
+    <LoginClient
+      showLocalFallback={process.env.NODE_ENV !== 'production'}
+      showConfigurator={!isAuthConfiguredForProduction()}
+    />
+  );
 }

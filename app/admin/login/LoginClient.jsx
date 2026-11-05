@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function LoginClient({ showLocalFallback = false }) {
+export default function LoginClient({ showLocalFallback = false, showConfigurator = false }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -42,12 +42,14 @@ export default function LoginClient({ showLocalFallback = false }) {
             </span>
           )}
         </p>
-        <a
-          href="/admin/configurator"
-          className="mt-4 inline-block font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-terracotta underline"
-        >
-          First-start configurator
-        </a>
+        {showConfigurator && (
+          <a
+            href="/admin/configurator"
+            className="mt-4 inline-block font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-terracotta underline"
+          >
+            First-start configurator
+          </a>
+        )}
         <form onSubmit={submit} className="mt-8 grid gap-5">
           <label>
             <span className="mb-1 block font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/45">

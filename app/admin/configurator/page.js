@@ -1,5 +1,6 @@
+import { notFound } from 'next/navigation';
 import ConfiguratorClient from './ConfiguratorClient';
-import { getAdminFromCookies, getAuthReadiness } from '@/lib/backoffice/auth';
+import { getAdminFromCookies, getAuthReadiness, isAuthConfiguredForProduction } from '@/lib/backoffice/auth';
 import { getMediaReadiness } from '@/lib/backoffice/media';
 import { getStorageInfo } from '@/lib/backoffice/kv';
 
@@ -11,6 +12,9 @@ export const metadata = {
 
 export default async function ConfiguratorPage() {
   const admin = await getAdminFromCookies();
+  // Only reachable on a brand-new install (admin login not configured yet),
+  // or by a logged-in admin. Everyone else gets "page not found".
+  if (!admin && isAuthConfiguredForProduction()) notFound();
   const auth = getAuthReadiness();
   const media = getMediaReadiness();
   const storage = getStorageInfo();
